@@ -547,7 +547,7 @@
 		5908F3E91B397F0500627424 = {
 			isa = PBXGroup;
 			children = (
-				5908F43C1B3984BC00627424 /* XMPPFramework */,
+				5908F43C1B3984BC00627424 /* XMPP */,
 				5908F3F41B397F0500627424 /* Classes */,
 				5908F4231B3981B800627424 /* Resources */,
 				5908F4111B397F0600627424 /* QikAChatTests */,
@@ -598,7 +598,7 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		5908F43C1B3984BC00627424 /* XMPPFramework */ = {
+		5908F43C1B3984BC00627424 /* XMPP */ = {
 			isa = PBXGroup;
 			children = (
 				5908F9341B39851D00627424 /* XMPPFramework.h */,
@@ -609,8 +609,8 @@
 				5908F57D1B3984BD00627424 /* Utilities */,
 				5908F58C1B3984BD00627424 /* Vendor */,
 			);
-			name = XMPPFramework;
-			path = Dependency/XMPPFramework;
+			name = XMPP;
+			path = Dependency/XMPP;
 			sourceTree = "<group>";
 		};
 		5908F4411B3984BC00627424 /* Authentication */ = {
@@ -1883,7 +1883,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Dependency/XMPPFramework/Vendor/libidn",
+					"$(PROJECT_DIR)/Dependency/XMPP/Vendor/libidn",
 				);
 				OTHER_LDFLAGS = "-lxml2 ";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1903,7 +1903,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Dependency/XMPPFramework/Vendor/libidn",
+					"$(PROJECT_DIR)/Dependency/XMPP/Vendor/libidn",
 				);
 				OTHER_LDFLAGS = "-lxml2 ";
 				PRODUCT_NAME = "$(TARGET_NAME)";
