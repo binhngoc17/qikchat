@@ -1,15 +1,15 @@
 //
-//  RootViewController.m
+//  FriendsViewController.m
 //  QikAChat
 //
 //  Created by Ram Chauhan on 27/06/2015.
 //  Copyright (c) 2015 RAMC. All rights reserved.
 //
 
-#import "RootViewController.h"
+#import "FriendsViewController.h"
 #import "AppDelegate.h"
 #import "SettingsViewController.h"
-
+#import "QikAChat-Prefix.pch"
 #import "XMPPFramework.h"
 #import "DDLog.h"
 
@@ -20,7 +20,7 @@
   static const int ddLogLevel = LOG_LEVEL_INFO;
 #endif
 
-@implementation RootViewController
+@implementation FriendsViewController
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Accessors
@@ -31,6 +31,28 @@
 	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.navigationBarHidden = NO;
+    [self.view setBackgroundColor:[UIColor clearColor]];
+    
+    [self initTableView];
+}
+
+- (void) initTableView {
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44)];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLineEtched];
+    [self.view addSubview:self.tableView];
+    
+    [self.tableView setBackgroundColor:[UIColor clearColor]];
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark View lifecycle
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,33 +61,64 @@
 {
 	[super viewWillAppear:animated];
   
-	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 400, 44)];
-	titleLabel.backgroundColor = [UIColor clearColor];
-	titleLabel.textColor = [UIColor darkTextColor];
-	titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
-	titleLabel.numberOfLines = 1;
-	titleLabel.adjustsFontSizeToFitWidth = YES;
-	titleLabel.textAlignment = NSTextAlignmentCenter;
-
-	if ([[self appDelegate] connect]) 
-	{
-		titleLabel.text = [[[[self appDelegate] xmppStream] myJID] bare];
-	} else
-	{
-		titleLabel.text = @"No JID";
-	}
-	
-	[titleLabel sizeToFit];
-
-	self.navigationItem.titleView = titleLabel;
+    [[self navigationController] setNavigationBarHidden:self.navigationBarHidden animated:YES];
+    [appInstance setStatusBarHidden:self.navigationBarHidden withAnimation:UIStatusBarAnimationNone];
+    
+    [self initTitleSegement];
+    
+    [self.tableView reloadData];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [[self navigationController] setNavigationBarHidden:false animated:YES];
+    [appInstance setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+    
 	[[self appDelegate] disconnect];
 	[[[self appDelegate] xmppvCardTempModule] removeDelegate:self];
 	
 	[super viewWillDisappear:animated];
+}
+
+- (void) initTitleSegement {
+    
+    UIView *segmentedView = [[UIView alloc] initWithFrame:(CGRect){0, 0, self.view.frame.size.width, 60}];
+    
+    UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 45, 45)];
+    [avatarView setBackgroundColor:[UIColor clearColor]];
+    avatarView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar.png"] borderColor:[UIColor blackColor]];
+    avatarView.layer.cornerRadius = 3.0f;
+    avatarView.clipsToBounds = YES;
+    [segmentedView addSubview:avatarView];
+    
+     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50+10, 15, self.view.frame.size.width-55, 44)];
+    
+     titleLabel.backgroundColor = [UIColor clearColor];
+     titleLabel.textColor = [UIColor darkTextColor];
+     titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
+     titleLabel.numberOfLines = 1;
+     titleLabel.adjustsFontSizeToFitWidth = YES;
+     titleLabel.textAlignment = NSTextAlignmentCenter;
+     
+     if ([[self appDelegate] connect])
+     {
+         titleLabel.text = [[[[self appDelegate] xmppStream] myJID] bare];
+     } else
+     {
+         titleLabel.text = @"No JID";
+     }
+     
+     [titleLabel sizeToFit];
+    
+     [segmentedView addSubview:titleLabel];
+     self.navigationItem.titleView = segmentedView;
+    
+}
+
+-(void) segmentedControlDidChange{
+    
+    
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,17 +178,20 @@
 	
 	if (user.photo != nil)
 	{
-		cell.imageView.image = user.photo;
-	} 
+		cell.imageView.image = [Utility roundImageWithImage:user.photo borderColor:[UIColor blackColor]];
+   }
 	else
 	{
 		NSData *photoData = [[[self appDelegate] xmppvCardAvatarModule] photoDataForJID:user.jid];
 
 		if (photoData != nil)
-			cell.imageView.image = [UIImage imageWithData:photoData];
-		else
-			cell.imageView.image = [UIImage imageNamed:@"defaultAvatar"];
+            cell.imageView.image = [Utility roundImageWithImage:[UIImage imageWithData:photoData] borderColor:[UIColor blackColor]];
+    	else
+            cell.imageView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar"] borderColor:[UIColor blackColor]];
 	}
+    
+    cell.imageView.layer.cornerRadius = 3.0f;
+    cell.imageView.clipsToBounds = YES;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,7 +245,7 @@
 	{
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
 		                               reuseIdentifier:CellIdentifier];
-	}
+ 	}
 	
 	XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
 	

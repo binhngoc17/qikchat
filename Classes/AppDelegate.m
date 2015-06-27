@@ -7,8 +7,9 @@
 //
 
 #import "AppDelegate.h"
-#import "RootViewController.h"
+#import "FriendsViewController.h"
 #import "SettingsViewController.h"
+#import "ChatsViewController.h"
 
 #import "GCDAsyncSocket.h"
 #import "XMPP.h"
@@ -23,6 +24,7 @@
 #import "DDTTYLogger.h"
 
 #import <CFNetwork/CFNetwork.h>
+#import "QikAChat-Prefix.pch"
 
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
@@ -58,34 +60,58 @@
 @synthesize xmppCapabilitiesStorage;
 
 @synthesize window;
-@synthesize navigationController;
+@synthesize tabController;
 @synthesize settingsViewController;
 @synthesize loginButton;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	// Configure logging framework
-	
-	[DDLog addLogger:[DDTTYLogger sharedInstance] withLogLevel:XMPP_LOG_FLAG_SEND_RECV];
-
-  // Setup the XMPP stream
+    // Configure logging framework
+    [DDLog addLogger:[DDTTYLogger sharedInstance] withLogLevel:XMPP_LOG_FLAG_SEND_RECV];
+    // Setup the XMPP stream
+    [self setupStream];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.window setBackgroundColor:headerColor];
+    
+    FriendsViewController* rootViewController1 = [[FriendsViewController alloc] init];
+    UINavigationController* navigationController1 = [[UINavigationController alloc] initWithRootViewController:rootViewController1];
+    
+    ChatsViewController* rootViewController2 = [[ChatsViewController alloc] init];
+    UINavigationController* navigationController2 = [[UINavigationController alloc] initWithRootViewController:rootViewController2];
   
-	[self setupStream];
-
-	// Setup the view controllers
-
-	[window setRootViewController:navigationController];
-	[window makeKeyAndVisible];
-
-	if (![self connect])
-	{
-		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC);
-		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-			
-			[navigationController presentViewController:settingsViewController animated:YES completion:NULL];
-		});
-	}
-		
+    
+   // FriendsViewController* rootViewController3 = [[FriendsViewController alloc] init];
+   // UINavigationController* navigationController3 = [[UINavigationController alloc] initWithRootViewController:rootViewController3];
+    
+    navigationController1.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Friends" image:[UIImage imageNamed:@"tab_friends"] tag:0] ;
+    //navigationController1.tabBarItem.image = [UIImage imageNamed:@"friends.png"];
+    //navigationController1.tabBarItem.title = @"Friends";
+    
+    navigationController2.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"tab_chats"] tag:1] ;
+   // navigationController2.tabBarItem.image = [UIImage imageNamed:@"chats.png"];
+    //navigationController2.tabBarItem.title = @"Chats";
+    
+    //navigationController3.tabBarItem= [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemDownloads tag:2] ;
+   
+    
+    self.tabController = [[UITabBarController alloc] init];
+    tabController.viewControllers = [NSArray arrayWithObjects:navigationController1,navigationController2, nil];
+    
+    //self.tabController.delegate = self;
+    
+    if ( ![self connect])
+    {
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+            //[self.tabController presentViewController:settingsViewController animated:YES completion:NULL];
+        });
+    }
+    
+    [self.window setRootViewController:self.tabController];
+    [self.window makeKeyAndVisible];
+  
 	return YES;
 }
 
@@ -103,10 +129,19 @@
 	return [xmppRosterStorage mainThreadManagedObjectContext];
 }
 
-- (NSManagedObjectContext *)managedObjectContext_capabilities
+- (NSManagedObjectContext *)managedObjectContext_message
 {
-	return [xmppCapabilitiesStorage mainThreadManagedObjectContext];
+	return [xmppMessageArchivingStorage mainThreadManagedObjectContext];
 }
+
+-(XMPPUserCoreDataStorageObject*) managedObjectContext_forUser:(XMPPJID*) ajid {
+    
+    XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:ajid
+                                                             xmppStream:xmppStream
+                                                   managedObjectContext:[self managedObjectContext_roster]];
+    return user;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Private
@@ -200,14 +235,19 @@
     xmppCapabilities.autoFetchHashedCapabilities = YES;
     xmppCapabilities.autoFetchNonHashedCapabilities = NO;
 
-	// Activate xmpp modules
+    xmppMessageArchivingStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+    xmppMessageArchivingModule = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:xmppMessageArchivingStorage];
+    // Activate xmpp modules
 
 	[xmppReconnect         activate:xmppStream];
 	[xmppRoster            activate:xmppStream];
 	[xmppvCardTempModule   activate:xmppStream];
 	[xmppvCardAvatarModule activate:xmppStream];
 	[xmppCapabilities      activate:xmppStream];
-
+    [xmppMessageArchivingModule activate:xmppStream];
+    
+    xmppMessageArchivingModule.clientSideMessageArchivingOnly = YES;
+    
 	// Add ourself as a delegate to anything we may be interested in
 
 	[xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];

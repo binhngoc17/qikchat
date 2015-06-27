@@ -12,13 +12,19 @@
 		5908F4321B39828E00627424 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5908F4311B39828E00627424 /* Default-568h@2x.png */; };
 		5908F4331B3982C800627424 /* QikAChat-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5908F4261B3981E900627424 /* QikAChat-Info.plist */; };
 		592758351B3E88B3007A8A18 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5927582E1B3E88B3007A8A18 /* AppDelegate.m */; };
-		592758361B3E88B3007A8A18 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 592758311B3E88B3007A8A18 /* RootViewController.m */; };
 		592758371B3E88B3007A8A18 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 592758331B3E88B3007A8A18 /* SettingsViewController.m */; };
-		592758381B3E88B3007A8A18 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 592758341B3E88B3007A8A18 /* SettingsViewController.xib */; };
-		592758481B3E9184007A8A18 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 592758471B3E9184007A8A18 /* RootViewController.xib */; };
-		5927584A1B3E927C007A8A18 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 592758491B3E927C007A8A18 /* MainWindow.xib */; };
 		5927584E1B3E9A9B007A8A18 /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 5927584D1B3E9A9B007A8A18 /* defaultAvatar.png */; };
 		592758501B3E9B0F007A8A18 /* QikAChatTest-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5927584F1B3E9B0F007A8A18 /* QikAChatTest-Info.plist */; };
+		59798BAB1B3EF29A00D92124 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 59798BAA1B3EF29A00D92124 /* Utility.m */; };
+		59798BAE1B3EF82900D92124 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59798BAD1B3EF82900D92124 /* FriendsViewController.m */; };
+		59798BAF1B3EF86E00D92124 /* libidn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5989673B1B3EB028002A296D /* libidn.a */; };
+		59798BB21B3EF8EC00D92124 /* ChatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59798BB11B3EF8EC00D92124 /* ChatsViewController.m */; };
+		59798BB61B3EFDEC00D92124 /* addfriends.png in Resources */ = {isa = PBXBuildFile; fileRef = 59798BB31B3EFDEC00D92124 /* addfriends.png */; };
+		59798BB71B3EFDEC00D92124 /* chats.png in Resources */ = {isa = PBXBuildFile; fileRef = 59798BB41B3EFDEC00D92124 /* chats.png */; };
+		59798BB81B3EFDEC00D92124 /* friends.png in Resources */ = {isa = PBXBuildFile; fileRef = 59798BB51B3EFDEC00D92124 /* friends.png */; };
+		59798BBB1B3F022200D92124 /* contacts.png in Resources */ = {isa = PBXBuildFile; fileRef = 59798BBA1B3F022200D92124 /* contacts.png */; };
+		59798BBE1B3F033100D92124 /* tab_chats@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59798BBC1B3F033100D92124 /* tab_chats@2x.png */; };
+		59798BBF1B3F033100D92124 /* tab_friends@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59798BBD1B3F033100D92124 /* tab_friends@2x.png */; };
 		5989673E1B3EB028002A296D /* XMPPAnonymousAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 598965CB1B3EB028002A296D /* XMPPAnonymousAuthentication.m */; };
 		5989673F1B3EB028002A296D /* XMPPDeprecatedDigestAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 598965CE1B3EB028002A296D /* XMPPDeprecatedDigestAuthentication.m */; };
 		598967401B3EB028002A296D /* XMPPDeprecatedPlainAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 598965D11B3EB028002A296D /* XMPPDeprecatedPlainAuthentication.m */; };
@@ -30,7 +36,6 @@
 		598967461B3EB028002A296D /* NSData+XMPP.m in Sources */ = {isa = PBXBuildFile; fileRef = 598965E51B3EB028002A296D /* NSData+XMPP.m */; };
 		598967471B3EB028002A296D /* NSNumber+XMPP.m in Sources */ = {isa = PBXBuildFile; fileRef = 598965E71B3EB028002A296D /* NSNumber+XMPP.m */; };
 		598967481B3EB028002A296D /* NSXMLElement+XMPP.m in Sources */ = {isa = PBXBuildFile; fileRef = 598965E91B3EB028002A296D /* NSXMLElement+XMPP.m */; };
-		598967491B3EB028002A296D /* copying.txt in Resources */ = {isa = PBXBuildFile; fileRef = 598965EA1B3EB028002A296D /* copying.txt */; };
 		5989674A1B3EB028002A296D /* XMPPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 598965EE1B3EB028002A296D /* XMPPConstants.m */; };
 		5989674B1B3EB028002A296D /* XMPPElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 598965F01B3EB028002A296D /* XMPPElement.m */; };
 		5989674C1B3EB028002A296D /* XMPPIQ.m in Sources */ = {isa = PBXBuildFile; fileRef = 598965F31B3EB028002A296D /* XMPPIQ.m */; };
@@ -139,7 +144,6 @@
 		598967B31B3EB028002A296D /* XMPPMessage+XEP_0308.m in Sources */ = {isa = PBXBuildFile; fileRef = 598966FB1B3EB028002A296D /* XMPPMessage+XEP_0308.m */; };
 		598967B41B3EB028002A296D /* XMPPMessage+XEP_0333.m in Sources */ = {isa = PBXBuildFile; fileRef = 598966FE1B3EB028002A296D /* XMPPMessage+XEP_0333.m */; };
 		598967B51B3EB028002A296D /* NSXMLElement+XEP_0335.m in Sources */ = {isa = PBXBuildFile; fileRef = 598967011B3EB028002A296D /* NSXMLElement+XEP_0335.m */; };
-		598967B61B3EB028002A296D /* README.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 598967021B3EB028002A296D /* README.markdown */; };
 		598967B71B3EB028002A296D /* DDList.m in Sources */ = {isa = PBXBuildFile; fileRef = 598967051B3EB028002A296D /* DDList.m */; };
 		598967B81B3EB028002A296D /* GCDMulticastDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 598967071B3EB028002A296D /* GCDMulticastDelegate.m */; };
 		598967B91B3EB028002A296D /* RFImageToDataTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 598967091B3EB028002A296D /* RFImageToDataTransformer.m */; };
@@ -162,7 +166,8 @@
 		598967CA1B3EB028002A296D /* DDXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 598967331B3EB028002A296D /* DDXMLElement.m */; };
 		598967CB1B3EB028002A296D /* DDXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 598967351B3EB028002A296D /* DDXMLNode.m */; };
 		598967CC1B3EB028002A296D /* build-libidn.sh in Resources */ = {isa = PBXBuildFile; fileRef = 598967391B3EB028002A296D /* build-libidn.sh */; };
-		598967CD1B3EB028002A296D /* libidn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5989673B1B3EB028002A296D /* libidn.a */; };
+		598967D11B3EC299002A296D /* UIImage+CoreExt.m in Sources */ = {isa = PBXBuildFile; fileRef = 598967D01B3EC299002A296D /* UIImage+CoreExt.m */; };
+		598967D51B3EDC1B002A296D /* hSlider.png in Resources */ = {isa = PBXBuildFile; fileRef = 598967D41B3EDC1B002A296D /* hSlider.png */; };
 		59F1436E1B3DCE64000F6D2E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59F1436B1B3DCE1E000F6D2E /* CoreGraphics.framework */; };
 		59F1436F1B3DCE64000F6D2E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59F143591B3DB6D1000F6D2E /* Foundation.framework */; };
 		59F143701B3DCE64000F6D2E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59F143561B3DB6C3000F6D2E /* UIKit.framework */; };
@@ -200,16 +205,24 @@
 		5908F94E1B39878F00627424 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
 		5927582D1B3E88B3007A8A18 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		5927582E1B3E88B3007A8A18 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Classes/AppDelegate.m; sourceTree = SOURCE_ROOT; };
-		592758301B3E88B3007A8A18 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
-		592758311B3E88B3007A8A18 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		592758321B3E88B3007A8A18 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		592758331B3E88B3007A8A18 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
-		592758341B3E88B3007A8A18 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		592758391B3E89B8007A8A18 /* QikAChat-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "QikAChat-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		592758471B3E9184007A8A18 /* RootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
-		592758491B3E927C007A8A18 /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		5927584D1B3E9A9B007A8A18 /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultAvatar.png; sourceTree = "<group>"; };
 		5927584F1B3E9B0F007A8A18 /* QikAChatTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "QikAChatTest-Info.plist"; sourceTree = "<group>"; };
+		59798BA91B3EF29A00D92124 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = Classes/Utility.h; sourceTree = SOURCE_ROOT; };
+		59798BAA1B3EF29A00D92124 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = Classes/Utility.m; sourceTree = SOURCE_ROOT; };
+		59798BAC1B3EF82900D92124 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
+		59798BAD1B3EF82900D92124 /* FriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsViewController.m; sourceTree = "<group>"; };
+		59798BB01B3EF8EC00D92124 /* ChatsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatsViewController.h; sourceTree = "<group>"; };
+		59798BB11B3EF8EC00D92124 /* ChatsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatsViewController.m; sourceTree = "<group>"; };
+		59798BB31B3EFDEC00D92124 /* addfriends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addfriends.png; sourceTree = "<group>"; };
+		59798BB41B3EFDEC00D92124 /* chats.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chats.png; sourceTree = "<group>"; };
+		59798BB51B3EFDEC00D92124 /* friends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = friends.png; sourceTree = "<group>"; };
+		59798BB91B3EFDF700D92124 /* Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Strings.h; sourceTree = "<group>"; };
+		59798BBA1B3F022200D92124 /* contacts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contacts.png; sourceTree = "<group>"; };
+		59798BBC1B3F033100D92124 /* tab_chats@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_chats@2x.png"; sourceTree = "<group>"; };
+		59798BBD1B3F033100D92124 /* tab_friends@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_friends@2x.png"; sourceTree = "<group>"; };
 		598965CA1B3EB028002A296D /* XMPPAnonymousAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPAnonymousAuthentication.h; sourceTree = "<group>"; };
 		598965CB1B3EB028002A296D /* XMPPAnonymousAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPAnonymousAuthentication.m; sourceTree = "<group>"; };
 		598965CD1B3EB028002A296D /* XMPPDeprecatedDigestAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPDeprecatedDigestAuthentication.h; sourceTree = "<group>"; };
@@ -234,7 +247,6 @@
 		598965E71B3EB028002A296D /* NSNumber+XMPP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+XMPP.m"; sourceTree = "<group>"; };
 		598965E81B3EB028002A296D /* NSXMLElement+XMPP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSXMLElement+XMPP.h"; sourceTree = "<group>"; };
 		598965E91B3EB028002A296D /* NSXMLElement+XMPP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLElement+XMPP.m"; sourceTree = "<group>"; };
-		598965EA1B3EB028002A296D /* copying.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = copying.txt; sourceTree = "<group>"; };
 		598965EC1B3EB028002A296D /* XMPP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPP.h; sourceTree = "<group>"; };
 		598965ED1B3EB028002A296D /* XMPPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPConstants.h; sourceTree = "<group>"; };
 		598965EE1B3EB028002A296D /* XMPPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPConstants.m; sourceTree = "<group>"; };
@@ -457,7 +469,6 @@
 		598966FE1B3EB028002A296D /* XMPPMessage+XEP_0333.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XMPPMessage+XEP_0333.m"; sourceTree = "<group>"; };
 		598967001B3EB028002A296D /* NSXMLElement+XEP_0335.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSXMLElement+XEP_0335.h"; sourceTree = "<group>"; };
 		598967011B3EB028002A296D /* NSXMLElement+XEP_0335.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLElement+XEP_0335.m"; sourceTree = "<group>"; };
-		598967021B3EB028002A296D /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.markdown; sourceTree = "<group>"; };
 		598967041B3EB028002A296D /* DDList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDList.h; sourceTree = "<group>"; };
 		598967051B3EB028002A296D /* DDList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDList.m; sourceTree = "<group>"; };
 		598967061B3EB028002A296D /* GCDMulticastDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDMulticastDelegate.h; sourceTree = "<group>"; };
@@ -507,6 +518,9 @@
 		5989673B1B3EB028002A296D /* libidn.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libidn.a; sourceTree = "<group>"; };
 		5989673C1B3EB028002A296D /* stringprep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringprep.h; sourceTree = "<group>"; };
 		5989673D1B3EB028002A296D /* XMPPFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPFramework.h; sourceTree = "<group>"; };
+		598967CF1B3EC299002A296D /* UIImage+CoreExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CoreExt.h"; sourceTree = "<group>"; };
+		598967D01B3EC299002A296D /* UIImage+CoreExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CoreExt.m"; sourceTree = "<group>"; };
+		598967D41B3EDC1B002A296D /* hSlider.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hSlider.png; sourceTree = "<group>"; };
 		59F143561B3DB6C3000F6D2E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		59F143591B3DB6D1000F6D2E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		59F143641B3DC9F4000F6D2E /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
@@ -529,12 +543,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59798BAF1B3EF86E00D92124 /* libidn.a in Frameworks */,
 				59F1436E1B3DCE64000F6D2E /* CoreGraphics.framework in Frameworks */,
 				59F1436F1B3DCE64000F6D2E /* Foundation.framework in Frameworks */,
 				59F143701B3DCE64000F6D2E /* UIKit.framework in Frameworks */,
 				59F143711B3DCE64000F6D2E /* libresolv.dylib in Frameworks */,
 				59F143721B3DCE64000F6D2E /* libsqlite3.0.dylib in Frameworks */,
-				598967CD1B3EB028002A296D /* libidn.a in Frameworks */,
 				59F1437D1B3DCF87000F6D2E /* AddressBook.framework in Frameworks */,
 				59F1437E1B3DCF87000F6D2E /* MediaPlayer.framework in Frameworks */,
 				59F1437F1B3DCF87000F6D2E /* CoreData.framework in Frameworks */,
@@ -572,12 +586,14 @@
 		5908F3F41B397F0500627424 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				598967CE1B3EC299002A296D /* extension */,
 				592758391B3E89B8007A8A18 /* QikAChat-Prefix.pch */,
 				5927582D1B3E88B3007A8A18 /* AppDelegate.h */,
 				5927582E1B3E88B3007A8A18 /* AppDelegate.m */,
 				5927582F1B3E88B3007A8A18 /* viewController */,
 				5908F4201B3981A300627424 /* main.m */,
-				592758491B3E927C007A8A18 /* MainWindow.xib */,
+				59798BA91B3EF29A00D92124 /* Utility.h */,
+				59798BAA1B3EF29A00D92124 /* Utility.m */,
 			);
 			name = Classes;
 			path = QikAChat;
@@ -595,6 +611,14 @@
 		5908F4231B3981B800627424 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				59798BBA1B3F022200D92124 /* contacts.png */,
+				59798BB91B3EFDF700D92124 /* Strings.h */,
+				59798BB31B3EFDEC00D92124 /* addfriends.png */,
+				59798BB41B3EFDEC00D92124 /* chats.png */,
+				59798BBC1B3F033100D92124 /* tab_chats@2x.png */,
+				59798BBD1B3F033100D92124 /* tab_friends@2x.png */,
+				59798BB51B3EFDEC00D92124 /* friends.png */,
+				598967D41B3EDC1B002A296D /* hSlider.png */,
 				5927584D1B3E9A9B007A8A18 /* defaultAvatar.png */,
 				5908F4261B3981E900627424 /* QikAChat-Info.plist */,
 				5908F4311B39828E00627424 /* Default-568h@2x.png */,
@@ -624,12 +648,12 @@
 		5927582F1B3E88B3007A8A18 /* viewController */ = {
 			isa = PBXGroup;
 			children = (
-				592758471B3E9184007A8A18 /* RootViewController.xib */,
-				592758301B3E88B3007A8A18 /* RootViewController.h */,
-				592758311B3E88B3007A8A18 /* RootViewController.m */,
+				59798BB01B3EF8EC00D92124 /* ChatsViewController.h */,
+				59798BB11B3EF8EC00D92124 /* ChatsViewController.m */,
+				59798BAC1B3EF82900D92124 /* FriendsViewController.h */,
+				59798BAD1B3EF82900D92124 /* FriendsViewController.m */,
 				592758321B3E88B3007A8A18 /* SettingsViewController.h */,
 				592758331B3E88B3007A8A18 /* SettingsViewController.m */,
-				592758341B3E88B3007A8A18 /* SettingsViewController.xib */,
 			);
 			name = viewController;
 			path = Classes/viewController;
@@ -640,10 +664,8 @@
 			children = (
 				598965C81B3EB028002A296D /* Authentication */,
 				598965E31B3EB028002A296D /* Categories */,
-				598965EA1B3EB028002A296D /* copying.txt */,
 				598965EB1B3EB028002A296D /* Core */,
 				598966011B3EB028002A296D /* Extensions */,
-				598967021B3EB028002A296D /* README.markdown */,
 				598967031B3EB028002A296D /* Utilities */,
 				598967121B3EB028002A296D /* Vendor */,
 				5989673D1B3EB028002A296D /* XMPPFramework.h */,
@@ -1524,6 +1546,16 @@
 			path = libidn;
 			sourceTree = "<group>";
 		};
+		598967CE1B3EC299002A296D /* extension */ = {
+			isa = PBXGroup;
+			children = (
+				598967CF1B3EC299002A296D /* UIImage+CoreExt.h */,
+				598967D01B3EC299002A296D /* UIImage+CoreExt.m */,
+			);
+			name = extension;
+			path = Classes/extension;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1605,15 +1637,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59798BBF1B3F033100D92124 /* tab_friends@2x.png in Resources */,
 				5927584E1B3E9A9B007A8A18 /* defaultAvatar.png in Resources */,
-				5927584A1B3E927C007A8A18 /* MainWindow.xib in Resources */,
-				592758381B3E88B3007A8A18 /* SettingsViewController.xib in Resources */,
-				592758481B3E9184007A8A18 /* RootViewController.xib in Resources */,
+				59798BBE1B3F033100D92124 /* tab_chats@2x.png in Resources */,
+				59798BB81B3EFDEC00D92124 /* friends.png in Resources */,
+				598967D51B3EDC1B002A296D /* hSlider.png in Resources */,
 				598967CC1B3EB028002A296D /* build-libidn.sh in Resources */,
-				598967491B3EB028002A296D /* copying.txt in Resources */,
+				59798BBB1B3F022200D92124 /* contacts.png in Resources */,
 				5908F4331B3982C800627424 /* QikAChat-Info.plist in Resources */,
 				598967C71B3EB028002A296D /* README.txt in Resources */,
+				59798BB61B3EFDEC00D92124 /* addfriends.png in Resources */,
 				5908F4321B39828E00627424 /* Default-568h@2x.png in Resources */,
+				59798BB71B3EFDEC00D92124 /* chats.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1643,7 +1678,6 @@
 				598967531B3EB028002A296D /* XMPPBandwidthMonitor.m in Sources */,
 				598967841B3EB028002A296D /* XMPPvCardTempModule.m in Sources */,
 				5989677A1B3EB028002A296D /* XMPPvCardAvatarCoreDataStorageObject.m in Sources */,
-				592758361B3E88B3007A8A18 /* RootViewController.m in Sources */,
 				598967731B3EB028002A296D /* XMPPRoomMemoryStorage.m in Sources */,
 				5908F4221B3981A300627424 /* main.m in Sources */,
 				598967551B3EB028002A296D /* XMPPFileTransfer.m in Sources */,
@@ -1652,6 +1686,7 @@
 				598967831B3EB028002A296D /* XMPPvCardTempLabel.m in Sources */,
 				598967411B3EB028002A296D /* XMPPDigestMD5Authentication.m in Sources */,
 				598967AB1B3EB028002A296D /* XMPPTime.m in Sources */,
+				59798BAE1B3EF82900D92124 /* FriendsViewController.m in Sources */,
 				598967BD1B3EB028002A296D /* XMPPTimer.m in Sources */,
 				5989675F1B3EB028002A296D /* XMPPUserCoreDataStorageObject.m in Sources */,
 				598967C01B3EB028002A296D /* DDASLLogger.m in Sources */,
@@ -1693,8 +1728,8 @@
 				5989677B1B3EB028002A296D /* XMPPvCardCoreDataStorage.m in Sources */,
 				598967571B3EB028002A296D /* XMPPOutgoingFileTransfer.m in Sources */,
 				598967AF1B3EB028002A296D /* XMPPMessage+XEP_0224.m in Sources */,
-				598967B61B3EB028002A296D /* README.markdown in Sources */,
 				598967A01B3EB028002A296D /* XMPPMessage+XEP_0172.m in Sources */,
+				59798BAB1B3EF29A00D92124 /* Utility.m in Sources */,
 				598967C31B3EB028002A296D /* DDTTYLogger.m in Sources */,
 				598967401B3EB028002A296D /* XMPPDeprecatedPlainAuthentication.m in Sources */,
 				598967B51B3EB028002A296D /* NSXMLElement+XEP_0335.m in Sources */,
@@ -1715,6 +1750,7 @@
 				5989674F1B3EB028002A296D /* XMPPModule.m in Sources */,
 				598967C61B3EB028002A296D /* DDMultiFormatter.m in Sources */,
 				598967B31B3EB028002A296D /* XMPPMessage+XEP_0308.m in Sources */,
+				598967D11B3EC299002A296D /* UIImage+CoreExt.m in Sources */,
 				598967B01B3EB028002A296D /* XMPPMessage+XEP_0280.m in Sources */,
 				598967BB1B3EB028002A296D /* XMPPSRVResolver.m in Sources */,
 				598967541B3EB028002A296D /* XMPPCoreDataStorage.m in Sources */,
@@ -1759,6 +1795,7 @@
 				598967C51B3EB028002A296D /* DDDispatchQueueLogFormatter.m in Sources */,
 				598967801B3EB028002A296D /* XMPPvCardTempAdrTypes.m in Sources */,
 				598967941B3EB028002A296D /* XMPPCapabilities.xcdatamodel in Sources */,
+				59798BB21B3EF8EC00D92124 /* ChatsViewController.m in Sources */,
 				5989675D1B3EB028002A296D /* XMPPRoster.xcdatamodel in Sources */,
 				598967701B3EB028002A296D /* XMPPRoomHybridStorage.m in Sources */,
 				598967901B3EB028002A296D /* XMPPMessage+XEP_0085.m in Sources */,
@@ -1891,7 +1928,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Dependency/XMPP/Vendor/libidn",
 					"$(PROJECT_DIR)/Dependency/XMPPFramework/Vendor/libidn",
 				);
 				OTHER_LDFLAGS = "-lxml2 ";
@@ -1912,7 +1948,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Dependency/XMPP/Vendor/libidn",
 					"$(PROJECT_DIR)/Dependency/XMPPFramework/Vendor/libidn",
 				);
 				OTHER_LDFLAGS = "-lxml2 ";
