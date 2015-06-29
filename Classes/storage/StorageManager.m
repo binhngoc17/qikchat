@@ -1,9 +1,9 @@
 //
 //  StorageManager.m
-//  ChatNA
+//  QikAChat
 //
-//  Created by Ram Bhawan Chauhan on 06/09/14.
-//  Copyright (c) 2014 CraterZone. All rights reserved.
+//  Created by Ram Chauhan on 27/06/2015.
+//  Copyright (c) 2015 RAMC. All rights reserved.
 //
 
 #import "StorageManager.h"
@@ -40,13 +40,13 @@
         _isFreshInstall = NO;
 		if ((error = sqlite3_config(SQLITE_CONFIG_SERIALIZED)) != SQLITE_OK)
 		{
-            NSLog(@"CHATNA SQLLITE ERROR!!!");
+            NSLog(@"CHAT SQLLITE ERROR!!!");
         }
         
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 		NSString *documentsPath = [paths objectAtIndex:0];
 	
-         _databasePath = [documentsPath stringByAppendingPathComponent:KCHATNA_DB] ;
+         _databasePath = [documentsPath stringByAppendingPathComponent:KCHAT_DB] ;
         
 		_database = [Database databaseWithPath:_databasePath] ;
         
@@ -285,8 +285,8 @@ rollback:
                                        [aChat getDisplayName],
                                        [aChat lastMessage ],
                                        lastdate,
-                                       [NSNumber numberWithInt:[aChat lastMessageId]],
-                                       [NSNumber numberWithInt:[aChat unreadCount] ],
+                                       [NSNumber numberWithLong:[aChat lastMessageId]],
+                                       [NSNumber numberWithLong:[aChat unreadCount] ],
                                         nil ];
     
     BOOL success = [_database executeUpdate:statement withArgumentsInArray:args];
@@ -313,7 +313,7 @@ rollback:
 -(BOOL)updateLastActivity:(Chat*) aChat
 {
     NSString* lastDate = [Utility dateToString:[aChat lastActivityDate] withFormat:kChatTimestampFormat];
-    NSString*   statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = '%@', %@ ='%@', %@=%d, %@=%d WHERE %@ = '%@'", KTableChats,kTableChatFieldLastMsg,[aChat lastMessage],kTableChatFieldLastTime, lastDate ,kTableChatFieldLastMsgId, [aChat lastMessageId], kTableChatFieldUnreadCount, [aChat unreadCount], kTableChatFieldJID,[aChat chatBareJid]];
+    NSString*   statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = '%@', %@ ='%@', %@=%ld, %@=%ld WHERE %@ = '%@'", KTableChats,kTableChatFieldLastMsg,[aChat lastMessage],kTableChatFieldLastTime, lastDate ,kTableChatFieldLastMsgId, (long)[aChat lastMessageId], kTableChatFieldUnreadCount, (long)[aChat unreadCount], kTableChatFieldJID,[aChat chatBareJid]];
     
     BOOL success =  [_database executeUpdate:statement];
     
@@ -644,16 +644,16 @@ rollback:
     NSString* timeStampStr = [Utility dateToString:aMesage.date withFormat:kChatTimestampFormat];
         
     NSMutableArray*     args        = [ [NSMutableArray alloc] initWithObjects:
-                                           [NSNumber numberWithInt:aMesage.messageNumber],
-                                           [NSNumber numberWithInt:aMesage.messageType],
-                                           [NSNumber numberWithInt:aMesage.isOutGoing],
+                                           [NSNumber numberWithLong:aMesage.messageNumber],
+                                           [NSNumber numberWithLong:aMesage.messageType],
+                                           [NSNumber numberWithLong:aMesage.isOutGoing],
                                            aMesage.bareJid,
                                            timeStampStr,
                                            aMesage.body,
                                            aMesage.lresURL,
                                            aMesage.hresURL,
                                            fileData?fileData:[NSNull null],
-                                           [NSNumber numberWithInt:aMesage.messageStatus],
+                                           [NSNumber numberWithLong:aMesage.messageStatus],
                                             nil ];
         
     success = [_database executeUpdate:statement withArgumentsInArray:args];
@@ -686,13 +686,13 @@ rollback:
     NSString* jid = aMesage.bareJid;
     if( state>0  && [jid length] && aMesage.messageNumber && [aMesage.hresURL length] )
     {
-        NSString* statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = %d, %@ = '%@', %@='%@' WHERE %@ ='%@' AND %@ = %d", KTableChatItems, kTableChatItemState, state, kTableChatItemLResURL, aMesage.lresURL, kTableChatItemHResURL, aMesage.hresURL, kTableChatItemChatJID ,jid , kTableChatItemID, aMesage.messageNumber ];
+        NSString* statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = %ld, %@ = '%@', %@='%@' WHERE %@ ='%@' AND %@ = %ld", KTableChatItems, kTableChatItemState, (long)state, kTableChatItemLResURL, aMesage.lresURL, kTableChatItemHResURL, aMesage.hresURL, kTableChatItemChatJID ,jid , kTableChatItemID, (long)aMesage.messageNumber ];
         if( statement )
             [_database executeUpdate:statement];
     }
     else if( state>0  && [jid length] && aMesage.messageNumber )
     {
-            NSString* statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = %d WHERE %@ ='%@' AND %@ = %d", KTableChatItems, kTableChatItemState, state, kTableChatItemChatJID ,jid , kTableChatItemID, aMesage.messageNumber ];
+            NSString* statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = %ld WHERE %@ ='%@' AND %@ = %ld", KTableChatItems, kTableChatItemState, (long)state, kTableChatItemChatJID ,jid , kTableChatItemID, (long)aMesage.messageNumber ];
             if( statement )
                 [_database executeUpdate:statement];
     }
@@ -702,13 +702,13 @@ rollback:
 {
     if( aState>0  && [jid length] && msgId )
     {
-        NSString* statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = %d WHERE %@ ='%@' AND %@ = %d", KTableChatItems, kTableChatItemState, aState, kTableChatItemChatJID ,jid , kTableChatItemID, msgId ];
+        NSString* statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = %ld WHERE %@ ='%@' AND %@ = %ld", KTableChatItems, kTableChatItemState, (long)aState, kTableChatItemChatJID ,jid , kTableChatItemID, (long)msgId ];
         if( statement )
             [_database executeUpdate:statement];
     }
     else if( aState>0  && [jid length] && msgId <=0 )
     {
-        NSString* statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = %d WHERE %@ ='%@' AND %@ = %d AND %@ = %d", KTableChatItems, kTableChatItemState, aState, kTableChatItemChatJID ,jid , kTableChatItemIsOutGoing, YES, kTableChatItemState , MESSAGE_STATUS_USER ];
+        NSString* statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = %ld WHERE %@ ='%@' AND %@ = %d AND %@ = %d", KTableChatItems, kTableChatItemState, (long)aState, kTableChatItemChatJID ,jid , kTableChatItemIsOutGoing, YES, kTableChatItemState , MESSAGE_STATUS_USER ];
         if( statement )
             [_database executeUpdate:statement];
     }
@@ -720,7 +720,7 @@ rollback:
     
     NSMutableString* statement = [[NSMutableString alloc] initWithString:kEmptyString];
     
-    [statement appendFormat:@"SELECT * FROM %@ WHERE %@ = %d AND %@ =%d", KTableChatItems, kTableChatItemState, aChatState ,kTableChatItemIsOutGoing, YES ];
+    [statement appendFormat:@"SELECT * FROM %@ WHERE %@ = %ld AND %@ =%d", KTableChatItems, kTableChatItemState, (long)aChatState ,kTableChatItemIsOutGoing, YES ];
     
     ResultSet *rs = [_database executeQuery:statement];
     
@@ -825,7 +825,7 @@ rollback:
     [statement appendFormat:@"DELETE FROM %@ WHERE %@ in (",KTableChatItems,kTableChatItemID];
     
     for (Message *msg in messagesArray) {
-        [statement appendFormat:@"%d,",msg.messageNumber];
+        [statement appendFormat:@"%ld,",(long)msg.messageNumber];
     }
     NSString *query = [statement substringToIndex:(statement.length-1)];
     query = [NSString stringWithFormat:@"%@)",query];

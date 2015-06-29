@@ -1,9 +1,9 @@
 //
 //  Chat.m
-//  ChatNA
+//  QikAChat
 //
-//  Created by Ram Bhawan Chauhan on 30/08/14.
-//  Copyright (c) 2014 CraterZone. All rights reserved.
+//  Created by Ram Chauhan on 27/06/2015.
+//  Copyright (c) 2015 RAMC. All rights reserved.
 //
 
 #import "Chat.h"
@@ -13,6 +13,7 @@
 #import "MessageController.h"
 #import "DDLog.h"
 #import "Strings.h"
+#import "StorageManager.h"
 
 @implementation Chat
 
@@ -199,12 +200,12 @@
     if (atRange.location == NSNotFound && aDisplayName.length )
     {
         _displayName = aDisplayName; // replace state away
-        //[[StorageManager sharedInstance] updateChatName:self];
+        [[StorageManager sharedInstance] updateChatName:self];
     }
     else if( aDisplayName.length && _displayName==nil )
     {
         _displayName = [aDisplayName substringToIndex:atRange.location];
-        //[[StorageManager sharedInstance] updateChatName:self];
+        [[StorageManager sharedInstance] updateChatName:self];
     }
  }
 
@@ -300,7 +301,7 @@
 -(void) doHandleReceivedMessage:(Message*) aMessage
 {
     
-    NSString* displayName = [self getDisplayName];
+ //   NSString* displayName = [self getDisplayName];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PROCESSED_NOTIFICATION object:self];
     
     if (![[UIApplication sharedApplication] applicationState] == UIApplicationStateActive )
@@ -427,7 +428,7 @@
 - (NSData *)thumbnailImageForVideo:(NSString *)videoURL
                              atTime:(NSTimeInterval)time
 {
-    NSURL *url = [NSURL fileURLWithPath:videoURL];
+   // NSURL *url = [NSURL fileURLWithPath:videoURL];
     /*
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:url options:nil];
     NSParameterAssert(asset);
@@ -464,11 +465,11 @@
 
 -(void) pushPendingMessages
 {
-    for( Message* message in _allUnreadMessages )
-    {
+   // for( Message* message in _allUnreadMessages )
+   // {
        // NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:message forKey:MESSAGE_KEY_FOR_MESSAGE];
         //[[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CHAT_LOADED object:self userInfo:messageInfo];
-    }
+    //}
     
     [_allUnreadMessages removeAllObjects];
 }

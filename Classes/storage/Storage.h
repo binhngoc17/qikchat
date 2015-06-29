@@ -1,16 +1,16 @@
 //
 //  Storage.h
-//  ChatNA
+//  QikAChat
 //
-//  Created by Ram Bhawan Chauhan on 09/09/14.
-//  Copyright (c) 2014 CraterZone. All rights reserved.
+//  Created by Ram Chauhan on 27/06/2015.
+//  Copyright (c) 2015 RAMC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 @interface Storage : NSObject
 
-#define KCHATNA_DB                     @"QikAChat.db"
+#define KCHAT_DB                       @"QikAChat.db"
 #define kEmptyString                   @""
 
 #define kTableBlockUser                 @"blocked_users"

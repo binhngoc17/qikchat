@@ -1,10 +1,11 @@
 //
 //  MessageController.h
-//  ChatNA
+//  QikAChat
 //
-//  Created by Ram Bhawan Chauhan on 13/08/14.
-//  Copyright (c) 2014 CraterZone. All rights reserved.
+//  Created by Ram Chauhan on 27/06/2015.
+//  Copyright (c) 2015 RAMC. All rights reserved.
 //
+
 #import "XMPPFramework.h"
 #import "Buddy.h"
 
@@ -37,7 +38,7 @@
 -(void)sendOrQueueChatMessage:(Message *)message;
 
 /*
- *@author - Babul Prabhakar
+*@author - Ram Chauhan
  * call this method to send Chat Stat
  */
 -(NSArray*) getAllChatList;

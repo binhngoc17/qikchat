@@ -83,8 +83,8 @@
 -(void)setAddressbookUploaded:(BOOL)isVerified;
 
 
--(void)setChatnaId:(NSString *)chatnaId;
--(NSString*)getChatnaID:(NSString *)temp;
+-(void)setChatId:(NSString *)chatId;
+-(NSString*)getChatID:(NSString *)temp;
 
 -(BOOL)isMessageVibrateChecked;
 -(void)setMessageVibrate:(BOOL)value;

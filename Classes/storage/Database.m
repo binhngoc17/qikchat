@@ -23,7 +23,7 @@
 	
 	// FIXME - someday check the return codes on these binds.
 	else if ([obj isKindOfClass:[NSData class]]) {
-		result = sqlite3_bind_blob(pStmt, idx, [obj bytes], [obj length], SQLITE_STATIC);
+		result = sqlite3_bind_blob(pStmt, idx, [obj bytes], (int)[obj length], SQLITE_STATIC);
 	}
 	else if ([obj isKindOfClass:[NSDate class]]) {
 		result = sqlite3_bind_double(pStmt, idx, [obj timeIntervalSince1970]);
@@ -279,7 +279,7 @@
 {
 	DASSERT(db);
 	
-	int rc;
+	int rc=SQLITE_OK;
 	int numberOfRetries = 3;
 	while (numberOfRetries > 0) {
 		// Call sqlite3_step() to run the virtual machine. Since the SQL being executed is

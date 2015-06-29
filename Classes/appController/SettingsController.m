@@ -25,7 +25,7 @@ NSString *const LICENSE_AGREED = @"LICENSE_AGREED";
 NSString *const TOKEN_KEY = @"TOKEN_KEY";
 NSString *const KDATABASE_VERSION =@"DATABASE_VERSION";
 NSString *const KACONTACT_UPLOADED =@"CONTACT_UPLOADED";
-NSString *const CHATNA_ID_KEY = @"CHATNA_ID_KEY";
+NSString *const CHAT_ID_KEY = @"CHAT_ID_KEY";
 NSString *const MESSAGE_VIBRATE_KEY = @"MESSAGE_VIBRATE_KEY";
 NSString *const MESSAGE_TONE_KEY = @"MESSAGE_TONE_KEY";
 NSString *const PASSCODE_KEY = @"PASSCODE_KEY";
@@ -253,18 +253,18 @@ NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
     [[NSUserDefaults standardUserDefaults] setBool:aValue forKey:KACONTACT_UPLOADED];
 }
 
--(void)setChatnaId:(NSString *)chatnaId {
-    if (chatnaId != nil)
+-(void)setChatId:(NSString *)chatId {
+    if (chatId != nil)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:chatnaId forKey:CHATNA_ID_KEY];
+        [[NSUserDefaults standardUserDefaults] setObject:chatId forKey:CHAT_ID_KEY];
     } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:CHATNA_ID_KEY];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:CHAT_ID_KEY];
     }
 }
 
--(NSString *)getChatnaID:(NSString *)temp {
-    NSString *chatNAid = [[NSUserDefaults standardUserDefaults] objectForKey:CHATNA_ID_KEY];
-    return ((chatNAid != nil)?chatNAid:temp);
+-(NSString *)getChatID:(NSString *)temp {
+    NSString *chatid = [[NSUserDefaults standardUserDefaults] objectForKey:CHAT_ID_KEY];
+    return ((chatid != nil)?chatid:temp);
 }
 
 

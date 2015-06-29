@@ -1,9 +1,9 @@
 //
 //  Message.h
-//  ChatNa
+//  QikAChat
 //
-//  Created by Babul Prabhakar on 26/07/14.
-//  Copyright (c) 2014 Babul Prabhakar. All rights reserved.
+//  Created by Ram Chauhan on 27/06/2015.
+//  Copyright (c) 2015 RAMC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

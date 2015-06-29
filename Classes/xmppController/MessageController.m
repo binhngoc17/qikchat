@@ -1,10 +1,11 @@
 //
 //  MessageController.m
-//  ChatNA
+//  QikAChat
 //
-//  Created by Ram Bhawan Chauhan on 13/08/14.
-//  Copyright (c) 2014 CraterZone. All rights reserved.
+//  Created by Ram Chauhan on 27/06/2015.
+//  Copyright (c) 2015 RAMC. All rights reserved.
 //
+
 #import "MessageController.h"
 #import "QikAChat-Prefix.pch"
 #import "Buddy.h"
@@ -59,7 +60,7 @@
     
 }
 
-/* @author - Babul Prabhakar
+/* @author - Ram Chauhan
  * recieve Message delegate for reciveing message
  */
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
@@ -167,9 +168,9 @@
     [_allWaitingMessageQueue addObject:chatMessage];
 }
 
-/* @author - Babul Prabhakar
+/* @author - Ram Chauhan
  * send Message through xmpp stream
- *properties i.e elements as is used by android version for chatna
+ *properties i.e elements as is used by android version for QikaChat
  * - params -  Message type
  */
 - (void) sendMessage:(Message*)chatMessage {

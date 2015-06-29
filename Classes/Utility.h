@@ -18,7 +18,6 @@
 +(NSString *) timeToShortStringForDisplay:(NSDate *) date;
 
 + (NSString *) contentTypeForImageData:(NSData *)data;
-+ (NSString *)relativeDateStringForDate:(NSDate *)date;
 + (NSString*) getTimestampForDate:(NSDate*)date;
 + (NSString*) getTimestampForChat:(NSDate*)date;
 
