@@ -39,4 +39,54 @@
     return [[Message alloc] initWithTextMessage:theMessage withJid: aJid ];
 }
 
+
++(NSString *)getStringMessageType:(MessageType)msgType {
+    
+    switch (msgType) {
+        case TEXT_TYPE_MESSAGE:
+            return @"TEXT";
+        case AUDIO_TYPE_MESSAGE:
+            return @"AUDIO";
+            
+        case VIDEO_TYPE_MESSAGE:
+            return @"VIDEO";
+            
+        case LOCATION_TYPE_MESSAGE:
+            return @"LOCATION";
+            
+        case IMAGE_TYPE_MESSAGE:
+            return @"IMAGE";
+            
+        default:
+            break;
+    }
+    
+    
+    return @"";
+}
+
++(MessageType)getMessageType:(NSString*)msgType {
+    
+    MessageType retType = TEXT_TYPE_MESSAGE;
+    if( [msgType isEqualToString:@"IMAGE"] )
+    {
+        retType = IMAGE_TYPE_MESSAGE;
+    }
+    else if( [msgType isEqualToString:@"AUDIO"] )
+    {
+        retType = AUDIO_TYPE_MESSAGE;
+    }
+    else if( [msgType isEqualToString:@"VIDEO"] )
+    {
+        retType = VIDEO_TYPE_MESSAGE;
+    }
+    else if( [msgType isEqualToString:@"LOCATION"] )
+    {
+        retType = LOCATION_TYPE_MESSAGE;
+    }
+    
+    return retType;
+}
+
+
 @end

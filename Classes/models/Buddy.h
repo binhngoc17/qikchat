@@ -7,9 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
-
-@class DDXMLElement;
+#import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 typedef unsigned int OTRKitMessageState;
 
@@ -18,11 +17,21 @@ enum OTRKitMessageState { // OtrlMessageState
     kOTRKitMessageStateEncrypted = 1, // OTRL_MSGSTATE_ENCRYPTED
     kOTRKitMessageStateFinished = 2 // OTRL_MSGSTATE_FINISHED
 }; //
+
+enum OTRBuddyStatus {
+    kOTRBuddyStatusAvailable = 0,
+    KOTRChatStatusBusy = 1,
+    kOTRBuddyStatusAway = 2,
+    kOTRBuddyStatusDreaming = 3,
+    kOTRBuddyStatusBroken= 4,
+    kOTRBuddyStatusAnnoyed = 5,
+    kOTRBuddyStatusLazy = 6,
+    kOTRBuddyStatusOffline = 7
+};
 typedef unsigned int OTRBuddyStatus;
 
 #define MESSAGE_PROCESSED_NOTIFICATION @"MessageProcessedNotification"
 #define kOTREncryptionStateNotification @"kOTREncryptionStateNotification"
-
 
 @interface Buddy : NSObject
 {
@@ -56,4 +65,5 @@ typedef unsigned int OTRBuddyStatus;
 -(OTRBuddyStatus) getStatus;
 -(BOOL) isLastSeenFetched;
 -(void) setLastSeenFetched:(BOOL) aValue;
+
 @end

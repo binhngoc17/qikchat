@@ -8,18 +8,10 @@
 
 #import "Buddy.h"
 #import "DDXMLElement.h"
-#import "Constants.h"
-#import "Message.h"
 #import "XmppController.h"
-#import "NSString+HTML.h"
 #import "Strings.h"
 #import "DDLog.h"
-
-#if DEBUG
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
-#else
-static const int ddLogLevel = LOG_LEVEL_WARN;
-#endif
+#import "QikAChat-Prefix.pch"
 
 @implementation Buddy
 @synthesize groupName;
@@ -55,7 +47,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 
 -(void) setBuddyDisplayName:(NSString*) aDisplayName
 {
-    NSRange atRange = [aDisplayName rangeOfString:[NSString stringWithFormat:@"@%@",DOMAIN_NAME_XMPP_CHATNA]];
+    NSRange atRange = [aDisplayName rangeOfString:[NSString stringWithFormat:@"@%@",QIKACHAT_DOMAIN_NAME]];
     if (atRange.location == NSNotFound && aDisplayName.length )
     {
         displayName = aDisplayName; // replace state away
@@ -71,7 +63,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     if(displayName)
         return displayName;
     
-    return [Constants bareName:self.accountName];
+    return [Utility displayName:self.accountName];
 }
 
 -(void) setPhoneNumber:(NSString*) aNumber
@@ -167,7 +159,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 
 //for showing phone number on contact list  method  --babul
 -(NSString *)getPhoneNumer {
-    return [Constants bareName:self.accountName];
+    return [Utility displayName:self.accountName];
 }
 
 -(void) setLastSeenFetched:(BOOL) aValue

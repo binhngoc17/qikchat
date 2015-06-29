@@ -7,7 +7,29 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
+#import "Literals.h"
+
+//MessageStatus
+enum {
+    MESSAGE_STATUS_UNKNOWN, // for recieved message or unknown 0
+    MESSAGE_STATUS_WAITING, // local waiting or queued 1
+    MESSAGE_STATUS_SERVER, // sent to server 2
+    MESSAGE_STATUS_USER,   // recieved by user 3
+    MESSAGE_STATUS_READ,   // read by user 4
+    MESSAGE_STATUS_FAILED  // failed to send 5
+};
+typedef NSInteger MessageStatus;
+
+//MEssage Types
+enum {
+    TEXT_TYPE_MESSAGE,
+    LOCATION_TYPE_MESSAGE,
+    VIDEO_TYPE_MESSAGE,
+    AUDIO_TYPE_MESSAGE,
+    IMAGE_TYPE_MESSAGE,
+};
+typedef NSInteger MessageType;
+
 
 @interface Message : NSObject
 
@@ -31,5 +53,9 @@
 -(id)initWithTextMessage:(NSString *)message withJid:(NSString*) aJid;
 
 +(Message*)messageWithText:(NSString *)message withJid:(NSString*) aJid;
+
++(NSString *)getStringMessageType:(MessageType)msgType ;
+
++(MessageType)getMessageType:(NSString*)msgType ;
 
 @end

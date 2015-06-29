@@ -6,14 +6,7 @@
 //
 
 #import "SettingsController.h"
-#import "DDLog.h"
-#import "Constants.h"
-
-#if DEBUG
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
-#else
-static const int ddLogLevel = LOG_LEVEL_WARN;
-#endif
+#import "Literals.h"
 
 @implementation SettingsController
 
@@ -37,6 +30,7 @@ NSString *const MESSAGE_VIBRATE_KEY = @"MESSAGE_VIBRATE_KEY";
 NSString *const MESSAGE_TONE_KEY = @"MESSAGE_TONE_KEY";
 NSString *const PASSCODE_KEY = @"PASSCODE_KEY";
 NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
+
 +(SettingsController *)sharedInstance
 {
     static SettingsController *sharedManager;
@@ -193,24 +187,6 @@ NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
     }
 }
 
-#pragma theme getter setter
--(NSString *)getThemeName {
-    NSString * themeName = [[NSUserDefaults standardUserDefaults] valueForKey:THEME_KEY];
-    if (themeName) {
-        return themeName;
-    }
-    return BLUE_THEME;
-}
-
--(void)setTheme:(NSString *)plistName  {
-    if (plistName) {
-        [[NSUserDefaults standardUserDefaults] setValue:plistName forKey:THEME_KEY];
-        [self commitChange];
-    }else {
-        DDLogError(@"No Plist Name");
-    }
-}
-
 -(UIImage *)getMyAvatarImage {
     NSData *myAvatarData = [[NSUserDefaults standardUserDefaults] valueForKey:MY_AVATAR_KEY];
     if (myAvatarData) {
@@ -239,8 +215,6 @@ NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
     [self commitChange];
 }
 
-
-
 -(void)setToken:(NSString *)token {
     if (token != nil)
     {
@@ -249,6 +223,7 @@ NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:TOKEN_KEY];
     }
 }
+
 -(NSString *)getToken {
     
     return [[NSUserDefaults standardUserDefaults] valueForKey:TOKEN_KEY];
@@ -258,6 +233,7 @@ NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
 -(NSString *)getDatabaseVersion {
     return [[NSUserDefaults standardUserDefaults] valueForKey:KDATABASE_VERSION];
 }
+
 -(void )setDatabaseVersion:(NSString*) aVersion
 {
     if (aVersion != nil)
@@ -277,8 +253,6 @@ NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
     [[NSUserDefaults standardUserDefaults] setBool:aValue forKey:KACONTACT_UPLOADED];
 }
 
-
-
 -(void)setChatnaId:(NSString *)chatnaId {
     if (chatnaId != nil)
     {
@@ -287,6 +261,7 @@ NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:CHATNA_ID_KEY];
     }
 }
+
 -(NSString *)getChatnaID:(NSString *)temp {
     NSString *chatNAid = [[NSUserDefaults standardUserDefaults] objectForKey:CHATNA_ID_KEY];
     return ((chatNAid != nil)?chatNAid:temp);
@@ -322,19 +297,6 @@ NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
 }
 -(NSString *)getPasscode {
     return [[NSUserDefaults standardUserDefaults] objectForKey:PASSCODE_KEY];
-}
-
--(void)setChatTextSize:(NSInteger)sizeVal {
-    
-    [[NSUserDefaults standardUserDefaults] setInteger:sizeVal forKey:TEXT_SIZE_KEY];
-    
-}
--(ChatTextSize)getChatTextSize {
-    
-    ChatTextSize textSize= [[NSUserDefaults standardUserDefaults] integerForKey:TEXT_SIZE_KEY];
-  return   textSize;
-    
-    
 }
 
 @end

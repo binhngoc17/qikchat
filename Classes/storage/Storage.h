@@ -10,7 +10,7 @@
 
 @interface Storage : NSObject
 
-#define KCHATNA_DB                     @"ChatNA.db"
+#define KCHATNA_DB                     @"QikAChat.db"
 #define kEmptyString                   @""
 
 #define kTableBlockUser                 @"blocked_users"

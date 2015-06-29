@@ -9,12 +9,16 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
+/*recieve message */
+#define MESSAGE_RECIEVED @"MessageReceived"
+#define MESSAGE_KEY_FOR_MESSAGE @"message"
+#define MESSAGE_CHAT_LOADED @"ChatMessageLoaded"
+#define MESSAGE_KEY_FOR_ALL_MESSAGES @"allmessages"
 
-@class Chat;
 @class Database;
-@class ABContact;
 @class Message;
 @class Buddy;
+@class Chat;
 
 @interface StorageManager : NSObject
 {
@@ -24,19 +28,11 @@
 }
 +(StorageManager *)sharedInstance;
 
--(void)blockUserWithJid:(NSString *)blockUserjid;
--(NSArray*)getAllBlockedUser;
-
 -(void)saveChat:(Chat*) aChat;
--(void)loadAllChatList:(NSMutableDictionary*) allChats forRosters:(NSDictionary*) allBuddyList;
+-(void)loadAllChatList:(NSMutableDictionary*) allChats ; //forRosters:(NSDictionary*) allBuddyList;
 
 -(BOOL)updateLastActivity:(Chat*) aChat;
 -(BOOL)updateChatName:(Chat*) aChat;
-
--(void)saveABContacts:(NSArray*) aContacts;
--(void)updateABContacts:(NSArray*) aContacts;
--(void)removeABContacts:(NSArray*) aContacts;
--(NSArray*) getAllPBContacts;
 
 -(void)saveNewRosters:(NSArray*) aRosters;
 -(void)saveNewRoster:(Buddy*) aBuddy;
@@ -45,7 +41,7 @@
 -(void)updateRosters:(NSArray*) aRosters;
 -(void)updateRosterStatus:(Buddy*) aBuddy;
 -(void)updateRosterAvatar:(Buddy*) aBuddy;
--(NSArray*) loadAllRosters;
+-(BOOL) loadAllRosters:(NSMutableDictionary*) aRosterDictionay;
 
 -(NSMutableArray*)getAllChatMessagesForState:(NSInteger) aChatState;
 -(void) storeChatMessage:(Message*) aMesage;

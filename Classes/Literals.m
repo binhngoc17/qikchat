@@ -10,4 +10,10 @@
 
 @implementation Literals
 
+
+NSString *const kXMPPmyJID = @"kXMPPmyJID";
+NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
+
+
+
 @end

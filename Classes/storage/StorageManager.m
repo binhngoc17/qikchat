@@ -7,15 +7,15 @@
 //
 
 #import "StorageManager.h"
-#import "BlockedUser.h"
-#import "Chat.h"
 #import "Database.h"
-#import "SettingsController.h"
-#import "ABContact.h"
 #import "Storage.h"
+#import "SettingsController.h"
+
+#import "Chat.h"
 #import "Buddy.h"
 #import "Message.h"
-#import "Constants.h"
+#import "Literals.h"
+#import "Utility.h"
 
 @implementation StorageManager
 
@@ -105,7 +105,7 @@
  */
 - (void) checkDBSchema
 {
-	NSString *db_version =  [[SettingsController sharedInstance] getDatabaseVersion];
+	NSString *db_version =  [[SettingsController sharedInstance ] getDatabaseVersion];
     
 	if(!db_version || [db_version isEqualToString:KDATABASE_CURRENT_VERSION])
 	{
@@ -278,7 +278,7 @@ rollback:
     
     [statement appendString:@" VALUES (?,?,?,?,?,?)"];
     
-    NSString* lastdate = [Constants dateToString:[aChat lastActivityDate] withFormat:kChatTimestampFormat];
+    NSString* lastdate = [Utility dateToString:[aChat lastActivityDate] withFormat:kChatTimestampFormat];
     
     NSMutableArray*     args        = [ [NSMutableArray alloc] initWithObjects:
                                        [aChat chatBareJid],
@@ -312,7 +312,7 @@ rollback:
 
 -(BOOL)updateLastActivity:(Chat*) aChat
 {
-    NSString* lastDate = [Constants dateToString:[aChat lastActivityDate] withFormat:kChatTimestampFormat];
+    NSString* lastDate = [Utility dateToString:[aChat lastActivityDate] withFormat:kChatTimestampFormat];
     NSString*   statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = '%@', %@ ='%@', %@=%d, %@=%d WHERE %@ = '%@'", KTableChats,kTableChatFieldLastMsg,[aChat lastMessage],kTableChatFieldLastTime, lastDate ,kTableChatFieldLastMsgId, [aChat lastMessageId], kTableChatFieldUnreadCount, [aChat unreadCount], kTableChatFieldJID,[aChat chatBareJid]];
     
     BOOL success =  [_database executeUpdate:statement];
@@ -326,7 +326,7 @@ rollback:
     return [_database executeUpdate:statement];
 }
 
--(void)loadAllChatList:(NSMutableDictionary*) allChats forRosters:(NSDictionary*) allBuddyList;
+-(void)loadAllChatList:(NSMutableDictionary*) allChats //forRosters:(NSDictionary*) allBuddyList;
 {
     NSMutableString* statement = [[NSMutableString alloc] initWithString:kEmptyString];
     
@@ -345,7 +345,7 @@ rollback:
         Chat* chat = [[Chat alloc ] initWithChatJID:jid withName:name];
         [chat setLastMessage:lastMsg withTime:lasttime withUnread:unreadCount messageId:msgNumber];
         
-        if( allBuddyList )
+        /*if( allBuddyList )
         {
             Buddy* associatedBuddy = [allBuddyList objectForKey:jid];
             if( associatedBuddy ){
@@ -353,166 +353,12 @@ rollback:
                 [chat setChatImage:avatar];
                 [chat setChatDisplayName:associatedBuddy.getDisplayName];
             }
-        }
+        }*/
         
         [allChats setObject:chat forKey:jid];
     }
 }
 
--(void)saveABContact:(ABContact*) aContact{
-    // Add Entry to PhoneBook Data base and reset all fields
-    
-    [_database beginDeferredTransaction];
-    
-    NSMutableString*    statement   = [[NSMutableString alloc] initWithString:kEmptyString] ;
-    
-    [statement appendFormat:@"INSERT OR REPLACE INTO %@ (",KTableContacts];
-    [statement appendFormat:@"%@,",kTableContactFieldLUID];
-    [statement appendFormat:@"%@,",kTableContactFieldName];
-    [statement appendFormat:@"%@)",kTableContactFieldNumbers];
-    
-    [statement appendString:@" VALUES (?,?,?)"];
-    
-    NSString* preParedNumber = [aContact getAllNumbersToString];
-    
-    NSMutableArray*     args        = [ [NSMutableArray alloc] initWithObjects:
-                                       [NSNumber numberWithInt:[aContact getLUID]],
-                                       aContact.cdisplayName,
-                                       preParedNumber,
-                                       nil ];
-    
-    BOOL success = [_database executeUpdate:statement withArgumentsInArray:args];
-    
-    if (!success) {
-        NSLog(@" Error on saving chat %@",[_database lastErrorMessage]);
-        goto rollback;
-    }
-    
-rollback:
-    
-    if(success)
-    {
-        [_database commit];
-    }
-    else
-    {
-        [_database rollback];
-        DASSERT("error");
-    }
-    
-}
-
--(void)saveABContacts:(NSArray*) aContacts;
-{
-    if( [aContacts count] == 0 )
-        return;
-    
-    [_database beginDeferredTransaction];
-    
-    BOOL success = NO;
-    
-    for (NSInteger i=0; i<[aContacts count]; i++)
-    {
-        ABContact* contact = [aContacts objectAtIndex:i];
-       
-        NSMutableString*    statement   = [[NSMutableString alloc] initWithString:kEmptyString] ;
-    
-        [statement appendFormat:@"INSERT OR REPLACE INTO %@ (",KTableContacts];
-        [statement appendFormat:@"%@, ",kTableContactFieldLUID];
-        [statement appendFormat:@"%@, ",kTableContactFieldName];
-        [statement appendFormat:@"%@)",kTableContactFieldNumbers];
-        
-        [statement appendString:@" VALUES (?,?,?)"];
-    
-        NSString* preParedNumber =  [contact getAllNumbersToString];
-    
-        NSMutableArray*     args        = [ [NSMutableArray alloc] initWithObjects:
-                                       [NSNumber numberWithInt:[contact getLUID]],
-                                       contact.cdisplayName,
-                                       preParedNumber,
-                                       nil ];
-    
-        success = [_database executeUpdate:statement withArgumentsInArray:args];
-    
-        if (!success) {
-            NSLog(@" Error on saving chat %@",[_database lastErrorMessage]);
-            goto rollback;
-        }
-    }
-
-rollback:
-    
-    if(success)
-    {
-        [_database commit];
-    }
-    else
-    {
-        [_database rollback];
-        DASSERT("error");
-    }
-    
-}
--(void)removeABContacts:(NSArray*) aContacts;
-{
-    for (NSInteger i=0; i<[aContacts count]; i++)
-    {
-        NSMutableString*    statement   = [[NSMutableString alloc] initWithString:kEmptyString] ;
-        
-        ABContact* contact = [aContacts objectAtIndex:i];
-        
-        [statement appendFormat:@"DELETE FROM %@ WHERE %@ ='%d'",KTableContacts,kTableContactFieldLUID,[contact getLUID] ];
-        
-        [_database executeUpdate:statement];
-        
-    }
-}
-
--(void)updateABContacts:(NSArray*) aContacts;
-{
-    for (NSInteger i=0; i<[aContacts count]; i++)
-    {
-        ABContact* contact = [aContacts objectAtIndex:i];
-        NSString* preParedNumbers =  [contact getAllNumbersToString];
-        NSString*   statement=nil;
-       if( [preParedNumbers length] )
-       {
-           statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = '%@', %@ = '%@' WHERE %@ = %ld", KTableContacts,kTableContactFieldName,contact.cdisplayName,kTableContactFieldNumbers,preParedNumbers, kTableContactFieldLUID,(long)[contact getLUID]];
-       }
-      else
-        {
-            statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = '%@' WHERE %@ = %ld", KTableContacts,kTableContactFieldName,contact.cdisplayName, kTableContactFieldLUID,(long)[contact getLUID]];
-        }
-        
-        [_database executeUpdate:statement];
-        
-    }
-}
-
--(NSArray*)getAllPBContacts
-{
-    NSMutableArray* retArray = [[NSMutableArray alloc] init] ;
-    
-    NSMutableString* statement = [[NSMutableString alloc] initWithString:kEmptyString];
-    
-    [statement appendFormat:@"SELECT * FROM %@", KTableContacts];
-    
-    ResultSet *rs = [_database executeQuery:statement];
-    while ([rs next])
-    {
-        int uid        = [rs intForColumnIndex:0];
-		NSString *name  = [rs stringForColumnIndex:1];
-		NSString *numbers       = [rs stringForColumnIndex:2];
-		
-        ABContact* contact = [[ABContact alloc] initWithLUID:uid withName:name];
-        [contact setAllNumbersFromString:numbers];
-        
-        [retArray addObject:contact];
-        
-        contact = nil;
-    }
-    return retArray;
-}
 
 ////////////////////////////////////////////////
 
@@ -732,10 +578,8 @@ rollback:
     }
 }
 
--(NSArray*)loadAllRosters
+-(BOOL)loadAllRosters:(NSMutableDictionary*) aRosterDictionay
 {
-    NSMutableArray* retArray = [[NSMutableArray alloc] init] ;
-    
     NSMutableString* statement = [[NSMutableString alloc] initWithString:kEmptyString];
     
     [statement appendFormat:@"SELECT * FROM %@", KTableRosters];
@@ -762,11 +606,11 @@ rollback:
          buddy.hresAvtarURL = hresURL;
         [buddy setAvatarImage:[UIImage imageWithData:avatarData]];
         
-        [retArray addObject:buddy];
+        [aRosterDictionay setObject:buddy forKey:jid];
         
-        buddy = nil;
     }
-    return retArray;
+    
+    return YES;
 }
 
 
@@ -797,7 +641,7 @@ rollback:
     
     [statement appendString:@" VALUES (?,?,?,?,?,?,?,?,?,?)"];
     
-    NSString* timeStampStr = [Constants dateToString:aMesage.date withFormat:kChatTimestampFormat];
+    NSString* timeStampStr = [Utility dateToString:aMesage.date withFormat:kChatTimestampFormat];
         
     NSMutableArray*     args        = [ [NSMutableArray alloc] initWithObjects:
                                            [NSNumber numberWithInt:aMesage.messageNumber],
@@ -901,7 +745,7 @@ rollback:
         msg.messageNumber = id;
         msg.messageType = type;
         msg.isOutGoing = isOutGoing;
-        msg.date = [Constants stringToDate:time withFormat:kChatTimestampFormat];
+        msg.date = [Utility stringToDate:time withFormat:kChatTimestampFormat];
         msg.lresURL = lresUrl;
         msg.hresURL = hresUrl;
         
@@ -961,7 +805,7 @@ rollback:
         msg.messageNumber = id;
         msg.messageType = type;
         msg.isOutGoing = isOutGoing;
-        msg.date = [Constants stringToDate:time withFormat:kChatTimestampFormat];
+        msg.date = [Utility stringToDate:time withFormat:kChatTimestampFormat];
         msg.lresURL = lresUrl;
         msg.hresURL = hresUrl;
         
@@ -971,7 +815,6 @@ rollback:
         NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:msg forKey:MESSAGE_KEY_FOR_MESSAGE];
         //save it to db and show to user on chat list and chat screen
         [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CHAT_LOADED object:self userInfo:messageInfo];
-        
     }
     
 }

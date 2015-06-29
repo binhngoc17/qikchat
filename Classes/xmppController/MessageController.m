@@ -6,22 +6,11 @@
 //  Copyright (c) 2014 CraterZone. All rights reserved.
 //
 #import "MessageController.h"
-
-#import "XmppController.h"
-#import "Message.h"
-#import "XMPPMessage+XEP_0184.h"
-#import "XMPPMessage+XEP_0085.h"
-#import "NSXMLElement+XMPP.h"
+#import "QikAChat-Prefix.pch"
 #import "Buddy.h"
-#import "DDXML.h"
-#import "DDLog.h"
 #import "Chat.h"
+#import "Literals.h"
 #import "StorageManager.h"
-#import "FileUploadResponse.h"
-#import "FileUploadRequest.h"
-#import "ChatNaController.h"
-#import "NSData+Base64.h"
-#import "XMPPMessageDeliveryReceipts.h"
 
 @implementation MessageController
 
@@ -40,24 +29,25 @@
 - (void) setup
 {
      _allChatList  = [[NSMutableDictionary alloc] init];
-	 _allPendingFileUpload = [[NSMutableDictionary alloc] init]; // file message queue
-     _allWaitingMessageQueue = [[NSMutableArray alloc] init];
-    
+	_allWaitingMessageQueue = [[NSMutableArray alloc] init];
+   
     [_xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
     
-   
     XMPPMessageDeliveryReceipts* xmppMessageDeliveryRecipts = [[XMPPMessageDeliveryReceipts alloc] init];
     xmppMessageDeliveryRecipts.autoSendMessageDeliveryReceipts = NO;
     xmppMessageDeliveryRecipts.autoSendMessageDeliveryRequests = YES;
     [xmppMessageDeliveryRecipts addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [xmppMessageDeliveryRecipts activate:_xmppStream];
     
-   
-    [self loadAllChats];
     
-    NSArray* array = [[StorageManager sharedInstance] getAllChatMessagesForState:MESSAGE_STATUS_WAITING];
-    [_allWaitingMessageQueue addObjectsFromArray:array];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[StorageManager  sharedInstance] loadAllChatList:_allChatList];
+        [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_CHAT_LIST object:self];
+        NSLog(@"count = %ld", _allChatList.count);
+    });
     
+   // NSArray* array = [[StorageManager sharedInstance] getAllChatMessagesForState:MESSAGE_STATUS_WAITING];
+    //[_allWaitingMessageQueue addObjectsFromArray:array];
 }
 
 
@@ -74,94 +64,17 @@
  */
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {
-   
     if ([message isMessageWithBody] && ![message isErrorMessage])
     {
-        // message
-        Message *msg = [self parse2LocalMessage:message ];
-        if( msg )
-        {
-            msg.isOutGoing = FALSE;
-            Chat* chat = [self createChatForJID:msg.bareJid withDisplayName:nil];
-            if( chat ){
-                [chat handleRecievedMessage:msg];
-                
-                if([message hasReceiptRequest])
-                {
-                    XMPPMessage *generatedReceiptResponse = [message generateReceiptResponse];
-                    NSXMLElement *received = [generatedReceiptResponse elementForName:@"received" xmlns:@"urn:xmpp:receipts"];
-                    if( [chat isActiveChat] )
-                    {
-                        [received addAttributeWithName:@"read" stringValue:@"true"];
-                    }
-                    else
-                    {
-                        [received addAttributeWithName:@"read" stringValue:@"false"];
-                    }
-                    [sender sendElement:generatedReceiptResponse];
-                }
-            }
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_CHAT_LIST_UPDATE object:nil];
-        }
     }
     else if ([message hasReceiptResponse] && ![message isErrorMessage])
     {
-        //delivery report
-        NSString* bareJid = message.from.bare;
-        NSArray* allIdParts = [[message receiptResponseID] componentsSeparatedByString:@"-"];
-        NSInteger msgId = [[allIdParts lastObject] intValue];
-      
-        MessageStatus status = MESSAGE_STATUS_USER;
         
-        NSXMLElement *received = [message elementForName:@"received" xmlns:@"urn:xmpp:receipts"];
-        if( received )
-        {
-            NSString* readValue = [received attributeStringValueForName:@"read"];
-            if( [readValue isEqualToString:@"true"] )
-                status = MESSAGE_STATUS_READ;
-        }
-        
-        [[StorageManager sharedInstance] updateMessageStatus:status bareJId:bareJid messageId:msgId];
-      
-        Chat* chat = [self getChatForJID:bareJid];
-        if( chat )
-        {
-            if ([chat.chatDelegate conformsToProtocol:@protocol(ChatMessageDelegate)] && [chat.chatDelegate respondsToSelector:@selector(handleMessageChange:messageId:status:)]) {
-                [chat.chatDelegate handleMessageChange:bareJid messageId:msgId status:status];
-            }
-        }
     }
     else if([message hasChatState] && ![message isErrorMessage])
     {
-        //delivery report
-        NSString* bareJid = message.from.bare;
-        Chat* chat = [self getChatForJID:bareJid];
-        if( chat )
-        {
-            OTRChatState newState = kOTRChatStateUnknown;
-            if( [message hasActiveChatState])
-                newState = kOTRChatStateActive;
-            else if( [message hasComposingChatState])
-                newState = kOTRChatStateComposing;
-            else if( [message hasPausedChatState])
-                newState = kOTRChatStatePaused;
-            else if( [message hasInactiveChatState])
-                newState = kOTRChatStateInactive;
-            else if( [message hasGoneChatState])
-                newState = kOTRChatStateGone;
-       
-            if( newState == kOTRChatStateActive || newState == kOTRChatStateComposing)
-            {
-                // mark all message read for this chat
-                [[StorageManager sharedInstance] updateMessageStatus:MESSAGE_STATUS_READ bareJId:bareJid messageId:0]; // all messages
-            }
- 
-            if ([chat.chatDelegate conformsToProtocol:@protocol(ChatMessageDelegate)] && [chat.chatDelegate respondsToSelector:@selector(handleChatState:state:)])
-            {
-                [chat.chatDelegate handleChatState:bareJid state:newState];
-            }
-        }
-   }
+        
+    }
 }
 
 -(void) handleServiceAuthenticated
@@ -194,7 +107,7 @@
 
 -(void)sendOrQueueChatMessage:(Message *)message
 {
-    if( [[XmppController sharedSingleton]  isServiceConnected] && !_isMessageSending)
+    if( [xmppInstance isServiceConnected] && !_isMessageSending)
     {
         [self processSendMessage:message];
     }
@@ -215,61 +128,12 @@
     {
         [self doSendChatMessage:message withErr:0];
     }
-    else if( message.fileData )
-    {
-        FileUploadRequest *fileupload = [[FileUploadRequest alloc] initWithJid:message.bareJid];
-        
-        fileupload.exten = [Constants contentTypeForImageData:message.fileData];
-        fileupload.fileType = [Constants getStringMessageType:message.messageType];
-        
-        NSString *filename = [message.body lastPathComponent];
-        [fileupload setFileName:filename];
-        
-        if( message.messageType == VIDEO_TYPE_MESSAGE )
-        {
-            fileupload.exten = [NSString stringWithFormat:@"video/%@",[filename pathExtension] ];
-        } else if (message.messageType == AUDIO_TYPE_MESSAGE) {
-            fileupload.exten = @"audio/m4a";
-        }
-        
-        fileupload.data = [message.fileData base64EncodedString];
-        message.extension = fileupload.exten;
-        
-        [_allPendingFileUpload setObject:message forKey:[fileupload getRequestId] ];
-        
-        [[ChatNaController sharedInstance] uploadMultiPartFile:fileupload];
-        
-        if( message.messageType == VIDEO_TYPE_MESSAGE ) // for displaying thumb
-        {
-            message.fileData = nil; // do not save whole data in db,  remove it
-        }
-    }
     else if( _isMessageSending )
     {
         _isMessageSending = NO;
         [self asynchSendQueueMessage];
     }
 }
-
-
-
--(void)sendorQueueForwardMessages:(Message *)message {
-    if( [[XmppController sharedSingleton]  isServiceConnected] && !_isMessageSending)
-    {
-        [self doSendChatMessage:message withErr:0];
-    }
-    else
-    {
-        [self queueMessage:message];
-    }
-}
-
-
-
-
-
-
-
 
 -(void) doSendChatMessage:(Message*) aMessage withErr:(NSInteger) error
 {
@@ -297,25 +161,6 @@
     [self asynchSendQueueMessage];
 }
 
--(void) handleFileUploadResponse:(FileUploadResponse*) aFileRespone error:(int) err
-{
-    _isMessageSending = NO;
-    
-    if( !aFileRespone ){
-        [self asynchSendQueueMessage];
-        return;
-    }
-    
-    Message* message = [_allPendingFileUpload objectForKey:[aFileRespone getRequestId]];
-    if( message )
-    {
-        message.lresURL = (aFileRespone.lresURL == nil) ? @"" : aFileRespone.lresURL;
-        message.hresURL = aFileRespone.hresURL;
-        [_allPendingFileUpload removeObjectForKey:[aFileRespone getRequestId]];
-        
-        [self doSendChatMessage:message withErr:err];
-    }
-}
 
 -(void) queueMessage:(Message*) chatMessage
 {
@@ -460,7 +305,7 @@
             
             NSXMLElement *value = [NSXMLElement  elementWithName:KTAG_VALUE];
             [value addAttributeWithName:@"type" stringValue:KTAG_STRING];
-            [value setStringValue:[Constants getStringMessageType:chatMessage.messageType]];
+            [value setStringValue:[Message getStringMessageType:chatMessage.messageType]];
             [property addChild:value];
        
             [properties addChild:property];
@@ -475,26 +320,6 @@
 		
         [_xmppStream sendElement:message];
         
-    }
-}
-
-
-/*
- *@author - Ram Chauhan
- *method returns array of chats
- */
--(void) updateChatInfoIfExists:(Buddy*) aBuddy
-{
-    if( aBuddy == nil)
-        return;
-    
-    Chat *chat = [_allChatList objectForKey:aBuddy.accountName ];
-    if( chat )
-    {
-        [chat setChatDisplayName:[aBuddy getDisplayName]];
-        [chat setChatImage:aBuddy.avatarImage];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_CHAT_LIST_UPDATE object:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_CHAT_INFO object:chat];
     }
 }
 
@@ -578,18 +403,6 @@
     [iq addChild:offline];
     
     [_xmppStream sendElement:iq];
-}
-
-
-/*
- *@author - Babul Prabhakar
- *method returns array of messages
- */
--(void) loadAllChats
-{
-    [_allChatList removeAllObjects];
-    NSDictionary* allStoredRoster = [[[XmppController sharedSingleton] rosterController] getAllStorageRoster];
-    [[StorageManager sharedInstance] loadAllChatList:_allChatList forRosters:allStoredRoster];
 }
 
 /*
@@ -677,7 +490,7 @@
                 
                 if( [name isEqualToString:KTAG_MESSAGETYPE] )
                 {
-                    msg.messageType = [Constants getMessageType:value];
+                    msg.messageType = [Message getMessageType:value];
                 }
                 else if( [name isEqualToString:KTAG_HRESURL]  )
                 {
@@ -706,6 +519,11 @@
     }
     return msg;
 }
+-(Chat*) chatForIndex:(NSInteger) aIndex{
+    return [[_allChatList allValues] objectAtIndex:aIndex];
+}
 
-
+-(NSInteger) chatCount{
+    return _allChatList.count;
+}
 @end

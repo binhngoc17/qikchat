@@ -6,7 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
+#import <UIKit/UIKit.h>
+#import "Literals.h"
 
 @interface SettingsController : NSObject
 
@@ -62,14 +63,9 @@
 -(NSString *)getPassword:(NSString*)password;
 -(void)setPassword:(NSString *)password;
 
-/*theme setter getter*/
--(NSString *)getThemeName;
--(void)setTheme:(NSString *)plistName;
-
 /*getter and setter for avatar*/
 -(UIImage *)getMyAvatarImage;
 -(void)setMyAvatarImage:(NSData *)aImageData;
-
 
 /*license agreed*/
 -(BOOL)isLicenseAgreed;
@@ -95,12 +91,7 @@
 -(BOOL)isMessageToneOn;
 -(void)setMessageTone:(BOOL)value;
 
-
 -(void)setPasscode:(NSString *)value;
 -(NSString *)getPasscode;
-
-
--(void)setChatTextSize:(NSInteger)sizeVal;
--(ChatTextSize)getChatTextSize;
 
 @end

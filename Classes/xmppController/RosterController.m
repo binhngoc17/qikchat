@@ -1,16 +1,17 @@
 //
-//  xmppRosterController.m
+//  RosterController.m
 //  QikAChat
 //
 //  Created by Ram Bhawan Chauhan on 28/06/15.
 //  Copyright (c) 2015 RAMC. All rights reserved.
 //
 
-#import "xmppRosterController.h"
+#import "RosterController.h"
 #import "QikAChat-Prefix.pch"
-#import "XmppController.h"
+#import "StorageManager.h"
+#import "Buddy.h"
 
-@implementation XmppRosterController
+@implementation RosterController
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark NSFetchedResultsController
@@ -38,7 +39,7 @@
     
     xmppRoster.autoFetchRoster = YES;
     xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = NO;
-    
+    xmppRoster.autoClearAllUsersAndResources = NO;
     // Setup vCard support
     //
     // The vCard Avatar module works in conjuction with the standard vCard Temp module to download user avatars.
@@ -49,16 +50,19 @@
     xmppvCardAvatarModule = [[XMPPvCardAvatarModule alloc] initWithvCardTempModule:xmppvCardTempModule];
     
     // Activate Roster modules
-    
     [xmppRoster            activate:_xmppStream];
     [xmppvCardTempModule   activate:_xmppStream];
     [xmppvCardAvatarModule activate:_xmppStream];
-    
     
     [xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [xmppvCardTempModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [xmppvCardAvatarModule addDelegate:self delegateQueue:dispatch_get_main_queue() ];
     
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[StorageManager  sharedInstance] loadAllRosters:_allBuddyList];
+        [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_FRIEND_LIST object:self];
+        NSLog(@"count = %ld", _allBuddyList.count);
+    });
 }
 
 /*
@@ -78,12 +82,21 @@
     xmppvCardAvatarModule = nil;
 }
 
+- (NSManagedObjectContext *)managedObjectContext_roster
+{
+    return [xmppRosterStorage mainThreadManagedObjectContext];
+}
+
+-(void)handleServiceAuthenticated{
+    
+    [self fetchRosterList:nil];
+}
 
 - (NSFetchedResultsController *)fetchedResultsController
 {
     if (fetchedResultsController == nil)
     {
-        NSManagedObjectContext *moc = [xmppInstance managedObjectContext_roster];
+        NSManagedObjectContext *moc = [self managedObjectContext_roster];
         
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject"
                                                   inManagedObjectContext:moc];
@@ -115,28 +128,268 @@
     return fetchedResultsController;
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    
-}
 
--(NSInteger) rosterCount:(NSInteger) sectionIndex
-{
-    NSArray *sections = [[self fetchedResultsController] sections];
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type{
     
-    if (sectionIndex < [sections count])
+    NSFetchedResultsController *frc = [self fetchedResultsController];
+    BOOL updated = false;
+    NSString *sectionName;
+    OTRBuddyStatus otrBuddyStatus;
+    
+    int section = [sectionInfo.name intValue];
+    switch (section)
     {
-        id <NSFetchedResultsSectionInfo> sectionInfo = sections[sectionIndex];
-        return sectionInfo.numberOfObjects;
+        case 0  :
+            sectionName = @"Available";
+            otrBuddyStatus = kOTRBuddyStatusAvailable;
+            break;
+        case 1  :
+            sectionName = @"Away";
+            otrBuddyStatus = kOTRBuddyStatusAway;
+            break;
+        default :
+            sectionName = @"Offline";
+            otrBuddyStatus = kOTRBuddyStatusOffline;
+            break;
     }
-    return 0;
+    
+    for(int j = 0; j < sectionInfo.numberOfObjects; j++)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:j inSection:sectionIndex];
+        XMPPUserCoreDataStorageObject *user = [frc objectAtIndexPath:indexPath];
+        
+        [xmppvCardTempModule fetchvCardTempForJID:user.jid ignoreStorage:YES];
+        
+        NSString* displayName = user.displayName;
+        if(![Utility isDisplayNameValid:displayName ] && user.nickname )
+            displayName = user.nickname;
+        
+        NSString* subscribtion = user.subscription;
+        NSString* bareJid = [[user jid] bare];
+        
+        updated = [self handleRosterItemUpdate:bareJid subcribtion:subscribtion formatName:displayName];
+        Buddy *buddy = [_allBuddyList objectForKey:bareJid];
+        if( buddy )
+        {
+            buddy.buddyStatus = otrBuddyStatus;
+            buddy.groupName = sectionName;
+            if (user.photo != nil)
+            {
+                buddy.avatarImage  = user.photo;
+                updated = YES;
+            }
+            else
+            {
+                NSData *photoData = [xmppvCardAvatarModule photoDataForJID:user.jid];
+                if (photoData != nil) {
+                    UIImage *avtImg = [UIImage imageWithData:photoData];
+                    buddy.avatarImage = avtImg;
+                    updated = YES;
+                }
+            }
+            if( updated )
+                [[StorageManager sharedInstance] updateRosterAvatar:buddy];
+        }
+        else
+        {
+            Buddy *buddy = [[Buddy alloc] initWithDisplayName:displayName accountName:bareJid status:otrBuddyStatus groupName:sectionName];
+            [_allBuddyList setObject:buddy forKey:bareJid];
+            if (user.photo != nil)
+            {
+                buddy.avatarImage  = user.photo;
+            }
+            else
+            {
+                NSData *photoData = [xmppvCardAvatarModule photoDataForJID:user.jid];
+                if (photoData != nil) {
+                    UIImage *avtImg = [UIImage imageWithData:photoData];
+                    buddy.avatarImage = avtImg;
+                }
+            }
+            [[StorageManager sharedInstance] saveNewRoster:buddy];
+        }
+    }
+    
+    if( updated ){
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[StorageManager  sharedInstance] updateRosters:_allBuddyList.allValues];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_FRIEND_LIST object:self];
+        });
+    }
 }
 
--(XMPPUserCoreDataStorageObject*) userForPath:(NSIndexPath*) indexPath
+-(BOOL) handleRosterItemUpdate:(NSString*) aJID subcribtion:(NSString*) subscribe formatName:(NSString*) name
 {
-    return  [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    BOOL didFrindChanged = NO;
+    
+    if( [subscribe isEqualToString:@"to"] ||  [subscribe isEqualToString:@"both"] || [subscribe isEqualToString:@"none"])
+    {
+        Buddy *buddy = [_allBuddyList objectForKey:aJID];
+        if(!buddy)
+        {
+            buddy = [Buddy buddyWithDisplayName:name accountName:aJID status:kOTRBuddyStatusOffline groupName:nil];
+            [_allBuddyList setObject:buddy forKey:aJID];
+            buddy.currentStatusText = @"";
+            didFrindChanged = YES;
+            [[StorageManager sharedInstance] saveNewRoster:buddy];
+        }
+        else if( [name length] && ![name isEqualToString:[buddy getDisplayName]])
+        {
+            [buddy setBuddyDisplayName:name]; // update new name
+            didFrindChanged = YES;
+        }
+    }
+    else if( [subscribe isEqualToString:@"from"] )
+    {
+        Buddy* budy = [_allBuddyList objectForKey:aJID];
+        if( _allBuddyList && budy  )
+        {
+            [[StorageManager sharedInstance] removeRoster:budy];
+            [_allBuddyList removeObjectForKey:aJID];
+            didFrindChanged = YES;
+        }
+    }
+    else if( [subscribe isEqualToString:@"remove"])
+    {
+        didFrindChanged = YES;
+        
+        Buddy* buddy = [_allBuddyList objectForKey:aJID];
+        if( buddy ){
+            [[StorageManager sharedInstance] removeRoster:buddy];
+            [_allBuddyList removeObjectForKey:aJID];
+        }
+    }
+    
+    return didFrindChanged;
 }
 
 
+-(Buddy*) getBuddyForJId:(NSString*) aJID
+{
+    if( [_allBuddyList count ] )
+    {
+        Buddy *buddy = [_allBuddyList objectForKey:aJID];
+        if( !buddy )
+        {
+            NSString* fullJid = [NSString stringWithFormat:@"%@@%@",aJID, QIKACHAT_DOMAIN_NAME];
+            buddy = [_allBuddyList objectForKey:fullJid];
+        }
+        return buddy;
+    }
+    
+    return nil;
+}
+
+-(void) fetchRosterList:(NSString*) aJid
+{
+    BOOL updated = false;
+    NSFetchedResultsController *frc = [self fetchedResultsController];
+    NSArray *sections = [[self fetchedResultsController] sections];
+    NSUInteger sectionsCount = [[[self fetchedResultsController] sections] count];
+    
+    for(int sectionIndex = 0; sectionIndex < sectionsCount; sectionIndex++)
+    {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:sectionIndex];
+        NSString *sectionName;
+        OTRBuddyStatus otrBuddyStatus;
+        
+        int section = [sectionInfo.name intValue];
+        switch (section)
+        {
+            case 0  :
+                sectionName = @"Available";
+                otrBuddyStatus = kOTRBuddyStatusAvailable;
+                break;
+            case 1  :
+                sectionName = @"Away";
+                otrBuddyStatus = kOTRBuddyStatusAway;
+                break;
+            default :
+                sectionName = @"Offline";
+                otrBuddyStatus = kOTRBuddyStatusOffline;
+                break;
+        }
+        
+        for(int j = 0; j < sectionInfo.numberOfObjects; j++)
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:j inSection:sectionIndex];
+            XMPPUserCoreDataStorageObject *user = [frc objectAtIndexPath:indexPath];
+            
+            [xmppvCardTempModule fetchvCardTempForJID:user.jid ignoreStorage:YES];
+            
+            
+            NSString* displayName = user.displayName;
+            if(![Utility isDisplayNameValid:displayName ] && user.nickname )
+                displayName = user.nickname;
+            
+            NSString* subscribtion = user.subscription;
+            NSString* bareJid = [[user jid] bare];
+            
+            updated = [self handleRosterItemUpdate:bareJid subcribtion:subscribtion formatName:displayName];
+            Buddy *buddy = [_allBuddyList objectForKey:bareJid];
+            if( buddy )
+            {
+                buddy.buddyStatus = otrBuddyStatus;
+                buddy.groupName = sectionName;
+                if (user.photo != nil)
+                {
+                    buddy.avatarImage  = user.photo;
+                    updated = YES;
+                }
+                else
+                {
+                    NSData *photoData = [xmppvCardAvatarModule photoDataForJID:user.jid];
+                    if (photoData != nil) {
+                        UIImage *avtImg = [UIImage imageWithData:photoData];
+                        buddy.avatarImage = avtImg;
+                        updated = YES;
+                    }
+                }
+                //  if image availabe set , other wise request for image
+            }
+            else
+            {
+                Buddy *buddy = [[Buddy alloc] initWithDisplayName:displayName accountName:bareJid status:otrBuddyStatus groupName:sectionName];
+                [_allBuddyList setObject:buddy forKey:bareJid];
+                
+                if (user.photo != nil)
+                {
+                    buddy.avatarImage  = user.photo;
+                    updated = YES;
+                }
+                else
+                {
+                    NSData *photoData = [xmppvCardAvatarModule photoDataForJID:user.jid];
+                    if (photoData != nil) {
+                        UIImage *avtImg = [UIImage imageWithData:photoData];
+                        buddy.avatarImage = avtImg;
+                    }
+                }
+        
+                [[StorageManager sharedInstance] saveNewRoster:buddy];
+            }
+ 
+        }
+    }
+    
+    if( updated ){
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[StorageManager  sharedInstance] updateRosters:_allBuddyList.allValues];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_FRIEND_LIST object:self];
+            NSLog(@"count = %ld", _allBuddyList.count);
+        });
+    }
+}
+
+
+-(Buddy*) buddyForIndex:(NSInteger) aIndex{
+   
+    return [[_allBuddyList allValues] objectAtIndex:aIndex];
+}
+
+-(NSInteger) rosterCount
+{
+    return _allBuddyList.count;
+}
 
 @end

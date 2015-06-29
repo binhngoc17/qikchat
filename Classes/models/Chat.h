@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Constants.h"
+#import <UIKit/UIKit.h>
+#import "Message.h"
 
 @class Message;
 @class FileUploadResponse;
@@ -63,7 +64,6 @@ typedef NSInteger OTRChatState;
 -(void) setLastMessage:(NSString*) message withTime:(NSString*) aTime withUnread:(NSInteger) aUnreadCount messageId:(NSInteger) messageNumber;
 
 -(void)receiveChatStateMessage:(OTRChatState) chatState;
-//-(void)sendChatState:(OTRChatState)chatState;
 
 -(void)restartPausedChatStateTimer;
 -(void)restartInactiveChatStateTimer;
@@ -79,14 +79,11 @@ typedef NSInteger OTRChatState;
 
 -(void)forwardMessages:(NSMutableArray *)fowardMessagesArray;
 
-
-
-
 -(void) asynchLoadAllMessages;
 -(BOOL) isActiveChat;
 -(void) setActive:(BOOL) isActive;
 -(NSInteger) unreadCount;
 
--(void)updateLastChat:(Message *)message;//created by babul for delete functionality
+-(void)updateLastChat:(Message *)message;
 
 @end
