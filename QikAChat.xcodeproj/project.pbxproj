@@ -15,7 +15,6 @@
 		592758371B3E88B3007A8A18 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 592758331B3E88B3007A8A18 /* SettingsViewController.m */; };
 		5927584E1B3E9A9B007A8A18 /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 5927584D1B3E9A9B007A8A18 /* defaultAvatar.png */; };
 		592758501B3E9B0F007A8A18 /* QikAChatTest-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5927584F1B3E9B0F007A8A18 /* QikAChatTest-Info.plist */; };
-		592E1E1C1B40734B007BC8E6 /* SettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 592E1E1B1B40734A007BC8E6 /* SettingsController.m */; };
 		5970C6061B3F36D900B5B9E4 /* XmppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5970C6051B3F36D900B5B9E4 /* XmppController.m */; };
 		5970C6091B3F3D0800B5B9E4 /* Literals.m in Sources */ = {isa = PBXBuildFile; fileRef = 5970C6081B3F3D0800B5B9E4 /* Literals.m */; };
 		5970C60F1B3F4B4600B5B9E4 /* RosterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5970C60E1B3F4B4600B5B9E4 /* RosterController.m */; };
@@ -29,6 +28,9 @@
 		5970C6461B406DD100B5B9E4 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 5970C6411B406DD100B5B9E4 /* Database.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5970C6471B406DD100B5B9E4 /* DatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5970C6431B406DD100B5B9E4 /* DatabaseAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5970C6481B406DD100B5B9E4 /* ResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 5970C6451B406DD100B5B9E4 /* ResultSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5974190B1B41CFC40068682D /* UIMessageBarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5974190A1B41CFC40068682D /* UIMessageBarManager.m */; };
+		5974190E1B41D67F0068682D /* ProfileDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5974190D1B41D67F0068682D /* ProfileDataManager.m */; };
+		597419111B41DF320068682D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597419101B41DF320068682D /* LoginViewController.m */; };
 		59798BAB1B3EF29A00D92124 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 59798BAA1B3EF29A00D92124 /* Utility.m */; };
 		59798BAE1B3EF82900D92124 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59798BAD1B3EF82900D92124 /* FriendsViewController.m */; };
 		59798BAF1B3EF86E00D92124 /* libidn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5989673B1B3EB028002A296D /* libidn.a */; };
@@ -224,8 +226,6 @@
 		592758391B3E89B8007A8A18 /* QikAChat-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "QikAChat-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		5927584D1B3E9A9B007A8A18 /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultAvatar.png; sourceTree = "<group>"; };
 		5927584F1B3E9B0F007A8A18 /* QikAChatTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "QikAChatTest-Info.plist"; sourceTree = "<group>"; };
-		592E1E1A1B40734A007BC8E6 /* SettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsController.h; sourceTree = "<group>"; };
-		592E1E1B1B40734A007BC8E6 /* SettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsController.m; sourceTree = "<group>"; };
 		5970C6041B3F36D900B5B9E4 /* XmppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmppController.h; sourceTree = "<group>"; };
 		5970C6051B3F36D900B5B9E4 /* XmppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XmppController.m; sourceTree = "<group>"; };
 		5970C6071B3F3D0800B5B9E4 /* Literals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Literals.h; path = Classes/Literals.h; sourceTree = SOURCE_ROOT; };
@@ -251,6 +251,12 @@
 		5970C6431B406DD100B5B9E4 /* DatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseAdditions.m; sourceTree = "<group>"; };
 		5970C6441B406DD100B5B9E4 /* ResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultSet.h; sourceTree = "<group>"; };
 		5970C6451B406DD100B5B9E4 /* ResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResultSet.m; sourceTree = "<group>"; };
+		597419091B41CFC40068682D /* UIMessageBarManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMessageBarManager.h; sourceTree = "<group>"; };
+		5974190A1B41CFC40068682D /* UIMessageBarManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMessageBarManager.m; sourceTree = "<group>"; };
+		5974190C1B41D67F0068682D /* ProfileDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileDataManager.h; sourceTree = "<group>"; };
+		5974190D1B41D67F0068682D /* ProfileDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileDataManager.m; sourceTree = "<group>"; };
+		5974190F1B41DF320068682D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		597419101B41DF320068682D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		59798BA91B3EF29A00D92124 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = Classes/Utility.h; sourceTree = SOURCE_ROOT; };
 		59798BAA1B3EF29A00D92124 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = Classes/Utility.m; sourceTree = SOURCE_ROOT; };
 		59798BAC1B3EF82900D92124 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
@@ -627,15 +633,16 @@
 		5908F3F41B397F0500627424 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				597419021B41CBFA0068682D /* viewControls */,
 				592E1E191B40734A007BC8E6 /* appController */,
 				5970C6211B406ADA00B5B9E4 /* storage */,
 				5970C6101B3FC54300B5B9E4 /* models */,
 				5970C6031B3F36C000B5B9E4 /* xmppController */,
 				598967CE1B3EC299002A296D /* extension */,
+				5927582F1B3E88B3007A8A18 /* viewController */,
 				592758391B3E89B8007A8A18 /* QikAChat-Prefix.pch */,
 				5927582D1B3E88B3007A8A18 /* AppDelegate.h */,
 				5927582E1B3E88B3007A8A18 /* AppDelegate.m */,
-				5927582F1B3E88B3007A8A18 /* viewController */,
 				5908F4201B3981A300627424 /* main.m */,
 				59798BA91B3EF29A00D92124 /* Utility.h */,
 				59798BAA1B3EF29A00D92124 /* Utility.m */,
@@ -703,6 +710,8 @@
 				59798BAD1B3EF82900D92124 /* FriendsViewController.m */,
 				592758321B3E88B3007A8A18 /* SettingsViewController.h */,
 				592758331B3E88B3007A8A18 /* SettingsViewController.m */,
+				5974190F1B41DF320068682D /* LoginViewController.h */,
+				597419101B41DF320068682D /* LoginViewController.m */,
 			);
 			name = viewController;
 			path = Classes/viewController;
@@ -711,8 +720,8 @@
 		592E1E191B40734A007BC8E6 /* appController */ = {
 			isa = PBXGroup;
 			children = (
-				592E1E1A1B40734A007BC8E6 /* SettingsController.h */,
-				592E1E1B1B40734A007BC8E6 /* SettingsController.m */,
+				5974190C1B41D67F0068682D /* ProfileDataManager.h */,
+				5974190D1B41D67F0068682D /* ProfileDataManager.m */,
 			);
 			name = appController;
 			path = Classes/appController;
@@ -761,6 +770,16 @@
 			);
 			name = storage;
 			path = Classes/storage;
+			sourceTree = SOURCE_ROOT;
+		};
+		597419021B41CBFA0068682D /* viewControls */ = {
+			isa = PBXGroup;
+			children = (
+				597419091B41CFC40068682D /* UIMessageBarManager.h */,
+				5974190A1B41CFC40068682D /* UIMessageBarManager.m */,
+			);
+			name = viewControls;
+			path = Classes/viewControls;
 			sourceTree = SOURCE_ROOT;
 		};
 		598965C71B3EB028002A296D /* XMPPFramework */ = {
@@ -1802,6 +1821,7 @@
 				598967B21B3EB028002A296D /* NSXMLElement+XEP_0297.m in Sources */,
 				598967621B3EB028002A296D /* XMPPUserMemoryStorageObject.m in Sources */,
 				598967631B3EB028002A296D /* XMPPRoster.m in Sources */,
+				5974190B1B41CFC40068682D /* UIMessageBarManager.m in Sources */,
 				5989675C1B3EB028002A296D /* XMPPResourceCoreDataStorageObject.m in Sources */,
 				598967AD1B3EB028002A296D /* XEP_0223.m in Sources */,
 				598967751B3EB028002A296D /* XMPPRoomOccupantMemoryStorageObject.m in Sources */,
@@ -1850,6 +1870,7 @@
 				598967881B3EB028002A296D /* XMPPIQ+XEP_0060.m in Sources */,
 				5970C6131B3FC54300B5B9E4 /* Buddy.m in Sources */,
 				5989675A1B3EB028002A296D /* XMPPReconnect.m in Sources */,
+				5974190E1B41D67F0068682D /* ProfileDataManager.m in Sources */,
 				5989676F1B3EB028002A296D /* XMPPRoomHybrid.xcdatamodeld in Sources */,
 				5989677D1B3EB028002A296D /* XMPPvCardTempCoreDataStorageObject.m in Sources */,
 				5989679D1B3EB028002A296D /* XMPPMessageArchiving.m in Sources */,
@@ -1875,6 +1896,7 @@
 				598967861B3EB028002A296D /* NSXMLElement+XEP_0059.m in Sources */,
 				598967CA1B3EB028002A296D /* DDXMLElement.m in Sources */,
 				598967431B3EB028002A296D /* XMPPSCRAMSHA1Authentication.m in Sources */,
+				597419111B41DF320068682D /* LoginViewController.m in Sources */,
 				598967741B3EB028002A296D /* XMPPRoomMessageMemoryStorageObject.m in Sources */,
 				598967AA1B3EB028002A296D /* XMPPAutoTime.m in Sources */,
 				598967441B3EB028002A296D /* XMPPXFacebookPlatformAuthentication.m in Sources */,
@@ -1923,7 +1945,6 @@
 				598967B41B3EB028002A296D /* XMPPMessage+XEP_0333.m in Sources */,
 				5989673F1B3EB028002A296D /* XMPPDeprecatedDigestAuthentication.m in Sources */,
 				5989674E1B3EB028002A296D /* XMPPMessage.m in Sources */,
-				592E1E1C1B40734B007BC8E6 /* SettingsController.m in Sources */,
 				598967931B3EB028002A296D /* NSString+XEP_0106.m in Sources */,
 				598967591B3EB028002A296D /* XMPPProcessOne.m in Sources */,
 				5989674D1B3EB028002A296D /* XMPPJID.m in Sources */,

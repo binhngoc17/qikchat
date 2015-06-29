@@ -19,9 +19,6 @@
 
 #define KDATABASE_CURRENT_VERSION @"1.0.0" // change if released
 
-extern NSString *const kXMPPmyJID;
-extern NSString *const kXMPPmyPassword;
-
 #define kChatTimestampFormat		@"yyyyMMddHHmmssSSS"
 #define kMessageTimestampFormat		@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
 
@@ -44,6 +41,11 @@ extern NSString *const kXMPPmyPassword;
 #define KTAG_SIZE        @"size"
 #define KTAG_STRING      @"string"
 #define KTAG_LONG        @"long"
+
+extern NSString *const NOTIFICATION_TYPE;
+extern NSString *const CHAT_TYPE;
+extern NSString *const CHAT_ID;
+extern NSString *const CHAT_DISPLAY_NAME;
 
 @end
 

@@ -13,7 +13,7 @@
 
 @class Buddy;
 
-@interface RosterController : NSObject<NSFetchedResultsControllerDelegate>
+@interface RosterController : NSObject<XMPPRosterDelegate,XMPPvCardTempModuleDelegate,XMPPvCardAvatarDelegate, NSFetchedResultsControllerDelegate>
 {
      NSFetchedResultsController *fetchedResultsController;
 
@@ -26,9 +26,11 @@
     NSMutableDictionary *_allBuddyList;
 }
 
--(void)handleServiceAuthenticated;
 -(id) initWithStream:(XMPPStream*) xmppStream;
-- (void)teardown;
+-(void)teardown;
+
+-(void)handleServiceAuthenticated;
+-(void)handleReceivePresence:(XMPPPresence*) presence;
 
 - (NSManagedObjectContext *)managedObjectContext_roster;
 

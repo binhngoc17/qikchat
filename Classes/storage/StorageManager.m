@@ -9,7 +9,7 @@
 #import "StorageManager.h"
 #import "Database.h"
 #import "Storage.h"
-#import "SettingsController.h"
+#import "ProfileDataManager.h"
 
 #import "Chat.h"
 #import "Buddy.h"
@@ -105,7 +105,7 @@
  */
 - (void) checkDBSchema
 {
-	NSString *db_version =  [[SettingsController sharedInstance ] getDatabaseVersion];
+	NSString *db_version =  [[ProfileDataManager sharedInstance ] getDatabaseVersion];
     
 	if(!db_version || [db_version isEqualToString:KDATABASE_CURRENT_VERSION])
 	{
@@ -199,7 +199,7 @@
     
     [self executeSQLStatements:sqlStatements];
     
-    [[SettingsController sharedInstance] setDatabaseVersion:KDATABASE_CURRENT_VERSION];
+    [[ProfileDataManager sharedInstance] setDatabaseVersion:KDATABASE_CURRENT_VERSION];
     
 }
 
@@ -819,7 +819,6 @@ rollback:
     
 }
 
-//not tested Yet-- babul
 -(BOOL)deleteMessages:(NSMutableArray *)messagesArray {
     NSMutableString *statement =  [[NSMutableString alloc] initWithString:kEmptyString];
     [statement appendFormat:@"DELETE FROM %@ WHERE %@ in (",KTableChatItems,kTableChatItemID];

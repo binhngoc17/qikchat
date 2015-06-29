@@ -32,11 +32,6 @@
 
 @implementation AppDelegate
 
-@synthesize window;
-@synthesize tabController;
-@synthesize settingsViewController;
-@synthesize loginButton;
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Setup the XMPP stream
@@ -56,7 +51,7 @@
     navigationController2.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"tab_chats"] tag:1] ;
     
     self.tabController = [[UITabBarController alloc] init];
-    tabController.viewControllers = [NSArray arrayWithObjects:navigationController1,navigationController2, nil];
+    self.tabController.viewControllers = [NSArray arrayWithObjects:navigationController1,navigationController2, nil];
     
     if ( ![xmppInstance connect])
     {
@@ -116,6 +111,11 @@
     DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
   
     [xmppInstance closeInstance];
+}
+
+-(void) activateChatView:(Chat*) aChat
+{
+    
 }
 
 @end

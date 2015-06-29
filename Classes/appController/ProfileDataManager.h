@@ -1,17 +1,18 @@
 //
-//  SettingsController.h
+//  ProfileDataManager.h
+//  QikAChat
 //
-//  Created by Ram Bhawan Chauhan on 07/08/14.
-//  Copyright (c) 2014 CraterZone. All rights reserved.
+//  Created by Ram Chauhan on 27/06/2015.
+//  Copyright (c) 2015 RAMC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "Literals.h"
 
-@interface SettingsController : NSObject
+@interface ProfileDataManager : NSObject
 
-+(SettingsController *)sharedInstance;
++(ProfileDataManager *)sharedInstance;
 
 - (void) commitChange;
 
@@ -81,7 +82,6 @@
 /*email verified*/
 -(BOOL)isAddressBookUploaded;
 -(void)setAddressbookUploaded:(BOOL)isVerified;
-
 
 -(void)setChatId:(NSString *)chatId;
 -(NSString*)getChatID:(NSString *)temp;

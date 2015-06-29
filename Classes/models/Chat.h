@@ -30,7 +30,6 @@ typedef NSInteger OTRChatState;
 -(void) handleMessageSent:(Message*) aMessage;
 -(void) handleMessageChange:(NSString*) aBareJid messageId:(NSInteger)messageId status:(MessageStatus) newState;
 -(void) handleChatState:(NSString*) aBareJid state:(OTRChatState) newState;
-
 @end
 
 @interface Chat : NSObject
@@ -75,9 +74,6 @@ typedef NSInteger OTRChatState;
 -(void) sendChatMessage:(Message *)message;
 -(void) handleRecievedMessage:(Message *)message;
 -(void) handleFileDownloaded:(Message*) aMessage error:(int) err;
-
-
--(void)forwardMessages:(NSMutableArray *)fowardMessagesArray;
 
 -(void) asynchLoadAllMessages;
 -(BOOL) isActiveChat;

@@ -1,14 +1,15 @@
 //
-//  SettingsController.m
+//  ProfileDataManager.m
+//  QikAChat
 //
-//  Created by Ram Bhawan Chauhan on 07/08/14.
-//  Copyright (c) 2014 CraterZone. All rights reserved.
+//  Created by Ram Chauhan on 27/06/2015.
+//  Copyright (c) 2015 RAMC. All rights reserved.
 //
 
-#import "SettingsController.h"
+#import "ProfileDataManager.h"
 #import "Literals.h"
 
-@implementation SettingsController
+@implementation ProfileDataManager
 
 NSString *const HAS_CREATED_ACCOUNT = @"HAS_CREATED_ACCOUNT";
 NSString *const IS_ACCOUNT_VERIFIED = @"IS_ACCOUNT_VERIFIED";
@@ -31,13 +32,13 @@ NSString *const MESSAGE_TONE_KEY = @"MESSAGE_TONE_KEY";
 NSString *const PASSCODE_KEY = @"PASSCODE_KEY";
 NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
 
-+(SettingsController *)sharedInstance
++(ProfileDataManager *)sharedInstance
 {
-    static SettingsController *sharedManager;
+    static ProfileDataManager *sharedManager;
     @synchronized(self)
     {
         if (sharedManager == nil) {
-            sharedManager = [[SettingsController alloc] init];
+            sharedManager = [[ProfileDataManager alloc] init];
             
         }
         return sharedManager;

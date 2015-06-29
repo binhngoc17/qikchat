@@ -18,17 +18,22 @@
 @interface MessageController : NSObject
 {
     XMPPStream *_xmppStream;
+    XMPPMessageArchivingCoreDataStorage* xmppMessageArchivingStorage;
+    XMPPMessageArchiving* xmppMessageArchivingModule;
+    
+    XMPPMessageDeliveryReceipts* xmppMessageDeliveryRecipts;
+
     NSMutableDictionary* _allChatList;
-   
     BOOL _isMessageSending;
     NSMutableArray* _allWaitingMessageQueue;
 }
 
 -(id) initWithStream:(XMPPStream*) xmppStream;
 - (void) setup;
-- (void)teardown;
+- (void) teardown;
 
 -(void) handleServiceAuthenticated;
+-(void) handleReceiveMessage:(XMPPMessage*) aMessage;
 
 /*
  *@author - Ram Chauhan
@@ -36,7 +41,7 @@
  * message are queued if offline here
  */
 -(void)sendOrQueueChatMessage:(Message *)message;
-
+-(void)sendChatState:(int)chatState toJId:(NSString *)toJid;
 /*
 *@author - Ram Chauhan
  * call this method to send Chat Stat

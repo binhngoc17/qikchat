@@ -29,17 +29,18 @@
 
 - (void) setup
 {
-     _allChatList  = [[NSMutableDictionary alloc] init];
+    _allChatList  = [[NSMutableDictionary alloc] init];
 	_allWaitingMessageQueue = [[NSMutableArray alloc] init];
    
-    [_xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    
-    XMPPMessageDeliveryReceipts* xmppMessageDeliveryRecipts = [[XMPPMessageDeliveryReceipts alloc] init];
+    xmppMessageDeliveryRecipts = [[XMPPMessageDeliveryReceipts alloc] init];
     xmppMessageDeliveryRecipts.autoSendMessageDeliveryReceipts = NO;
     xmppMessageDeliveryRecipts.autoSendMessageDeliveryRequests = YES;
-    [xmppMessageDeliveryRecipts addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [xmppMessageDeliveryRecipts activate:_xmppStream];
     
+    xmppMessageArchivingStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+    xmppMessageArchivingModule = [[XMPPMessageArchiving alloc] initWithMessageArchivingStorage:xmppMessageArchivingStorage];
+    xmppMessageArchivingModule.clientSideMessageArchivingOnly = YES;
+    [xmppMessageArchivingModule activate:_xmppStream];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[StorageManager  sharedInstance] loadAllChatList:_allChatList];
@@ -51,31 +52,23 @@
     //[_allWaitingMessageQueue addObjectsFromArray:array];
 }
 
+- (NSManagedObjectContext *)managedObjectContext_message
+{
+    return [xmppMessageArchivingStorage mainThreadManagedObjectContext];
+    
+}
 
 /*
  *call it in delloc of to tear down connection
  */
 - (void)teardown
 {
-    
-}
-
-/* @author - Ram Chauhan
- * recieve Message delegate for reciveing message
- */
-- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
-{
-    if ([message isMessageWithBody] && ![message isErrorMessage])
-    {
-    }
-    else if ([message hasReceiptResponse] && ![message isErrorMessage])
-    {
-        
-    }
-    else if([message hasChatState] && ![message isErrorMessage])
-    {
-        
-    }
+    [xmppMessageDeliveryRecipts      deactivate];
+    [xmppMessageArchivingModule      deactivate];
+  
+    xmppMessageDeliveryRecipts = nil;
+    xmppMessageArchivingModule = nil;
+    xmppMessageArchivingStorage = nil;
 }
 
 -(void) handleServiceAuthenticated
@@ -85,6 +78,40 @@
         //start timer 3 second delay for complete ready to send
         [NSTimer scheduledTimerWithTimeInterval:3.0f target:self selector:@selector(sendQueueMessage:) userInfo:nil repeats:NO] ;
         _isMessageSending = YES;
+    }
+}
+
+-(void) handleReceiveMessage:(XMPPMessage*) message {
+   
+    if ([message isChatMessageWithBody])
+    {
+        NSString* jid = [message from].bare;
+        
+        Chat* chat = [self createChatForJID:jid withDisplayName:jid];
+        if( chat ){
+            Message* msg = [self parse2LocalMessage:message];
+            [chat handleRecievedMessage:msg];
+        }
+  
+        /*  if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+        {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
+                                                                message:body
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"Ok"
+                                                      otherButtonTitles:nil];
+            [alertView show];
+        }
+        else
+        {
+            // We are not active, so use a local notification instead
+            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+            localNotification.alertAction = @"Ok";
+            localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
+            
+            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+        }
+       */
     }
 }
 
@@ -108,7 +135,7 @@
 
 -(void)sendOrQueueChatMessage:(Message *)message
 {
-    if( [xmppInstance isServiceConnected] && !_isMessageSending)
+    if( [_xmppStream isConnected] && !_isMessageSending)
     {
         [self processSendMessage:message];
     }
@@ -175,7 +202,7 @@
  */
 - (void) sendMessage:(Message*)chatMessage {
     NSString *messageStr = chatMessage.body;
-   // if ([messageStr length] >0)
+    if ([messageStr length] >0)
     {
         NSString *messageID=[_xmppStream generateUUID];
         
@@ -196,10 +223,9 @@
         [thread setStringValue:@"wj2hPxTzW2Nt"];
         [message addChild:thread];
         
-
-       // NSXMLElement * receiptRequest = [NSXMLElement elementWithName:@"request"];
-        //[receiptRequest addAttributeWithName:@"xmlns" stringValue:@"urn:xmpp:receipts"];
-        //[message addChild:receiptRequest];
+        NSXMLElement * receiptRequest = [NSXMLElement elementWithName:@"request"];
+        [receiptRequest addAttributeWithName:@"xmlns" stringValue:@"urn:xmpp:receipts"];
+        [message addChild:receiptRequest];
         
         NSXMLElement *properties = [NSXMLElement  elementWithName:KTAG_PROPERTIES];
         [properties addAttributeWithName:@"xmlns" stringValue:@"http://www.jivesoftware.com/xmlns/xmpp/properties"];
@@ -325,7 +351,6 @@
 }
 
 //get image From String
-
 -(void)sendChatState:(int)chatState toJId:(NSString *)toJid
 {
     NSXMLElement *message = [NSXMLElement elementWithName:TAG_MESSAGE];
@@ -424,8 +449,6 @@
 
 }
 
-
-
 -(void)removeChat:(NSString *)jid {
     
     [_allChatList removeObjectForKey:jid];
@@ -513,13 +536,12 @@
                 } else if([name isEqualToString:TAG_LNG]) {
                     msg.lresURL = value;
                 }
-                
-                
             }
         }
     }
     return msg;
 }
+
 -(Chat*) chatForIndex:(NSInteger) aIndex{
     return [[_allChatList allValues] objectAtIndex:aIndex];
 }

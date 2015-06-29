@@ -11,9 +11,9 @@
 @implementation Literals
 
 
-NSString *const kXMPPmyJID = @"kXMPPmyJID";
-NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
-
-
+NSString *const NOTIFICATION_TYPE = @"NOTIFICATION_TYPE";
+NSString *const CHAT_TYPE = @"CHAT_TYPE";
+NSString *const CHAT_ID = @"CHAT_ID";
+NSString *const CHAT_DISPLAY_NAME = @"displayName";
 
 @end

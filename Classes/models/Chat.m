@@ -14,6 +14,13 @@
 #import "DDLog.h"
 #import "Strings.h"
 #import "StorageManager.h"
+#import "ProfileDataManager.h"
+#import "Literals.h"
+#import "UIMessageBarManager.h"
+
+#import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
+#import <AudioToolbox/AudioServices.h>
 
 @implementation Chat
 
@@ -65,7 +72,7 @@
             remainingBadgeNumber = 0;
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:remainingBadgeNumber] ;
         _unreadCount = 0;
-        //[[StorageManager sharedInstance] updateLastActivity:self];
+        [[StorageManager sharedInstance] updateLastActivity:self];
         
         if( !_isCurrentlyActive || [_allUnreadMessages count] )
         {
@@ -116,17 +123,16 @@
     
     self.lastDate = _lastMessage.date;
     
-    //[[StorageManager sharedInstance] storeChatMessage:message];
-    //[[StorageManager sharedInstance] updateLastActivity:self];
+    [[StorageManager sharedInstance] storeChatMessage:message];
+    [[StorageManager sharedInstance] updateLastActivity:self];
 }
-
 
 
 -(void)updateLastChat:(Message *)message {
    
     _lastMessage = message;
     self.lastDate = _lastMessage.date;
-    //[[StorageManager sharedInstance] updateLastActivity:self];
+    [[StorageManager sharedInstance] updateLastActivity:self];
 }
 
 -(NSInteger) lastMessageId
@@ -183,7 +189,8 @@
 {
     if( self.chatJid != nil )
         return self.chatJid;
-    return nil;
+    
+    return _displayName;
 }
 
 -(NSString*) getDisplayName
@@ -217,13 +224,12 @@
 -(UIImage*) chatImage
 {
     return _image;
- }
-
+}
 
 -(void)sendChatState:(OTRChatState) sendingChatState
 {
      lastSentChatState = sendingChatState;
-    //[[[XmppController sharedSingleton] messageController ] sendChatState:sendingChatState toJId:self.chatJid];
+    [[xmppInstance messageController ] sendChatState:sendingChatState toJId:self.chatJid];
 }
 
 -(void)sendComposingChatState
@@ -248,6 +254,7 @@
     [self restartInactiveChatStateTimer];
     [self sendChatState:kOTRChatStateActive];
 }
+
 -(void)sendInactiveChatState
 {
     [self.inactiveChatStateTimer invalidate];
@@ -260,6 +267,7 @@
     [pausedChatStateTimer invalidate];
     pausedChatStateTimer = [NSTimer scheduledTimerWithTimeInterval:kOTRChatStatePausedTimeout target:self selector:@selector(sendPausedChatState) userInfo:nil repeats:NO];
 }
+
 -(void)restartInactiveChatStateTimer
 {
     [inactiveChatStateTimer invalidate];
@@ -271,13 +279,11 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PROCESSED_NOTIFICATION object:self];
 }
 
-
 -(void) handleRecievedMessage:(Message *)message
 {
     if (message)
     {
         message.isOutGoing = NO;
-        
         if( message.messageType == IMAGE_TYPE_MESSAGE  && message.lresURL != nil )
         {
             [self asynchDownloadMedia:message];
@@ -300,8 +306,7 @@
 
 -(void) doHandleReceivedMessage:(Message*) aMessage
 {
-    
- //   NSString* displayName = [self getDisplayName];
+     NSString* displayName = [self getDisplayName];
     [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PROCESSED_NOTIFICATION object:self];
     
     if (![[UIApplication sharedApplication] applicationState] == UIApplicationStateActive )
@@ -314,10 +319,10 @@
         UILocalNotification *localNotification = [[UILocalNotification alloc] init];
         localNotification.alertAction = REPLY_STRING;
         //check from data controller that user has defined the messageController yes or not;
-     /*   if ([[SettingsController sharedInstance] isMessageToneOn]) {
+        if ([[ProfileDataManager sharedInstance] isMessageToneOn]) {
              localNotification.soundName = UILocalNotificationDefaultSoundName;
         }
-        if ([[SettingsController sharedInstance] isMessageVibrateChecked]) {
+        if ([[ProfileDataManager sharedInstance] isMessageVibrateChecked]) {
             //vibrate
         }
         localNotification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
@@ -329,8 +334,7 @@
         
         [[UIApplication sharedApplication] cancelAllLocalNotifications];
         [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-      */
-        
+      
     }
     else if( !_isCurrentlyActive )
     {
@@ -338,38 +342,35 @@
         [_allUnreadMessages addObject:aMessage];
         [self saveChatMessage:aMessage];
       
-        /*
         NSString* bodyMsg = [NSString stringWithFormat:@"%@: %@",displayName,self.lastMessage];
         
-        [[TWMessageBarManager sharedInstance] showMessageWithTitle:@"ChatNA"
+        [[UIMessageBarManager sharedInstance] showMessageWithTitle:@"QikAChat"
                                                        description:bodyMsg
-                                                              type:TWMessageBarMessageTypeInfo
+                                                              type:UIMessageBarMessageTypeInfo
                                                     statusBarStyle:UIStatusBarStyleLightContent callback:^{
                                                         
-                                                        [[AppDelegate sharedInstance] activateChatView:self];
+                                                        //[appInstance activateChatView:self];
 
                                                     }
          ];
         
         [self playSystemSound];
-         */
-        
     }
     else
     {
         [self saveChatMessage:aMessage];
         [self playSystemSound];
         
-       // NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:aMessage forKey:MESSAGE_KEY_FOR_MESSAGE];
+        NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:aMessage forKey:MESSAGE_KEY_FOR_MESSAGE];
         //save it to db and show to user on chat list and chat screen
-        //[[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RECIEVED object:self userInfo:messageInfo];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RECIEVED object:self userInfo:messageInfo];
     }
     
 }
 
 -(void) playSystemSound
 {
-    /*
+    
     NSString *path = [[NSBundle bundleWithIdentifier:@"com.apple.UIKit"] pathForResource:@"Tock" ofType:@"aiff"];
     SystemSoundID soundID = 0;
     if( path )
@@ -384,7 +385,7 @@
     
     AudioServicesPlaySystemSound(soundID);
     AudioServicesDisposeSystemSoundID(soundID);
-     */
+
 }
 
 -(void)sendChatMessage:(Message *)message
@@ -397,8 +398,7 @@
     message.messageStatus = MESSAGE_STATUS_WAITING;
     [self saveChatMessage:message];
     
-    //[[[XmppController sharedSingleton]  messageController] sendOrQueueChatMessage:message];
-    
+    [[xmppInstance  messageController] sendOrQueueChatMessage:message];
 }
 
 -(void) asynchDownloadMedia:(Message*) aOperationId
@@ -408,20 +408,20 @@
 
 -(void) downloadMediaData:(Message*)aOperationId
 {
-    //[[ChatNaController sharedInstance] downloadRecievedFile:aOperationId forChat:self];
+    //[[ChatNController sharedInstance] downloadRecievedFile:aOperationId forChat:self];
 }
 
 -(void) asynchLoadAllMessages
 {
-    [NSThread detachNewThreadSelector:@selector(loadMessages) toTarget:self withObject:nil];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self loadMessages];
+    });
 }
 
 -(void)loadMessages{
     
-    [_allUnreadMessages removeAllObjects]; // loading message from db , just clear the local list
-    
-   //[[StorageManager sharedInstance] loadAllChatMessags:self.chatJid];
-   
+   [_allUnreadMessages removeAllObjects]; // loading message from db , just clear the local list
+   [[StorageManager sharedInstance] loadAllChatMessags:self.chatJid];
 }
 
 
@@ -465,36 +465,13 @@
 
 -(void) pushPendingMessages
 {
-   // for( Message* message in _allUnreadMessages )
-   // {
-       // NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:message forKey:MESSAGE_KEY_FOR_MESSAGE];
-        //[[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CHAT_LOADED object:self userInfo:messageInfo];
-    //}
-    
-    [_allUnreadMessages removeAllObjects];
-}
-
-
-
--(void)forwardMessages:(NSMutableArray *)fowardMessagesArray {
-    
-    
-    for (NSObject *obj  in fowardMessagesArray)
+    for( Message* message in _allUnreadMessages )
     {
-        if ([obj isKindOfClass:[Message class]]) {
-            Message *message = (Message *)obj;
-            message.isOutGoing = YES;
-            message.messageStatus = MESSAGE_STATUS_WAITING;
-            message.bareJid = self.chatJid;
-            [self saveChatMessage:message];
-           // [[NSNotificationCenter defaultCenter] postNotificationName:ADD_SENT_CHAT object:message];
-           // [[[XmppController sharedSingleton]  messageController] sendorQueueForwardMessages:message];
-        }
-       
-
+        NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:message forKey:MESSAGE_KEY_FOR_MESSAGE];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CHAT_LOADED object:self userInfo:messageInfo];
     }
     
-    
+    [_allUnreadMessages removeAllObjects];
 }
 
 @end

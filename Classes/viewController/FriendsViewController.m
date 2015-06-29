@@ -89,13 +89,16 @@
      titleLabel.numberOfLines = 1;
      titleLabel.adjustsFontSizeToFitWidth = YES;
      titleLabel.textAlignment = NSTextAlignmentCenter;
-     
-     if ([xmppInstance connect])
+    
+     NSString* displayName = [[ProfileDataManager sharedInstance] getDisplayName:nil];
+     if ([displayName length])
      {
-         titleLabel.text = [[[xmppInstance xmppStream] myJID] bare];
-     } else
+         titleLabel.text = displayName;
+     }
+     else
      {
-         titleLabel.text = @"No JID";
+         NSString* jid = [[ProfileDataManager sharedInstance] getXabberID:nil];
+         titleLabel.text = [Utility displayName:jid];
      }
      [titleLabel sizeToFit];
     

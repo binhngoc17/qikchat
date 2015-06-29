@@ -7,9 +7,13 @@
 //
 
 #import "SettingsViewController.h"
+#import "ProfileDataManager.h"
 #import "Literals.h"
 
 @implementation SettingsViewController
+
+@synthesize jidField;
+@synthesize passwordField;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Init/dealloc methods
@@ -26,22 +30,8 @@
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   
-  jidField.text = [[NSUserDefaults standardUserDefaults] stringForKey:kXMPPmyJID];
-  passwordField.text = [[NSUserDefaults standardUserDefaults] stringForKey:kXMPPmyPassword];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Private
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-- (void)setField:(UITextField *)field forKey:(NSString *)key
-{
-  if (field.text != nil) 
-  {
-    [[NSUserDefaults standardUserDefaults] setObject:field.text forKey:key];
-  } else {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-  }
+   jidField.text = [[ProfileDataManager sharedInstance] getXabberID:nil];
+   passwordField.text = [[ProfileDataManager sharedInstance] getPassword:nil];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,8 +40,17 @@
 
 - (IBAction)done:(id)sender
 {
-  [self setField:jidField forKey:kXMPPmyJID];
-  [self setField:passwordField forKey:kXMPPmyPassword];
+    if( ![jidField.text length] || ![passwordField.text length]){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Input Error"
+                                                        message:@"You must enter user name and password!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+  }
+  [[ProfileDataManager sharedInstance] setXabberID:jidField.text];
+  [[ProfileDataManager sharedInstance] setPassword:passwordField.text];
 
   [self dismissViewControllerAnimated:YES completion:NULL];
 }
@@ -61,11 +60,5 @@
   [self done:sender];
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Getter/setter methods
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-@synthesize jidField;
-@synthesize passwordField;
 
 @end

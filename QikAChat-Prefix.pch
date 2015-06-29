@@ -17,6 +17,7 @@
     #import "Utility.h"
     #import "DDLog.h"
     #import "XmppController.h"
+    #import "ProfileDataManager.h"
 #endif
 
 #define appInstance    [UIApplication sharedApplication]

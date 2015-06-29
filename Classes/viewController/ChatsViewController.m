@@ -106,7 +106,6 @@
     
 }
 
-
 -(void) updateChatList:(id) sender {
     
     [self.tableView reloadData];

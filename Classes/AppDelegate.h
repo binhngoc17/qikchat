@@ -8,18 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-
 #import "XMPPFramework.h"
 
-@class SettingsViewController;
-
+@class Chat;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
 
 @property(strong, nonatomic) UIWindow *window;
 
 @property (nonatomic, strong) IBOutlet UITabBarController *tabController;
-@property (nonatomic, strong) IBOutlet SettingsViewController *settingsViewController;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *loginButton;
+
+-(void) activateChatView:(Chat*) aChat;
 
 @end
