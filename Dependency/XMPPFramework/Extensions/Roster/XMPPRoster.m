@@ -912,7 +912,7 @@ enum XMPPRosterFlags
 		// We will receive general roster updates as long as we're still connected though.
 		// So there's no need to refetch the roster.
 		
-		[xmppRosterStorage clearAllResourcesForXMPPStream:xmppStream];
+		//[xmppRosterStorage clearAllResourcesForXMPPStream:xmppStream];
 		
 		[earlyPresenceElements removeAllObjects];
 	}
@@ -926,11 +926,11 @@ enum XMPPRosterFlags
 	
     if([self autoClearAllUsersAndResources])
     {
-        [xmppRosterStorage clearAllUsersAndResourcesForXMPPStream:xmppStream];
+        //[xmppRosterStorage clearAllUsersAndResourcesForXMPPStream:xmppStream];
     }
     else
     {
-        [xmppRosterStorage clearAllResourcesForXMPPStream:xmppStream];
+        //[xmppRosterStorage clearAllResourcesForXMPPStream:xmppStream];
     }
 	
 	[self _setRequestedRoster:NO];

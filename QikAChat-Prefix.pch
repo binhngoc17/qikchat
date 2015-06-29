@@ -7,20 +7,25 @@
 #warning "This project uses features only available in iPhone SDK 3.0 and later."
 #endif
 
-
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
+    #import <CoreData/CoreData.h>
 
     #import "UIImage+CoreExt.h"
     #import "AppDelegate.h"
-#import "Utility.h"
-
+    #import "Utility.h"
+    #import "DDLog.h"
+    #import "XmppController.h"
 #endif
 
-#define fontOfSize(x) [UIFont fontWithName:@"HelveticaNeue" size:x]
-#define appInstance   [UIApplication sharedApplication]
-#define headerColor   [UIColor colorWithRed:0.0f green:0.9f blue:0.9f alpha:0.7f]
+#define appInstance    [UIApplication sharedApplication]
+#define xmppInstance   [XmppController sharedSingleton]
+
+
+#define headerColor      [UIColor colorWithRed:0.0f green:0.9f blue:0.9f alpha:0.7f]
+#define tableColor       [UIColor clearColor]
+#define tableCellColor   [UIColor colorWithRed:0.0f green:0.9f blue:0.9f alpha:0.5f]
 
 // Define global macros here
 #define fontThinOfSize(x) [UIFont fontWithName:@"HelveticaNeue-Thin" size:x]
@@ -33,6 +38,9 @@
 #define fontItalicOfSize(x) [UIFont fontWithName:@"HelveticaNeue-Italic" size:x]
 #define fontBoldItalicOfSize(x) [UIFont fontWithName:@"HelveticaNeue-BoldItalic" size:x]
 
+#define QIKACHAT_RESOURCE @"iOSQikAChat"
+#define QIKACHAT_DOMAIN_NAME @"talk.google.com"
+#define QIKACHAT_PORT 5222
 
 //end of file
 

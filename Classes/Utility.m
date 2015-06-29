@@ -88,4 +88,200 @@
     return retImage;
 }
 
+
+
+
++(BOOL)isDisplayNameValid:(NSString*)aName
+{
+    NSRange atRange = [aName rangeOfString:[NSString stringWithFormat:@"@%@",QIKACHAT_DOMAIN_NAME]];
+    if( !aName || atRange.location != NSNotFound )
+        return NO;
+    else
+        return YES;
+}
+
++(NSString*)displayName:(NSString*)aJID
+{
+    NSRange atRange = [aJID rangeOfString:@"@"];
+    if (atRange.location != NSNotFound)
+    {
+        return [aJID substringToIndex:atRange.location];
+    }
+    return aJID;
+}
+
++(NSString*)bareJID:(NSString*)aNumber
+{
+    NSRange atRange = [aNumber rangeOfString:@"@"];
+    if (atRange.location == NSNotFound)
+    {
+        return [NSString stringWithFormat:@"%@@%@", aNumber, QIKACHAT_DOMAIN_NAME ];
+    }
+    return aNumber;
+}
+
+
++(NSString*)bareXabberJID:(NSString*)aNumber
+{
+    NSRange atRange = [aNumber rangeOfString:@"@"];
+    if (atRange.location == NSNotFound)
+    {
+        return [NSString stringWithFormat:@"%@", aNumber];
+    }
+    return aNumber;
+}
+
+
++(NSDateFormatter*) dateFormatorInstance
+{
+    static NSDateFormatter *globaldateFormatter = nil;
+    
+    @synchronized(globaldateFormatter)
+    {
+        if(globaldateFormatter == nil)
+        {
+            globaldateFormatter = [[NSDateFormatter alloc] init];
+        }
+        return globaldateFormatter;
+    }
+}
+/**
+ *
+ */
++(NSString *) dateToString:(NSDate *) date withFormat:(NSString *) format
+{
+    NSString *result = nil;
+    
+    if(date && format && [format length] > 0)
+    {
+        NSDateFormatter* formator = [Utility dateFormatorInstance];
+        if( formator )
+        {
+            [formator setDateFormat:format];
+            result = [formator stringFromDate:date];
+        }
+    }
+    if( ![result length] )
+        return @"";
+    
+    return result;
+}
+
+/**
+ *
+ */
++(NSDate *) stringToDate:(NSString *) stamp withFormat:(NSString *) format
+{
+    NSDate * result = nil;
+    if(stamp && [stamp length] > 0 && format && [format length] > 0 )
+    {
+        NSDateFormatter* formator = [Utility dateFormatorInstance];
+        if( formator )
+        {
+            [formator setDateFormat:format];
+            NSError *error = nil;
+            [formator getObjectValue:&result forString:stamp range:nil error:&error];
+        }
+    }
+    return result;
+}
+
++(NSString *) timeToShortStringForDisplay:(NSDate *) date
+{
+    NSString *result = nil;
+    if(date)
+    {
+        result = [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle: NSDateFormatterShortStyle];
+    }
+    if( ![result length] )
+        return @"";
+    
+    return result;
+}
+
++ (NSString *) contentTypeForImageData:(NSData *)data
+{
+    uint8_t c;
+    [data getBytes:&c length:1];
+    
+    switch (c) {
+        case 0xFF:
+            return @"image/jpeg";
+        case 0x89:
+            return @"image/png";
+        case 0x47:
+            return @"image/gif";
+        case 0x49:
+            break;
+        case 0x42:
+            return @"image/bmp";
+        case 0x4D:
+            return @"image/tiff";
+    }
+    return nil;
+}
+
++ (NSString*) getTimestampForDate:(NSDate*)date{
+    
+    if( !date )
+        return @"";
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setAMSymbol:@"AM"];
+    [dateFormatter setPMSymbol:@"PM"];
+    
+    NSString* timestamp;
+    int timeIntervalInHours = (int)[[NSDate date] timeIntervalSinceDate:date] /3600;
+    
+    if(timeIntervalInHours < 24){//less than 1 day
+        
+        [dateFormatter setDateFormat:@"h:mm a"];
+        timestamp = [NSString stringWithFormat:@"Today at %@",[dateFormatter stringFromDate:date]];
+        
+    }else if (timeIntervalInHours < 48){//less than 2 days
+        
+        [dateFormatter setDateFormat:@"h:mm a"];
+        timestamp = [NSString stringWithFormat:@"Yesterday at %@",[dateFormatter stringFromDate:date]];
+        
+    }else if (timeIntervalInHours < 168){//less than  a week
+        
+        [dateFormatter setDateFormat:@"h:mm a, dd/MM/yyyy"];
+        timestamp = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:date]];
+    }else{//older than a week
+        
+        [dateFormatter setDateFormat:@"dd/MM/yyyy"];
+        timestamp = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:date]];
+    }
+    return timestamp;
+}
+
++ (NSString*) getTimestampForChat:(NSDate*)date{
+    
+    if( !date )
+        return @"";
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setAMSymbol:@"AM"];
+    [dateFormatter setPMSymbol:@"PM"];
+    
+    NSString* timestamp;
+    int timeIntervalInHours = (int)[[NSDate date] timeIntervalSinceDate:date] /3600;
+    
+    if(timeIntervalInHours < 24){//less than 1 day
+        
+        [dateFormatter setDateFormat:@"h:mm a"];
+        timestamp = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:date]];
+        
+    }else if (timeIntervalInHours < 48){//less than 2 days
+        
+        timestamp = [NSString stringWithFormat:@"Yesterday"];
+    }else{
+        
+        [dateFormatter setDateFormat:@"dd/MM/yyyy"];
+        timestamp = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:date]];
+    }
+    return timestamp;
+}
+
+
 @end

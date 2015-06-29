@@ -7,36 +7,15 @@
 //
 
 #import "ChatsViewController.h"
-#import "AppDelegate.h"
 #import "SettingsViewController.h"
 #import "QikAChat-Prefix.pch"
-#import "XMPPFramework.h"
-#import "DDLog.h"
-
-#import "XMPPCoreDataStorage.h"
-#import "XMPPMessageArchiving.h"
-#import "XMPPMessageArchiving_Message_CoreDataObject.h"
-#import "XMPPMessageArchiving_Contact_CoreDataObject.h"
-
-
-// Log levels: off, error, warn, info, verbose
-#if DEBUG
-  static const int ddLogLevel = LOG_LEVEL_VERBOSE;
-#else
-  static const int ddLogLevel = LOG_LEVEL_INFO;
-#endif
+#import "Chat.h"
 
 @implementation ChatsViewController
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Accessors
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-- (AppDelegate *)appDelegate
-{
-	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -56,9 +35,8 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLineEtched];
     [self.view addSubview:self.tableView];
     
-    [self.tableView setBackgroundColor:[UIColor clearColor]];
-    
-    [self fetchedResultsController];
+    [self.tableView setBackgroundColor:tableColor];
+
 }
 
 
@@ -73,98 +51,82 @@
     [[self navigationController] setNavigationBarHidden:self.navigationBarHidden animated:YES];
     [appInstance setStatusBarHidden:self.navigationBarHidden withAnimation:UIStatusBarAnimationNone];
     
-    self.title = @"Chats";
-    
+    [self initTitleSegement];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateChatList:) name:UPDATE_CHAT_LIST object:nil];
+
     [self.tableView reloadData];
     
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UPDATE_CHAT_LIST object:nil];
+
     [[self navigationController] setNavigationBarHidden:false animated:YES];
     [appInstance setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     
-	[[self appDelegate] disconnect];
-	[[[self appDelegate] xmppvCardTempModule] removeDelegate:self];
-	
 	[super viewWillDisappear:animated];
 }
 
 
-
--(void) segmentedControlDidChange{
+- (void) initTitleSegement {
     
+    UIView *segmentedView = [[UIView alloc] initWithFrame:(CGRect){0, 0, self.view.frame.size.width, 60}];
+    
+   
+    UIButton* plusButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 35, 35)];
+    [plusButton setBackgroundImage:[UIImage imageNamed:@"navmenu"] forState:UIControlStateNormal];
+    [plusButton addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
+    [segmentedView addSubview:plusButton];
+  
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 5, self.view.frame.size.width-85, 44)];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textColor = [UIColor darkTextColor];
+    titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
+    titleLabel.numberOfLines = 1;
+    titleLabel.adjustsFontSizeToFitWidth = YES;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.text = @"Chats";
+    
+    
+    [segmentedView addSubview:titleLabel];
+    
+    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-50, 10, 35, 35)];
+    [menuButton setBackgroundImage:[UIImage imageNamed:@"navmenu"] forState:UIControlStateNormal];
+    [menuButton addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
+    [segmentedView addSubview:menuButton];
+    
+    self.navigationItem.titleView = segmentedView;
     
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark NSFetchedResultsController
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-- (NSFetchedResultsController *)fetchedResultsController
-{
-	if (fetchedResultsController == nil)
-	{
-        
-        
-    	NSManagedObjectContext *moc = [[self appDelegate] managedObjectContext_message];
-		
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPMessageArchiving_Contact_CoreDataObject"
-		                                          inManagedObjectContext:moc];
-		
-		NSSortDescriptor *sd1 = [[NSSortDescriptor alloc] initWithKey:@"mostRecentMessageTimestamp" ascending:NO];
-		
-		NSArray *sortDescriptors = @[sd1];
-		
-		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-		[fetchRequest setEntity:entity];
-		[fetchRequest setSortDescriptors:sortDescriptors];
-		[fetchRequest setFetchBatchSize:10];
-		
-		fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-		                                                               managedObjectContext:moc
-		                                                                 sectionNameKeyPath:nil
-		                                                                          cacheName:nil];
-		[fetchedResultsController setDelegate:self];
-		
-		
-		NSError *error = nil;
-		if (![fetchedResultsController performFetch:&error])
-		{
-			DDLogError(@"Error performing fetch: %@", error);
-		}
-	
-	}
-	
-	return fetchedResultsController;
+-(void) menuAction:(id) sender{
+    
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-	[[self tableView] reloadData];
+
+-(void) updateChatList:(id) sender {
+    
+    [self.tableView reloadData];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark UITableViewCell helpers
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (void)configurePhotoForCell:(UITableViewCell *)cell user:(XMPPUserCoreDataStorageObject *)user
+- (void)configurePhotoForCell:(UITableViewCell *)cell user:(Buddy *)user
 {
     // Our xmppRosterStorage will cache photos as they arrive from the xmppvCardAvatarModule.
     // We only need to ask the avatar module for a photo, if the roster doesn't have it.
-    
-    if (user.photo != nil)
+    if (user.avatarImage != nil)
     {
-        cell.imageView.image = [Utility roundImageWithImage:user.photo borderColor:[UIColor blackColor]];
+        cell.imageView.image = [Utility roundImageWithImage:user.avatarImage borderColor:[UIColor blackColor]];
     }
     else
     {
-        NSData *photoData = [[[self appDelegate] xmppvCardAvatarModule] photoDataForJID:user.jid];
-        
-        if (photoData != nil)
-            cell.imageView.image = [Utility roundImageWithImage:[UIImage imageWithData:photoData] borderColor:[UIColor blackColor]];
-        else
-            cell.imageView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar"] borderColor:[UIColor blackColor]];
+        cell.imageView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar"] borderColor:[UIColor blackColor]];
     }
     
     cell.imageView.layer.cornerRadius = 3.0f;
@@ -177,7 +139,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1; //[[[self fetchedResultsController] sections] count];
+    return 1;
 }
 
 - (NSString *)tableView:(UITableView *)sender titleForHeaderInSection:(NSInteger)sectionIndex
@@ -187,15 +149,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex
 {
-	NSArray *sections = [[self fetchedResultsController] sections];
-	
-	if (sectionIndex < [sections count])
-	{
-		id <NSFetchedResultsSectionInfo> sectionInfo = sections[sectionIndex];
-		return sectionInfo.numberOfObjects;
-	}
-	
-	return 0;
+  	return [[xmppInstance messageController] chatCount];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -209,19 +163,23 @@
 		                               reuseIdentifier:CellIdentifier];
  	}
     
-    XMPPMessageArchiving_Contact_CoreDataObject *chat = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    XMPPUserCoreDataStorageObject *user =[[self appDelegate] managedObjectContext_forUser:chat.bareJid];
+    Chat* chat = [[xmppInstance messageController] chatForIndex:indexPath.row];
+    Buddy *user = [[xmppInstance rosterController] getBuddyForJId:chat.chatJid];
     
     if( user != nil && [user displayName].length )
         cell.textLabel.text = [user displayName];
     else
-        cell.textLabel.text = chat.bareJidStr;
+        cell.textLabel.text = chat.chatJid;
 
-    cell.detailTextLabel.text = chat.mostRecentMessageBody;
+    cell.detailTextLabel.text = chat.lastMessage;
    
 	[self configurePhotoForCell:cell user:user];
 	
-	return cell;
+    [cell setBackgroundColor:tableCellColor];
+    cell.layer.borderColor = headerColor.CGColor;
+    cell.layer.borderWidth = 1.0f;
+
+    return cell;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -230,7 +188,7 @@
 
 - (IBAction)settings:(id)sender
 {
-	[self.navigationController presentViewController:[[self appDelegate] settingsViewController] animated:YES completion:NULL];
+	//[self.navigationController presentViewController:[[self appDelegate] settingsViewController] animated:YES completion:NULL];
 }
 
 @end

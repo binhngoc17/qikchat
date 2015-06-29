@@ -80,4 +80,33 @@
 //
 #import "XMPPMessageArchivingCoreDataStorage.h"
 
+#import "TURNSocket.h"
+#import "XMPP.h"
+#import "XMPPLogging.h"
+#import "GCDAsyncSocket.h"
+#import "NSData+XMPP.h"
+#import "NSNumber+XMPP.h"
+#import "DDLog.h"
+
+#import "GCDAsyncSocket.h"
+#import "XMPPLogging.h"
+#import "XMPPReconnect.h"
+#import "XMPPCapabilitiesCoreDataStorage.h"
+#import "XMPPRosterCoreDataStorage.h"
+#import "XMPPvCardAvatarModule.h"
+#import "XMPPvCardCoreDataStorage.h"
+
+#import "DDLog.h"
+#import "DDTTYLogger.h"
+
+#import "XMPPMessageDeliveryReceipts.h"
+
+// Log levels: off, error, warn, info, verbose
+#if DEBUG
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+static const int ddLogLevel = LOG_LEVEL_INFO;
+#endif
+
+
 //#import "XMPPElement+Delay.h"

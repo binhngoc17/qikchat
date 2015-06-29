@@ -10,13 +10,10 @@
 #import <CoreData/CoreData.h>
 
 
-@interface FriendsViewController : UIViewController <UITableViewDelegate,UITableViewDataSource, NSFetchedResultsControllerDelegate>
-{
-	NSFetchedResultsController *fetchedResultsController;
-}
+@interface FriendsViewController : UIViewController <UITableViewDelegate,UITableViewDataSource>
+
 
 @property(nonatomic, strong) UITableView *tableView;
-@property(nonatomic, strong) UISegmentedControl *segmentedControl;
 @property(nonatomic) BOOL navigationBarHidden;
 
 - (IBAction)settings:(id)sender;

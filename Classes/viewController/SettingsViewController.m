@@ -7,11 +7,7 @@
 //
 
 #import "SettingsViewController.h"
-
-
-NSString *const kXMPPmyJID = @"kXMPPmyJID";
-NSString *const kXMPPmyPassword = @"kXMPPmyPassword";
-
+#import "Literals.h"
 
 @implementation SettingsViewController
 

@@ -9,10 +9,6 @@
 #import <UIKit/UIKit.h>
 
 
-extern NSString *const kXMPPmyJID;
-extern NSString *const kXMPPmyPassword;
-
-
 @interface SettingsViewController : UIViewController 
 {
   UITextField *jidField;
