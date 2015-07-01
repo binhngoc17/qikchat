@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIActivitySpiner.h"
 
-@interface LoginViewController : UIViewController
-
+@interface LoginViewController : UIViewController<UITextFieldDelegate>
+{
+    UITextField *_displayNameField;
+    UITextField *_usernameTextField;
+    UITextField *_passwordTextField;
+    
+    BOOL _keyBoardIsVisible;
+    UIView* _controllView;
+    UIActivitySpiner* _spiner;
+}
 @end

@@ -12,6 +12,8 @@
 #import "RosterController.h"
 #import "MessageController.h"
 
+#define USER_AUTHENTICATED_NOTIFICATION  @"userAuthenticateNotification"
+
 @interface XmppController : NSObject<XMPPStreamDelegate>
 {
     XMPPStream *xmppStream;

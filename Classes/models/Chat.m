@@ -349,8 +349,8 @@
                                                               type:UIMessageBarMessageTypeInfo
                                                     statusBarStyle:UIStatusBarStyleLightContent callback:^{
                                                         
-                                                        //[appInstance activateChatView:self];
-
+                                                        [[UIController getUIController] activateChatView:self];
+                                                        
                                                     }
          ];
         

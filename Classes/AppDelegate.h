@@ -10,14 +10,6 @@
 #import <CoreData/CoreData.h>
 #import "XMPPFramework.h"
 
-@class Chat;
-
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
-
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
 @property(strong, nonatomic) UIWindow *window;
-
-@property (nonatomic, strong) IBOutlet UITabBarController *tabController;
-
--(void) activateChatView:(Chat*) aChat;
-
 @end

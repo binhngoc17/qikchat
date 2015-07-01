@@ -7,9 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "FriendsViewController.h"
-#import "SettingsViewController.h"
-#import "ChatsViewController.h"
 
 #import "GCDAsyncSocket.h"
 #import "XMPP.h"
@@ -35,40 +32,23 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Setup the XMPP stream
-    [XmppController sharedSingleton];
+    XmppController* controller = [XmppController sharedSingleton];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window setBackgroundColor:headerColor];
-    
-    FriendsViewController* rootViewController1 = [[FriendsViewController alloc] init];
-    UINavigationController* navigationController1 = [[UINavigationController alloc] initWithRootViewController:rootViewController1];
-    
-    ChatsViewController* rootViewController2 = [[ChatsViewController alloc] init];
-    UINavigationController* navigationController2 = [[UINavigationController alloc] initWithRootViewController:rootViewController2];
-  
-    navigationController1.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Friends" image:[UIImage imageNamed:@"tab_friends"] tag:0] ;
-    
-    navigationController2.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"tab_chats"] tag:1] ;
-    
-    self.tabController = [[UITabBarController alloc] init];
-    self.tabController.viewControllers = [NSArray arrayWithObjects:navigationController1,navigationController2, nil];
-    
-    if ( ![xmppInstance connect])
+    UIController* uiController = [[UIController alloc] initWithWindow:self.window];
+   
+    if (![profileInstance hasCreatedAccount] )
     {
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.0 * NSEC_PER_SEC);
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        
-            //[self.tabController presentViewController:settingsViewController animated:YES completion:NULL];
-        });
+        [uiController showLoginScreen];
     }
-    
-    [self.window setRootViewController:self.tabController];
-    [self.window makeKeyAndVisible];
-  
-	return YES;
+    else
+    {
+        [controller connect];
+        [uiController showMainScreen];
+    }
+    return YES;
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark UIApplicationDelegate
@@ -113,9 +93,5 @@
     [xmppInstance closeInstance];
 }
 
--(void) activateChatView:(Chat*) aChat
-{
-    
-}
 
 @end

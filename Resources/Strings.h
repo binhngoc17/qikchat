@@ -161,4 +161,8 @@
 #define FACEBOOK_STRING NSLocalizedString(@"Facebook","the name for facebook")
 #define JABBER_STRING NSLocalizedString(@"Jabber (XMPP)","the name for jabber, also include (XMPP) at the end")
 
+#define btnLogin @"Login"
+#define lblYourDisplayName @"Your Display Name"
+#define lblYourUserId @"Your User Id"
+#define lblYourPassworld @"Passworld"
 

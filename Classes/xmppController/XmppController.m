@@ -19,6 +19,8 @@
 
 @implementation XmppController
 
+const NSTimeInterval XMPPStreamTimeoutSecond = 30;
+
 +(XmppController *)sharedSingleton {
     static XmppController *sharedSingleton;
     @synchronized(self)
@@ -247,7 +249,6 @@
     NSString *myJID = [[ProfileDataManager sharedInstance] getXabberID:nil];
     NSString *myPassword = [[ProfileDataManager sharedInstance] getPassword:nil];
 
-
     //
     // If you don't want to use the Settings view to set the JID,
     // uncomment the section below to hard code a JID and password.
@@ -263,7 +264,7 @@
     password = myPassword;
     
     NSError *error = nil;
-    if (![xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&error])
+    if (![xmppStream connectWithTimeout:XMPPStreamTimeoutSecond error:&error])
     {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error connecting"
                                                             message:@"See console for error details."
@@ -395,6 +396,7 @@
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender
 {
     DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+    [[NSNotificationCenter defaultCenter] postNotificationName:USER_AUTHENTICATED_NOTIFICATION object:nil];
     
     [self goOnline];
 }
@@ -402,6 +404,7 @@
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(NSXMLElement *)error
 {
     DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
+    [[NSNotificationCenter defaultCenter] postNotificationName:USER_AUTHENTICATED_NOTIFICATION object:self];
 }
 
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq

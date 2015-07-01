@@ -31,6 +31,8 @@
 		5974190B1B41CFC40068682D /* UIMessageBarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5974190A1B41CFC40068682D /* UIMessageBarManager.m */; };
 		5974190E1B41D67F0068682D /* ProfileDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5974190D1B41D67F0068682D /* ProfileDataManager.m */; };
 		597419111B41DF320068682D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597419101B41DF320068682D /* LoginViewController.m */; };
+		597419141B41EA7E0068682D /* UIController.m in Sources */ = {isa = PBXBuildFile; fileRef = 597419131B41EA7E0068682D /* UIController.m */; };
+		59741EEA1B43104D0068682D /* UIActivitySpiner.m in Sources */ = {isa = PBXBuildFile; fileRef = 59741EE91B43104D0068682D /* UIActivitySpiner.m */; };
 		59798BAB1B3EF29A00D92124 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 59798BAA1B3EF29A00D92124 /* Utility.m */; };
 		59798BAE1B3EF82900D92124 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59798BAD1B3EF82900D92124 /* FriendsViewController.m */; };
 		59798BAF1B3EF86E00D92124 /* libidn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5989673B1B3EB028002A296D /* libidn.a */; };
@@ -257,6 +259,10 @@
 		5974190D1B41D67F0068682D /* ProfileDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileDataManager.m; sourceTree = "<group>"; };
 		5974190F1B41DF320068682D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		597419101B41DF320068682D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		597419121B41EA7E0068682D /* UIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIController.h; sourceTree = "<group>"; };
+		597419131B41EA7E0068682D /* UIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIController.m; sourceTree = "<group>"; };
+		59741EE81B43104D0068682D /* UIActivitySpiner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIActivitySpiner.h; sourceTree = "<group>"; };
+		59741EE91B43104D0068682D /* UIActivitySpiner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIActivitySpiner.m; sourceTree = "<group>"; };
 		59798BA91B3EF29A00D92124 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = Classes/Utility.h; sourceTree = SOURCE_ROOT; };
 		59798BAA1B3EF29A00D92124 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = Classes/Utility.m; sourceTree = SOURCE_ROOT; };
 		59798BAC1B3EF82900D92124 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
@@ -712,6 +718,8 @@
 				592758331B3E88B3007A8A18 /* SettingsViewController.m */,
 				5974190F1B41DF320068682D /* LoginViewController.h */,
 				597419101B41DF320068682D /* LoginViewController.m */,
+				597419121B41EA7E0068682D /* UIController.h */,
+				597419131B41EA7E0068682D /* UIController.m */,
 			);
 			name = viewController;
 			path = Classes/viewController;
@@ -777,6 +785,8 @@
 			children = (
 				597419091B41CFC40068682D /* UIMessageBarManager.h */,
 				5974190A1B41CFC40068682D /* UIMessageBarManager.m */,
+				59741EE81B43104D0068682D /* UIActivitySpiner.h */,
+				59741EE91B43104D0068682D /* UIActivitySpiner.m */,
 			);
 			name = viewControls;
 			path = Classes/viewControls;
@@ -1807,6 +1817,7 @@
 				5908F4221B3981A300627424 /* main.m in Sources */,
 				598967551B3EB028002A296D /* XMPPFileTransfer.m in Sources */,
 				598967961B3EB028002A296D /* XMPPCapsCoreDataStorageObject.m in Sources */,
+				59741EEA1B43104D0068682D /* UIActivitySpiner.m in Sources */,
 				5989673E1B3EB028002A296D /* XMPPAnonymousAuthentication.m in Sources */,
 				598967831B3EB028002A296D /* XMPPvCardTempLabel.m in Sources */,
 				598967411B3EB028002A296D /* XMPPDigestMD5Authentication.m in Sources */,
@@ -1855,6 +1866,7 @@
 				598967C91B3EB028002A296D /* DDXMLDocument.m in Sources */,
 				598967A31B3EB028002A296D /* XMPPMessageDeliveryReceipts.m in Sources */,
 				5989677B1B3EB028002A296D /* XMPPvCardCoreDataStorage.m in Sources */,
+				597419141B41EA7E0068682D /* UIController.m in Sources */,
 				598967571B3EB028002A296D /* XMPPOutgoingFileTransfer.m in Sources */,
 				598967AF1B3EB028002A296D /* XMPPMessage+XEP_0224.m in Sources */,
 				598967A01B3EB028002A296D /* XMPPMessage+XEP_0172.m in Sources */,

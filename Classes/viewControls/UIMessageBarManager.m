@@ -230,6 +230,7 @@ static UIColor *kTWDefaultMessageBarStyleSheetInfoStrokeColor = nil;
 {
     UIMessageView *messageView = [[UIMessageView alloc] initWithTitle:title description:description type:type];
     messageView.delegate = self;
+    [messageView setFrame:CGRectMake(0, 0, messageView.frame.size.width, messageView.frame.size.height-40)];
     
     messageView.callbacks = callback ? [NSArray arrayWithObject:callback] : [NSArray array];
     messageView.hasCallback = callback ? YES : NO;
