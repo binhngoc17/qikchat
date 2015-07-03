@@ -50,6 +50,11 @@
 {
 	[super viewWillAppear:animated];
     
+    self.navigationController.navigationBar.translucent = YES;
+   // self.navigationController.navigationBar.barTintColor = headerColor;
+    //self.navigationController.navigationBar.alpha = 0.5f;
+    
+  
     [[self navigationController] setNavigationBarHidden:self.navigationBarHidden animated:YES];
     [appInstance setStatusBarHidden:self.navigationBarHidden withAnimation:UIStatusBarAnimationNone];
     
@@ -181,6 +186,19 @@
     
   	return cell;
     
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark UITableViewDelegate
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    Buddy *budy = [[xmppInstance rosterController] buddyForIndex:indexPath.row];
+    if( budy ){
+        UIViewController* chatview = [[UIController getUIController] startChatWith:budy.jid withName:budy.displayName];
+        [self.navigationController pushViewController:chatview animated:YES];
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

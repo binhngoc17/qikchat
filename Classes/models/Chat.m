@@ -474,4 +474,8 @@
     [_allUnreadMessages removeAllObjects];
 }
 
+-(NSArray*) allMessageArray{
+    return _allMessages;
+}
+
 @end

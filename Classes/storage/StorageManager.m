@@ -400,7 +400,7 @@ rollback:
         NSData* avatarData =  UIImagePNGRepresentation(buddy.avatarImage);
         
         NSMutableArray*     args        = [ [NSMutableArray alloc] initWithObjects:
-                                           buddy.accountName,
+                                           buddy.jid,
                                            [buddy getDisplayName],
                                            phone,
                                            statusText,
@@ -464,7 +464,7 @@ rollback:
     NSData* avatarData =  UIImagePNGRepresentation(aBuddy.avatarImage);
     
     NSMutableArray*     args        = [ [NSMutableArray alloc] initWithObjects:
-                                       aBuddy.accountName,
+                                       aBuddy.jid,
                                        [aBuddy getDisplayName],
                                        phone,
                                        statusText,
@@ -510,7 +510,7 @@ rollback:
         return;
     
      NSMutableString*    statement   = [[NSMutableString alloc] initWithString:kEmptyString] ;
-    [statement appendFormat:@"DELETE FROM %@ WHERE %@ ='%@'",KTableRosters,kTableRosterFieldJID, aBuddy.accountName ];
+    [statement appendFormat:@"DELETE FROM %@ WHERE %@ ='%@'",KTableRosters,kTableRosterFieldJID, aBuddy.jid ];
     [_database executeUpdate:statement];
     
 }
@@ -530,7 +530,7 @@ rollback:
         return;
     
     NSString* stext = [aBuddy getCurrentStatusText];
-    NSString* jid = aBuddy.accountName;
+    NSString* jid = aBuddy.jid;
     if( [stext length]  && [jid length] )
     {
         NSString* statement   = [NSString stringWithFormat:@"UPDATE %@ SET %@ = '%@' WHERE %@ ='%@'", KTableRosters, kTableRosterFieldStatusText, stext, kTableRosterFieldJID ,jid ];
@@ -544,7 +544,7 @@ rollback:
     if( !aBuddy )
         return;
     
-    NSString* jid = aBuddy.accountName;
+    NSString* jid = aBuddy.jid;
     
     NSData* avatarData =  UIImagePNGRepresentation(aBuddy.avatarImage);
    
@@ -596,7 +596,7 @@ rollback:
         NSString *hresURL       = [rs stringForColumnIndex:6];
 		NSData * avatarData     = [rs dataForColumnIndex:7];
 		
-        Buddy* buddy = [Buddy buddyWithDisplayName:name accountName:jid status:(OTRBuddyStatus)status groupName:@"" ];
+        Buddy* buddy = [Buddy buddyWithDisplayName:name accountJid:jid status:(OTRBuddyStatus)status groupName:@"" ];
                         
         [buddy setCurrentStatusText:stext];
         [buddy setCurrentStatus:(OTRBuddyStatus)status];

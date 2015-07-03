@@ -48,6 +48,11 @@
 {
 	[super viewWillAppear:animated];
   
+    self.navigationController.navigationBar.translucent = YES;
+    //self.navigationController.navigationBar.barTintColor = headerColor;
+    //self.navigationController.navigationBar.alpha = 0.5f;
+    
+  
     [[self navigationController] setNavigationBarHidden:self.navigationBarHidden animated:YES];
     [appInstance setStatusBarHidden:self.navigationBarHidden withAnimation:UIStatusBarAnimationNone];
     

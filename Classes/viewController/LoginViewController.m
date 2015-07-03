@@ -1,4 +1,4 @@
-ad//
+//
 //  LoginViewController.m
 //  QikAChat
 //
@@ -34,7 +34,7 @@ ad//
     int scrnheight = [UIScreen mainScreen].bounds.size.height;
     
     CGRect fieldframe = CGRectMake((scrnwidth-260)/2,
-                                   scrnheight/2 + 3*kXLabelFieldHight, 260, kXLabelFieldHight);
+                                   scrnheight/2 + 2*kXLabelFieldHight, 260, kXLabelFieldHight);
     
     UIButton* signButton = [[UIButton alloc] initWithFrame:fieldframe];
     [signButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -129,10 +129,9 @@ ad//
         [alert show];
         return;
     }
-    int scrnheight = [UIScreen mainScreen].bounds.size.height;
     
     if( !_spiner )
-        _spiner = [[UIActivitySpiner alloc] initWithFrame:CGRectMake((self.view.frame.size.width-40)/2, scrnheight/2-40-10, 40, 40)];
+        _spiner = [[UIActivitySpiner alloc] initWithFrame:CGRectMake((self.view.frame.size.width-40)/2, 90 , 40, 40)];
     
     [[ProfileDataManager sharedInstance] setXabberID:_displayNameField.text];
     [[ProfileDataManager sharedInstance] setXabberID:_usernameTextField.text];
@@ -141,6 +140,10 @@ ad//
     
     [_controllView addSubview:_spiner];
     [_spiner createAndShowSpinner];
+    
+    [self handleKeyboardHide];
+    _keyBoardIsVisible = NO;
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -252,7 +255,7 @@ ad//
     else if( _usernameTextField == textField )
     {
         if( textField.text.length )
-            [_usernameTextField becomeFirstResponder];
+            [_passwordTextField becomeFirstResponder];
     }
     else if( _passwordTextField == textField )
     {

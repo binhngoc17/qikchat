@@ -39,9 +39,29 @@ NSString *const TEXT_SIZE_KEY = @"TEXT_SIZE_KEY";
     {
         if (sharedManager == nil) {
             sharedManager = [[ProfileDataManager alloc] init];
-            
         }
         return sharedManager;
+    }
+}
+-(instancetype) init{
+    self = [super init];
+    {
+        [self readMyData];
+    }
+    return self;
+}
+
+-(void) readMyData{
+    
+    self.myJid = [self getXabberID:nil];
+    self.myName =  [self getDisplayName:nil];
+    if( !self.myName.length )
+        self.myName = self.myJid;
+    
+    self.myAvatar = [self getMyAvatarImage];
+    if( !self.myAvatar )
+    {
+        self.myAvatar = [UIImage imageNamed:@"defaultAvatar.png"];
     }
 }
 

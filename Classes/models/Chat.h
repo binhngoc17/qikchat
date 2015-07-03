@@ -40,6 +40,7 @@ typedef NSInteger OTRChatState;
     BOOL _isCurrentlyActive;
     NSInteger _unreadCount;
     NSMutableArray* _allUnreadMessages; //unread messages
+    NSMutableArray* _allMessages;
 }
 @property (nonatomic, assign) IBOutlet id<ChatMessageDelegate> chatDelegate;
 @property (nonatomic, retain) NSString* chatJid;
@@ -81,5 +82,7 @@ typedef NSInteger OTRChatState;
 -(NSInteger) unreadCount;
 
 -(void)updateLastChat:(Message *)message;
+
+-(NSArray*) allMessageArray;
 
 @end

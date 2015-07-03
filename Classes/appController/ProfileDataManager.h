@@ -14,6 +14,10 @@
 
 +(ProfileDataManager *)sharedInstance;
 
+@property (nonatomic, retain) NSString *myJid;
+@property (nonatomic, retain) NSString *myName;
+@property (nonatomic, retain) UIImage *myAvatar;
+
 - (void) commitChange;
 
 /*

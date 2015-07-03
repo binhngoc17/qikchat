@@ -8,10 +8,12 @@
 
 #import "UIController.h"
 #include "Literals.h"
+#import "QikAChat-Prefix.pch"
 #import "FriendsViewController.h"
 #import "SettingsViewController.h"
 #import "ChatsViewController.h"
 #import "LoginViewController.h"
+#import "ChatViewController.h"
 
 static UIController *sharedUIController;
 
@@ -61,8 +63,16 @@ static UIController *sharedUIController;
 }
 
 -(void) activateChatView:(Chat*) aChat{
-    
+    ChatViewController* chatView = [[ChatViewController alloc] init];
+    [chatView setupChat:aChat];
 }
 
+-(UIViewController*) startChatWith:(NSString*) aJid withName:(NSString*) aName{
+    Chat* chat = [[xmppInstance messageController] createChatForJID:aJid withDisplayName:aName];
+    ChatViewController* chatView = [[ChatViewController alloc] init];
+    [chatView setupChat:chat];
+    chatView.hidesBottomBarWhenPushed = YES;
+    return chatView;
+}
 
 @end

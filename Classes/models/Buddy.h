@@ -39,7 +39,7 @@ typedef unsigned int OTRBuddyStatus;
     BOOL _isLastSeenFetched;
 }
 
-@property (nonatomic, retain, getter = accountName ) NSString* accountName;
+@property (nonatomic, retain, getter = getJid ) NSString* jid;
 @property (nonatomic, retain) NSString* groupName;
 @property (nonatomic, retain, getter = getCurrentStatusText ) NSString *statusText;
 @property (nonatomic, retain) UIImage *avatarImage;
@@ -52,8 +52,8 @@ typedef unsigned int OTRBuddyStatus;
 @property (nonatomic, strong) NSString* lresAvtarURL;
 @property (nonatomic, strong) NSDate *lastSeenDate;
 
--(id)initWithDisplayName:(NSString*)buddyName accountName:(NSString*)accountName status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName;
-+(Buddy*)buddyWithDisplayName:(NSString*)buddyName accountName:(NSString*)accountName  status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName;
+-(id)initWithDisplayName:(NSString*)buddyName accountJid:(NSString*)accountName status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName;
++(Buddy*)buddyWithDisplayName:(NSString*)buddyName accountJid:(NSString*)accountName  status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName;
 
 -(void) setBuddyDisplayName:(NSString*) aDisplayName;
 -(NSString*) getDisplayName;

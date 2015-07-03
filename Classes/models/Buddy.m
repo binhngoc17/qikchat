@@ -23,11 +23,11 @@
 @synthesize lresAvtarURL;
 @synthesize lastSeenDate;
 
--(id)initWithDisplayName:(NSString*)buddyName accountName:(NSString*) buddyAccountName status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName
+-(id)initWithDisplayName:(NSString*)buddyName accountJid:(NSString*) buddyAccountName status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName
 {
     if(self = [super init])
     {
-        self.accountName = buddyAccountName;
+        self.jid = buddyAccountName;
         self.buddyStatus = buddyStatus;
         self.groupName = buddyGroupName;
         [self setBuddyDisplayName:buddyName];
@@ -39,9 +39,9 @@
     return self;
 }
 
-+(Buddy*)buddyWithDisplayName:(NSString*)buddyName accountName:(NSString*) accountName  status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName
++(Buddy*)buddyWithDisplayName:(NSString*)buddyName accountJid:(NSString*) accountName  status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName
 {
-    Buddy *newBuddy = [[Buddy alloc] initWithDisplayName:buddyName accountName:accountName  status:buddyStatus groupName:buddyGroupName];
+    Buddy *newBuddy = [[Buddy alloc] initWithDisplayName:buddyName accountJid:accountName  status:buddyStatus groupName:buddyGroupName];
     return newBuddy;
 }
 
@@ -63,7 +63,7 @@
     if(displayName)
         return displayName;
     
-    return [Utility displayName:self.accountName];
+    return [Utility displayName:self.jid];
 }
 
 -(void) setPhoneNumber:(NSString*) aNumber
@@ -159,7 +159,7 @@
 
 //for showing phone number on contact list  method  
 -(NSString *)getPhoneNumer {
-    return [Utility displayName:self.accountName];
+    return [Utility displayName:self.jid];
 }
 
 -(void) setLastSeenFetched:(BOOL) aValue

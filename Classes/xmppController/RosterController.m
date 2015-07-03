@@ -291,7 +291,7 @@
             }
             else
             {
-                Buddy *buddy = [[Buddy alloc] initWithDisplayName:displayName accountName:bareJid status:otrBuddyStatus groupName:sectionName];
+                Buddy *buddy = [[Buddy alloc] initWithDisplayName:displayName accountJid:bareJid status:otrBuddyStatus groupName:sectionName];
                 [_allBuddyList setObject:buddy forKey:bareJid];
                 
                 if (user.photo != nil)
@@ -386,7 +386,7 @@
         }
         else
         {
-            Buddy *buddy = [[Buddy alloc] initWithDisplayName:displayName accountName:bareJid status:otrBuddyStatus groupName:sectionName];
+            Buddy *buddy = [[Buddy alloc] initWithDisplayName:displayName accountJid:bareJid status:otrBuddyStatus groupName:sectionName];
             [_allBuddyList setObject:buddy forKey:bareJid];
             if (user.photo != nil)
             {
@@ -421,7 +421,7 @@
         Buddy *buddy = [_allBuddyList objectForKey:aJID];
         if(!buddy)
         {
-            buddy = [Buddy buddyWithDisplayName:name accountName:aJID status:kOTRBuddyStatusOffline groupName:nil];
+            buddy = [Buddy buddyWithDisplayName:name accountJid:aJID status:kOTRBuddyStatusOffline groupName:nil];
             [_allBuddyList setObject:buddy forKey:aJID];
             buddy.currentStatusText = @"";
             didFrindChanged = YES;

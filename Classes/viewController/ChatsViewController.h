@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 
 
-@interface ChatsViewController : UIViewController <UITableViewDelegate,UITableViewDataSource >
+@interface ChatsViewController : UIViewController <UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic, strong) UITableView *tableView;
 @property(nonatomic) BOOL navigationBarHidden;
