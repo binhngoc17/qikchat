@@ -20,11 +20,9 @@
     UIView *textInputView;
     UITextField *textField;
     UIButton* sendButton;
-    NSMutableArray *bubbleData;
     UIImage* defaultAvatar;
 }
 @property(nonatomic, strong) Chat* currentChat;
-@property(nonatomic) BOOL isReloadTabble;
 @end
 
 @implementation ChatViewController
@@ -47,6 +45,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view setBackgroundColor:dHeaderColor];
     [self initTableView];
 }
 
@@ -59,11 +58,9 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.translucent = YES;
     
-    //[[self navigationController] setNavigationBarHidden:self.navigationBarHidden animated:YES];
-    //[appInstance setStatusBarHidden:self.navigationBarHidden withAnimation:UIStatusBarAnimationNone];
-  
     [self initTitleSegement];
  
+    self.currentChat.chatDelegate  = self;
     [self.currentChat setActive:YES];
     
     bubbleTable.snapInterval = 120;
@@ -81,19 +78,18 @@
     
     bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
     
-    if( self.isReloadTabble )
-        [bubbleTable reloadData];
-    else
-        [bubbleTable reloadData];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
-
+    
+    [bubbleTable reloadData];
+    [self scrollToBottom:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [self.currentChat setActive:NO];
+    self.currentChat.chatDelegate  = nil;
+    
     [[self navigationController] setNavigationBarHidden:false animated:YES];
     [appInstance setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     [super viewWillDisappear:animated];
@@ -105,17 +101,17 @@
     bubbleTable.delegate = self;
     
     [self.view addSubview:bubbleTable];
-    [bubbleTable setBackgroundColor:[UIColor whiteColor]];
+    [bubbleTable setBackgroundColor:dTableChatColor];
     
     textInputView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-50, self.view.frame.size.width, 50)];
     [self.view addSubview:textInputView];
-    [textInputView setBackgroundColor:tableColor];
+    [textInputView setBackgroundColor:dHeaderColor];
     
     textField = [[UITextField alloc] initWithFrame:CGRectMake(5, 5, self.view.frame.size.width-60, 40)];
     [textInputView addSubview:textField];
     [textField setBackgroundColor:[UIColor whiteColor]];
     textField.layer.cornerRadius = 10.0f;
-    textField.layer.borderColor = headerColor.CGColor;
+    textField.layer.borderColor = dHeaderColor.CGColor;
     textField.layer.borderWidth = 2.0f;
     textField.delegate = self;
     
@@ -125,9 +121,7 @@
     [sendButton setTitle:@"Send" forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(sendPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    bubbleData = [[NSMutableArray alloc] init];
     bubbleTable.bubbleDataSource = self;
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -140,11 +134,8 @@
     if( self.currentChat != newChat ){
        [self.currentChat setActive:FALSE];
         self.currentChat = newChat;
-        self.isReloadTabble = YES;
-        [bubbleData removeAllObjects];
+        [self.currentChat loadMessagesFromDB];
     }
-    else
-        self.isReloadTabble = NO;
 }
 
 -(UIImage*) defaultAvatarImage{
@@ -208,111 +199,9 @@
 #pragma mark UITableView
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
--(NSBubbleData*) addSentMessage:(Message*) message scroll:(BOOL) aScroll
-{
-    bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
-    
-    NSBubbleData *sayBubble =nil;
-    if( message.messageType == TEXT_TYPE_MESSAGE ){
-        sayBubble = [NSBubbleData dataWithText:message.body date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeMine];
-    }
-    else if( message.fileData && message.messageType == IMAGE_TYPE_MESSAGE )
-    {
-        if (message.fileData != nil) {
-            UIImage *img = [UIImage imageWithData:message.fileData];
-            sayBubble = [NSBubbleData dataWithImage:img date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeMine];
-        }
-    }
-    else if( message.messageType == AUDIO_TYPE_MESSAGE )
-    {
-        UIImage* image = [UIImage imageNamed:@"micro.png"];
-        UIImageView *imgView = [[UIImageView alloc] initWithImage:image];
-        imgView.frame = CGRectMake(0, 0, 100,100);
-        sayBubble = [NSBubbleData dataWithImage:image date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeMine];
-    }
-    else if (message.messageType == LOCATION_TYPE_MESSAGE)
-    {
-        sayBubble = [NSBubbleData dataWithText:message.body date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeMine];
-    }
-    else
-    {
-        sayBubble = [NSBubbleData dataWithText:message.body date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeMine];
-    }
-    
-   //[sayBubble setExtObject:message];
-   //sayBubble.status = message.messageStatus;
-    
-    ProfileDataManager *myAccount = [ProfileDataManager sharedInstance];
-    UIImage* avatarImage =  myAccount.myAvatar;
-    sayBubble.avatar = avatarImage;
-    
-    [bubbleData addObject:sayBubble];
-    
-    if( aScroll ){
-        // can be optimized here to just refresh the single cell
-        [bubbleTable reloadData];
-        [self scrollToBottom];
-    }
-    
-    return sayBubble;
+-(void) scrollToBottom:(BOOL) animated{
+    [bubbleTable scrollBubbleViewToBottomAnimated:animated];
 }
-
--(void) scrollToBottom{
-    [bubbleTable scrollBubbleViewToBottomAnimated:YES];
-}
-
--(NSBubbleData*) addRecievedMessage:(Message*) message scroll:(BOOL) aScroll
-{
-    bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
-    
-    NSBubbleData *sayBubble =nil;
-    if( message.messageType == TEXT_TYPE_MESSAGE ){
-        sayBubble = [NSBubbleData dataWithText:message.body date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
-    }
-    else if( message.fileData && message.messageType == IMAGE_TYPE_MESSAGE )
-    {
-        if (message.fileData != nil) {
-            UIImage *img = [UIImage imageWithData:message.fileData];
-            sayBubble = [NSBubbleData dataWithImage:img date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
-        }
-    }
-    else if( message.messageType == AUDIO_TYPE_MESSAGE )
-    {
-        UIImage* image = [UIImage imageNamed:@"micro.png"];
-        UIImageView *imgView = [[UIImageView alloc] initWithImage:image];
-        imgView.frame = CGRectMake(0, 0, 100,100);
-        sayBubble = [NSBubbleData dataWithImage:image date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
-    }
-    else if (message.messageType == LOCATION_TYPE_MESSAGE)
-    {
-        sayBubble = [NSBubbleData dataWithText:message.body date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
-    }
-    else
-    {
-        sayBubble = [NSBubbleData dataWithText:message.body date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
-    }
-    
-    //  [sayBubble setExtObject:message];
-    // sayBubble.status = message.messageStatus;
-    
-    UIImage *sendImage = [self.currentChat chatImage];
-    
-    if( sendImage == nil ){
-        sendImage = [self defaultAvatarImage];
-    }
-    sayBubble.avatar = sendImage;
-    
-    [bubbleData addObject:sayBubble];
-    
-    if( aScroll ){
-        // can be optimized here to just refresh the single cell
-        [bubbleTable reloadData];
-        [self scrollToBottom];
-    }
-    return sayBubble;
-}
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -323,12 +212,12 @@
 
 - (NSInteger)rowsForBubbleTable:(UIBubbleTableView *)tableView
 {
-    return [bubbleData count];
+    return [[self.currentChat allUiMessageArray] count];
 }
 
 - (NSBubbleData *)bubbleTableView:(UIBubbleTableView *)tableView dataForRow:(NSInteger)row
 {
-    return [bubbleData objectAtIndex:row];
+    return [[self.currentChat allUiMessageArray] objectAtIndex:row];
 }
 
 #pragma mark - Keyboard events
@@ -383,9 +272,11 @@
     message.messageType = TEXT_TYPE_MESSAGE;
     
     [self.currentChat sendChatMessage:message];
-    [self addSentMessage:message scroll:YES];
     textField.text = @"";
+    
+    [self aSynchReloadTableData];
 }
+
 #pragma mark - UITextFieldDelegate implementation
 
 - (void)textFieldDidBeginEditing:(UITextField *)atextField{
@@ -395,6 +286,7 @@
     
     bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
 }
+
 // called when 'return' key pressed. return NO to ignore.
 - (BOOL)textFieldShouldReturn:(UITextField *)atextField{
    
@@ -404,6 +296,24 @@
         [self sendPressed:nil];
     
     return YES;
+}
+
+-(void) handleAllMessageLoaded:(NSObject*) aObject{
+    [self performSelectorOnMainThread:@selector(aSynchReloadTableData) withObject:nil waitUntilDone:NO];
+}
+
+-(void) handleMessageListChange:(NSString*) aBareJid {
+    [self performSelectorOnMainThread:@selector(aSynchReloadTableData) withObject:nil waitUntilDone:NO];
+}
+
+-(void) handleChatStateChange:(OTRChatState)aState{
+    bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
+    [self scrollToBottom:YES];
+}
+
+-(void) aSynchReloadTableData{
+    [bubbleTable reloadData];
+    [self scrollToBottom:YES];
 }
 
 @end

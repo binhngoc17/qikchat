@@ -38,7 +38,7 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLineEtched];
     [self.view addSubview:self.tableView];
     
-    [self.tableView setBackgroundColor:tableColor];
+    [self.tableView setBackgroundColor:dClearColor];
     
     self.tableDictionory  = [[NSMutableDictionary alloc] init];
     
@@ -110,8 +110,8 @@
     
     cell.textLabel.text = [list objectAtIndex:indexPath.row];
     
-    [cell setBackgroundColor:tableCellColor];
-    cell.layer.borderColor = headerColor.CGColor;
+    [cell setBackgroundColor:dTableCellColor];
+    cell.layer.borderColor = dHeaderColor.CGColor;
     cell.layer.borderWidth = 1.0f;
 
     return cell;

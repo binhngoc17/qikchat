@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>D43C4E75-8639-4332-BC7C-F3F2799EB282</string>
 	<key>IDESourceControlProjectName</key>
-	<string>QikAChat</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>B956E36BEDF01BA85725DD74B4CF3587FB0CE56D</key>
 		<string>https://bitbucket.org/rbchauhan/qikachat.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>QikAChat.xcodeproj</string>
+	<string>QikAChat.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>B956E36BEDF01BA85725DD74B4CF3587FB0CE56D</key>

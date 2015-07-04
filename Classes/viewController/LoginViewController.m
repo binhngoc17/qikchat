@@ -56,7 +56,7 @@
     _passwordTextField.textAlignment = NSTextAlignmentCenter;
     _passwordTextField.delegate = self;
     _passwordTextField.layer.cornerRadius = 6.0f;
-    _passwordTextField.backgroundColor = tableCellColor;
+    _passwordTextField.backgroundColor = dTableCellColor;
     [_controllView addSubview: _passwordTextField];
     
     fieldframe.origin.y = fieldframe.origin.y -kXLabelFieldHight-kXLabelTopMargin;
@@ -70,7 +70,7 @@
     _usernameTextField.textAlignment = NSTextAlignmentCenter;
     _usernameTextField.delegate = self;
     _usernameTextField.layer.cornerRadius = 6.0f;
-    _usernameTextField.backgroundColor = tableCellColor;
+    _usernameTextField.backgroundColor = dTableCellColor;
     [_controllView addSubview: _usernameTextField];
     
     fieldframe.origin.y = fieldframe.origin.y -kXLabelFieldHight-kXLabelTopMargin;
@@ -84,7 +84,7 @@
     _displayNameField.textAlignment = NSTextAlignmentCenter;
     _displayNameField.delegate = self;
     _displayNameField.layer.cornerRadius = 6.0f;
-    _displayNameField.backgroundColor = tableCellColor;
+    _displayNameField.backgroundColor = dTableCellColor;
     [_controllView addSubview: _displayNameField];
     
 }

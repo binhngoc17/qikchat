@@ -41,7 +41,7 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLineEtched];
     [self.view addSubview:self.tableView];
     
-    [self.tableView setBackgroundColor:tableColor];
+    [self.tableView setBackgroundColor:dClearColor];
 }
 
 
@@ -170,8 +170,8 @@
 	
     Buddy *budy = [[xmppInstance rosterController] buddyForIndex:indexPath.row];
 	cell.textLabel.text = budy.displayName;
-	[cell setBackgroundColor:tableCellColor];
-    cell.layer.borderColor = headerColor.CGColor;
+	[cell setBackgroundColor:dTableCellColor];
+    cell.layer.borderColor = dHeaderColor.CGColor;
     cell.layer.borderWidth = 1.0f;
     cell.detailTextLabel.text = budy.statusText;
     [self configurePhotoForCell:cell user:budy];

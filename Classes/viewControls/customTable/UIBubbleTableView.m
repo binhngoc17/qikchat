@@ -12,6 +12,7 @@
 #import "NSBubbleData.h"
 #import "UIBubbleHeaderTableViewCell.h"
 #import "UIBubbleTypingTableViewCell.h"
+#import "QikAChat-Prefix.pch"
 
 @interface UIBubbleTableView ()
 
@@ -195,11 +196,13 @@
         static NSString *cellId = @"tblBubbleTypingCell";
         UIBubbleTypingTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         
-        if (cell == nil) cell = [[UIBubbleTypingTableViewCell alloc] init];
-
+        if (cell == nil)
+            cell = [[UIBubbleTypingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        
         cell.type = self.typingBubble;
         cell.showAvatar = self.showAvatars;
-        
+        [cell setBackgroundColor:dClearColor];
+    
         return cell;
     }
 
@@ -209,24 +212,29 @@
         static NSString *cellId = @"tblBubbleHeaderCell";
         UIBubbleHeaderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:0];
-        
-        if (cell == nil) cell = [[UIBubbleHeaderTableViewCell alloc] init];
-
-        cell.date = data.date;
        
+        if (cell == nil)
+            cell = [[UIBubbleHeaderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        
+        cell.date = data.date;
+        [cell setBackgroundColor:dClearColor];
+        
+        
         return cell;
     }
     
-    // Standard bubble    
     static NSString *cellId = @"tblBubbleCell";
     UIBubbleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (cell == nil){
+        cell = [[UIBubbleTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+    }
+    [cell setBackgroundColor:dClearColor];
+    
     NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
-    
-    if (cell == nil) cell = [[UIBubbleTableViewCell alloc] init];
-    
-    cell.data = data;
+    if( data.view.tag == 0 )
+        data.view.tag = indexPath.row ;
+    cell.data = data ;
     cell.showAvatar = self.showAvatars;
-    
     return cell;
 }
 

@@ -48,8 +48,6 @@
         NSLog(@"count = %ld", _allChatList.count);
     });
     
-   // NSArray* array = [[StorageManager sharedInstance] getAllChatMessagesForState:MESSAGE_STATUS_WAITING];
-    //[_allWaitingMessageQueue addObjectsFromArray:array];
 }
 
 - (NSManagedObjectContext *)managedObjectContext_message
@@ -92,26 +90,7 @@
             Message* msg = [self parse2LocalMessage:message];
             [chat handleRecievedMessage:msg];
         }
-  
-        /*  if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-        {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
-                                                                message:body
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-            [alertView show];
-        }
-        else
-        {
-            // We are not active, so use a local notification instead
-            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-            localNotification.alertAction = @"Ok";
-            localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
-            
-            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-        }
-       */
+        [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_CHAT_LIST object:self];
     }
 }
 
@@ -180,11 +159,8 @@
 
     Chat* chat = [self getChatForJID:aMessage.bareJid];
     if( chat ){
-        if ([chat.chatDelegate conformsToProtocol:@protocol(ChatMessageDelegate)] && [chat.chatDelegate respondsToSelector:@selector(handleMessageSent:)]) {
-        [chat.chatDelegate handleMessageSent:aMessage];
-        }
+        [chat handleMessageDelivered:aMessage];
     }
-    
     _isMessageSending = NO;
     [self asynchSendQueueMessage];
 }
@@ -476,6 +452,7 @@
         chat = [[Chat alloc] initWithChatJID:Jid withName:aName];
         [_allChatList setObject:chat forKey:Jid];
         [[StorageManager sharedInstance] saveChat:chat];
+        
     }
     return chat;
 }

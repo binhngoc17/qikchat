@@ -16,6 +16,7 @@
 #import "Message.h"
 #import "Literals.h"
 #import "Utility.h"
+#import "NSBubbleData.h"
 
 @implementation StorageManager
 
@@ -776,6 +777,51 @@ rollback:
     
 }
 
+-(void) loadAllUiChatMessags:(NSMutableArray*) aArray forChatId:(NSString*) aChatJID{
+    
+    NSMutableString* statement = [[NSMutableString alloc] initWithString:kEmptyString];
+    
+    [statement appendFormat:@"SELECT * FROM %@ WHERE %@ ='%@'", KTableChatItems, kTableChatItemChatJID, aChatJID ];
+    
+    ResultSet *rs = [_database executeQuery:statement];
+    
+    while ([rs next])
+    {
+        NSInteger id            = [rs intForColumnIndex:0];
+        NSInteger type          = [rs intForColumnIndex:1];
+        NSInteger isOutGoing    = [rs intForColumnIndex:2];
+        
+        NSString* chatJid       = [rs stringForColumnIndex:3];
+        NSString* time          = [rs stringForColumnIndex:4];
+        NSString* body          = [rs stringForColumnIndex:5];
+        NSString* lresUrl       = [rs stringForColumnIndex:6];
+        NSString* hresUrl       = [rs stringForColumnIndex:7];
+        
+        NSData* fileData   = [rs dataForColumnIndex:8];
+        NSInteger state    = [rs intForColumnIndex:9];
+        
+        //TODO
+        Message* msg = [ [Message alloc] initWithTextMessage:body withJid:chatJid];
+        
+        msg.messageNumber = id;
+        msg.messageType = type;
+        msg.isOutGoing = isOutGoing;
+        msg.date = [Utility stringToDate:time withFormat:kChatTimestampFormat];
+        msg.lresURL = lresUrl;
+        msg.hresURL = hresUrl;
+        
+        msg.fileData   =  fileData;
+        msg.messageStatus = state;
+        
+        NSObject* bData = [Utility createDataWithMessage:msg];
+        [aArray addObject:bData];
+   
+        //NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:msg forKey:MESSAGE_KEY_FOR_MESSAGE];
+        //save it to db and show to user on chat list and chat screen
+        //[[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CHAT_LOADED object:self userInfo:messageInfo];
+    }
+
+}
 
 -(void) loadAllChatMessags:(NSString*) aChatJID
 {

@@ -17,10 +17,28 @@
 #import "ProfileDataManager.h"
 #import "Literals.h"
 #import "UIMessageBarManager.h"
+#import "NSBubbleData.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <AudioToolbox/AudioServices.h>
+
+@interface Chat()
+{
+    Message* _lastMessage;
+    UIImage* _image;
+    NSString* _displayName;
+    BOOL _isCurrentlyActive;
+    NSInteger _unreadCount;
+    NSMutableArray* _allUiMessages;
+}
+
+@property (nonatomic) OTRChatState lastSentChatState;
+@property (nonatomic, strong) NSDate *lastDate;
+@property (nonatomic, strong) NSTimer * pausedChatStateTimer;
+@property (nonatomic, strong) NSTimer * inactiveChatStateTimer;
+
+@end
 
 @implementation Chat
 
@@ -37,8 +55,7 @@
     {
         // Custom initialization
         self.chatJid = aJID;
-        [self setChatDisplayName:aName];
-        
+        _displayName =  aName;
     }
     return self;
 }
@@ -58,7 +75,7 @@
         _displayName = nil;
         _isCurrentlyActive = NO;
         _unreadCount = 0;
-        _allUnreadMessages = [[NSMutableArray alloc] init];
+        _allUiMessages = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -72,12 +89,7 @@
             remainingBadgeNumber = 0;
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:remainingBadgeNumber] ;
         _unreadCount = 0;
-        [[StorageManager sharedInstance] updateLastActivity:self];
         
-        if( !_isCurrentlyActive || [_allUnreadMessages count] )
-        {
-            [self asynchPushPendingMessages];
-        }
         [self sendActiveChatState];
     }
     else
@@ -125,15 +137,10 @@
     
     [[StorageManager sharedInstance] storeChatMessage:message];
     [[StorageManager sharedInstance] updateLastActivity:self];
+    
+    
 }
 
-
--(void)updateLastChat:(Message *)message {
-   
-    _lastMessage = message;
-    self.lastDate = _lastMessage.date;
-    [[StorageManager sharedInstance] updateLastActivity:self];
-}
 
 -(NSInteger) lastMessageId
 {
@@ -201,21 +208,6 @@
     return [Utility displayName:self.chatJid];
 }
 
--(void) setChatDisplayName:(NSString*) aDisplayName
-{
-    NSRange atRange = [aDisplayName rangeOfString:[NSString stringWithFormat:@"@%@",QIKACHAT_DOMAIN_NAME]];
-    if (atRange.location == NSNotFound && aDisplayName.length )
-    {
-        _displayName = aDisplayName; // replace state away
-        [[StorageManager sharedInstance] updateChatName:self];
-    }
-    else if( aDisplayName.length && _displayName==nil )
-    {
-        _displayName = [aDisplayName substringToIndex:atRange.location];
-        [[StorageManager sharedInstance] updateChatName:self];
-    }
- }
-
 -(void) setChatImage:(UIImage*) image
 {
     _image = image;
@@ -229,7 +221,6 @@
 -(void)sendChatState:(OTRChatState) sendingChatState
 {
      lastSentChatState = sendingChatState;
-    [[xmppInstance messageController ] sendChatState:sendingChatState toJId:self.chatJid];
 }
 
 -(void)sendComposingChatState
@@ -274,9 +265,31 @@
     inactiveChatStateTimer = [NSTimer scheduledTimerWithTimeInterval:kOTRChatStateInactiveTimeout target:self selector:@selector(sendInactiveChatState) userInfo:nil repeats:NO];
 }
 
--(void)receiveChatStateMessage:(OTRChatState) newChatState
+-(void) handleMessageDelivered:(Message*) aMessage{
+    aMessage.messageStatus = MESSAGE_STATUS_WAITING;
+    if( self.isActiveChat  )
+        [self performSelectorOnMainThread:@selector(asynchNotifyMessageListChange:) withObject:aMessage waitUntilDone:NO];
+}
+
+-(void) asynchNotifyMessageListChange:(NSObject*) object
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PROCESSED_NOTIFICATION object:self];
+    if(self.chatDelegate && self.isActiveChat  ){
+        [self.chatDelegate handleMessageListChange:object];
+    }
+}
+
+-(void)handleChatStateRecieved:(OTRChatState) newChatState
+{
+   if( self.isActiveChat  )
+       [self performSelectorOnMainThread:@selector(asynchNotifyChatStateRecieved:) withObject:[NSNumber numberWithInteger:newChatState] waitUntilDone:NO];
+}
+
+-(void) asynchNotifyChatStateRecieved:(NSObject*) object
+{
+    NSNumber* number = (NSNumber*) object;
+    if(self.chatDelegate && self.isActiveChat ){
+        [self.chatDelegate handleChatStateChange:number.integerValue];
+    }
 }
 
 -(void) handleRecievedMessage:(Message *)message
@@ -284,36 +297,18 @@
     if (message)
     {
         message.isOutGoing = NO;
-        if( message.messageType == IMAGE_TYPE_MESSAGE  && message.lresURL != nil )
-        {
-            [self asynchDownloadMedia:message];
-        }
-        else if( message.messageType == VIDEO_TYPE_MESSAGE  && message.lresURL != nil )
-        {
-            [self asynchDownloadMedia:message];
-        }
-        else
-        {
-            [self doHandleReceivedMessage:message];
-        }
+        [self doHandleReceivedMessage:message];
     }
-}
-
--(void) handleFileDownloaded:(Message*) message  error:(int) err;
-{
-    [self doHandleReceivedMessage:message];
 }
 
 -(void) doHandleReceivedMessage:(Message*) aMessage
 {
      NSString* displayName = [self getDisplayName];
-    [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_PROCESSED_NOTIFICATION object:self];
+    [self addRecievedMessage:aMessage];
     
     if (![[UIApplication sharedApplication] applicationState] == UIApplicationStateActive )
     {
         _unreadCount++;
-        [_allUnreadMessages addObject:aMessage];
-        [self saveChatMessage:aMessage];
         
         // We are not active, so use a local notification instead
         UILocalNotification *localNotification = [[UILocalNotification alloc] init];
@@ -339,9 +334,7 @@
     else if( !_isCurrentlyActive )
     {
         _unreadCount++;
-        [_allUnreadMessages addObject:aMessage];
-        [self saveChatMessage:aMessage];
-      
+       
         NSString* bodyMsg = [NSString stringWithFormat:@"%@: %@",displayName,self.lastMessage];
         
         [[UIMessageBarManager sharedInstance] showMessageWithTitle:@"QikAChat"
@@ -358,19 +351,13 @@
     }
     else
     {
-        [self saveChatMessage:aMessage];
         [self playSystemSound];
         
-        NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:aMessage forKey:MESSAGE_KEY_FOR_MESSAGE];
-        //save it to db and show to user on chat list and chat screen
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_RECIEVED object:self userInfo:messageInfo];
     }
-    
 }
 
 -(void) playSystemSound
 {
-    
     NSString *path = [[NSBundle bundleWithIdentifier:@"com.apple.UIKit"] pathForResource:@"Tock" ofType:@"aiff"];
     SystemSoundID soundID = 0;
     if( path )
@@ -394,88 +381,73 @@
         return;
    
     message.isOutGoing = YES;
-    
     message.messageStatus = MESSAGE_STATUS_WAITING;
-    [self saveChatMessage:message];
+  
+    [self addSentMessage:message];
     
     [[xmppInstance  messageController] sendOrQueueChatMessage:message];
-}
-
--(void) asynchDownloadMedia:(Message*) aOperationId
-{
-    [NSThread detachNewThreadSelector:@selector(downloadMediaData:) toTarget:self withObject:aOperationId];
-}
-
--(void) downloadMediaData:(Message*)aOperationId
-{
-    //[[ChatNController sharedInstance] downloadRecievedFile:aOperationId forChat:self];
-}
-
--(void) asynchLoadAllMessages
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self loadMessages];
-    });
-}
-
--(void)loadMessages{
-    
-   [_allUnreadMessages removeAllObjects]; // loading message from db , just clear the local list
-   [[StorageManager sharedInstance] loadAllChatMessags:self.chatJid];
-}
-
-
-- (NSData *)thumbnailImageForVideo:(NSString *)videoURL
-                             atTime:(NSTimeInterval)time
-{
-   // NSURL *url = [NSURL fileURLWithPath:videoURL];
-    /*
-    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:url options:nil];
-    NSParameterAssert(asset);
-    AVAssetImageGenerator *assetIG =
-    [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    assetIG.appliesPreferredTrackTransform = YES;
-    assetIG.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
-    
-    CGImageRef thumbnailImageRef = NULL;
-    CFTimeInterval thumbnailImageTime = time;
-    NSError *igError = nil;
-    thumbnailImageRef =
-    [assetIG copyCGImageAtTime:CMTimeMake(thumbnailImageTime, 60)
-                    actualTime:NULL
-                         error:&igError];
-    
-    if (!thumbnailImageRef)
-        NSLog(@"thumbnailImageGenerationError %@", igError );
-    */
-    CGImageRef thumbnailImageRef = NULL;
-    
-    UIImage *thumbnailImage = thumbnailImageRef ? [[UIImage alloc] initWithCGImage:thumbnailImageRef] : nil;
-    
-    return UIImagePNGRepresentation(thumbnailImage);
 }
 
 
 -(void) asynchPushPendingMessages
 {
-    if( [_allUnreadMessages count] ){
-        [NSThread detachNewThreadSelector:@selector(pushPendingMessages) toTarget:self withObject:nil];
+    if( ![_allUiMessages count] ) {
+        [[StorageManager sharedInstance] loadAllUiChatMessags:_allUiMessages forChatId:self.chatJid];
+        if( self.isActiveChat )
+            [self performSelectorOnMainThread:@selector(asynchNotifyMessageLoaded) withObject:Nil waitUntilDone:NO];
     }
 }
 
--(void) pushPendingMessages
+-(void) loadMessagesFromDB
 {
-    for( Message* message in _allUnreadMessages )
-    {
-        NSDictionary *messageInfo = [NSDictionary dictionaryWithObject:message forKey:MESSAGE_KEY_FOR_MESSAGE];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MESSAGE_CHAT_LOADED object:self userInfo:messageInfo];
+    if( ![_allUiMessages count] ) {
+        // message all readlly in cache
+        [NSThread detachNewThreadSelector:@selector(asynchPushPendingMessages) toTarget:self withObject:nil];
     }
-    
-    [_allUnreadMessages removeAllObjects];
 }
 
--(NSArray*) allMessageArray{
-    return _allMessages;
+-(void) asynchNotifyMessageLoaded{
+    if(self.chatDelegate && _allUiMessages.count ){
+        [self.chatDelegate handleAllMessageLoaded:_allUiMessages];
+    }
 }
+
+-(NSArray*) allUiMessageArray{
+    return _allUiMessages;
+}
+
+-(void) addSentMessage:(Message*) message
+{
+    [self saveChatMessage:message];
+    
+    NSBubbleData *sayBubble = [Utility createDataWithMessage:message];
+    
+    ProfileDataManager *myAccount = [ProfileDataManager sharedInstance];
+    UIImage* avatarImage =  myAccount.myAvatar;
+    sayBubble.avatar = avatarImage;
+    
+    [_allUiMessages addObject:sayBubble];
+}
+
+-(void) addRecievedMessage:(Message*) message
+{
+    [self saveChatMessage:message];
+    
+    if( self.isActiveChat || [_allUiMessages count] ){
+        NSBubbleData *sayBubble = [Utility createDataWithMessage:message];
+        sayBubble.avatar = self.chatImage;
+        [_allUiMessages addObject:sayBubble];
+    
+        if( self.isActiveChat )
+            [self performSelectorOnMainThread:@selector(asynchNotifyRecievedMessage) withObject:Nil waitUntilDone:NO];
+    }
+}
+
+-(void) asynchNotifyRecievedMessage{
+    if(self.chatDelegate && self.isActiveChat ){
+        [self.chatDelegate handleMessageListChange:nil];
+    }
+}
+
 
 @end

@@ -48,6 +48,8 @@
 -(void) updateChatMessage:(Message*) aMesage;
 -(void) loadAllChatMessags:(NSString*) aChatJID;
 
+-(void) loadAllUiChatMessags:(NSMutableArray*) aArray forChatId:(NSString*) aChatJID;
+
 -(void)updateMessageStatus:(NSInteger) aState bareJId:(NSString*)jid messageId:(NSInteger) msgId;
 
 -(BOOL)deleteAllChatMessagesForJid:(NSString *)aChatJID ;

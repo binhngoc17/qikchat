@@ -53,6 +53,16 @@
 	[self setupInternalData];
 }
 
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    
+    if (self.customView.superview == self.contentView) {
+        [self.customView removeFromSuperview];
+        self.customView = nil;
+    }
+}
+
 - (void) setupInternalData
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;

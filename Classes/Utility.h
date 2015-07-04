@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "QikAChat-Prefix.pch"
 
+@class Message;
+
 @interface Utility : NSObject
 
 + (UIImage *)roundImageWithImage:(UIImage *)image borderColor:(UIColor *)borderColor;
@@ -26,5 +28,7 @@
 +(NSString*)bareJID:(NSString*)aNumber;
 +(NSString*)bareXabberJID:(NSString*)aNumber;
 
+
++ (id) createDataWithMessage:(Message *)message ;
 
 @end

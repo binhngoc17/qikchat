@@ -7,6 +7,8 @@
 //
 
 #import "Utility.h"
+#import "NSBubbleData.h"
+#import "Message.h"
 
 @implementation Utility
 
@@ -282,6 +284,48 @@
     }
     return timestamp;
 }
+
+
++ (id) createDataWithMessage:(Message *)message {
+    
+    NSBubbleData *sayBubble =nil;
+    
+    if( !message )
+        return sayBubble;
+    
+    NSBubbleType type = BubbleTypeSomeoneElse;
+    if( message.isOutGoing )
+        type = BubbleTypeMine;
+    
+    if( message.messageType == TEXT_TYPE_MESSAGE ){
+        sayBubble = [NSBubbleData dataWithText:message.body date:message.date type:type];
+    }
+    else if( message.fileData && message.messageType == IMAGE_TYPE_MESSAGE )
+    {
+        if (message.fileData != nil) {
+            UIImage *img = [UIImage imageWithData:message.fileData];
+            sayBubble = [NSBubbleData dataWithImage:img date:message.date type:type];
+        }
+    }
+    else if( message.messageType == AUDIO_TYPE_MESSAGE )
+    {
+        UIImage* image = [UIImage imageNamed:@"micro.png"];
+        UIImageView *imgView = [[UIImageView alloc] initWithImage:image];
+        imgView.frame = CGRectMake(0, 0, 100,100);
+        sayBubble = [NSBubbleData dataWithImage:image date:message.date type:type];
+    }
+    else if (message.messageType == LOCATION_TYPE_MESSAGE)
+    {
+        sayBubble = [NSBubbleData dataWithText:message.body date:message.date type:type];
+    }
+    else
+    {
+        sayBubble = [NSBubbleData dataWithText:message.body date:message.date type:type];
+    }
+    
+    return sayBubble;
+}
+
 
 
 @end
