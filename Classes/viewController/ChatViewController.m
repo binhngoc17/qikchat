@@ -23,16 +23,30 @@
     NSMutableArray *bubbleData;
     UIImage* defaultAvatar;
 }
-
-
+@property(nonatomic, strong) Chat* currentChat;
+@property(nonatomic) BOOL isReloadTabble;
 @end
 
 @implementation ChatViewController
 
++(ChatViewController*) sharedViewWitChat:(Chat*) achat{
+    
+    if( achat == nil )
+        return nil;
+    
+    static ChatViewController *sharedSingleton;
+    @synchronized(self)
+    {
+        if (!sharedSingleton) {
+            sharedSingleton = [[ChatViewController alloc] init];
+        }
+        [sharedSingleton setupChat:achat];
+        return sharedSingleton;
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.navigationBarHidden = NO;
     [self initTableView];
 }
 
@@ -45,8 +59,8 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.translucent = YES;
     
-    [[self navigationController] setNavigationBarHidden:self.navigationBarHidden animated:YES];
-    [appInstance setStatusBarHidden:self.navigationBarHidden withAnimation:UIStatusBarAnimationNone];
+    //[[self navigationController] setNavigationBarHidden:self.navigationBarHidden animated:YES];
+    //[appInstance setStatusBarHidden:self.navigationBarHidden withAnimation:UIStatusBarAnimationNone];
   
     [self initTitleSegement];
  
@@ -127,6 +141,7 @@
        [self.currentChat setActive:FALSE];
         self.currentChat = newChat;
         self.isReloadTabble = YES;
+        [bubbleData removeAllObjects];
     }
     else
         self.isReloadTabble = NO;

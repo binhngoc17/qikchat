@@ -12,11 +12,7 @@
 
 @interface ChatViewController : UIViewController <UIBubbleTableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
-@property(nonatomic) BOOL navigationBarHidden;
-@property(nonatomic, strong) Chat* currentChat;
-@property(nonatomic) BOOL isReloadTabble;
-
--(void) setupChat:(Chat*) newChat;
++(ChatViewController*) sharedViewWitChat:(Chat*) achat;
 
 @end
 
