@@ -21,7 +21,10 @@
     UITextField *textField;
     UIButton* sendButton;
     NSMutableArray *bubbleData;
+    UIImage* defaultAvatar;
 }
+
+
 @end
 
 @implementation ChatViewController
@@ -54,7 +57,7 @@
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
     // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
     
-    bubbleTable.showAvatars = NO;
+    bubbleTable.showAvatars = YES;
     
     // Uncomment the line below to add "Now typing" bubble
     // Possible values are
@@ -105,6 +108,7 @@
     [textInputView addSubview:sendButton];
     [sendButton setBackgroundColor:[UIColor clearColor]];
     [sendButton setTitle:@"Send" forState:UIControlStateNormal];
+    //[sendButton setBackgroundImage:[UIImage imageNamed:@"paperplane.png"] forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(sendPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     bubbleData = [[NSMutableArray alloc] init];
@@ -128,50 +132,60 @@
         self.isReloadTabble = NO;
 }
 
+-(UIImage*) defaultAvatarImage{
+    if( defaultAvatar )
+        return defaultAvatar;
+    
+   defaultAvatar = [UIImage imageNamed:@"defaultAvatar.png"];
+    return defaultAvatar;
+}
+
 - (void) initTitleSegement {
+   
+    self.navigationItem.hidesBackButton = YES;
     
-    UIView *segmentedView = [[UIView alloc] initWithFrame:(CGRect){0, 0, self.view.frame.size.width, 60}];
+    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 45)];
+    [titleView setBackgroundColor:[UIColor clearColor]];
     
-    UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 45, 45)];
+    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 5, 50, 40)];
+    [backButton addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [titleView addSubview:backButton];
+    
+    UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(55, 1, 43, 43)];
     [avatarView setBackgroundColor:[UIColor clearColor]];
     avatarView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar.png"] borderColor:[UIColor blackColor]];
-    avatarView.layer.cornerRadius = 3.0f;
     avatarView.clipsToBounds = YES;
-    [segmentedView addSubview:avatarView];
+    [titleView addSubview:avatarView];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50+10, 15, self.view.frame.size.width-85, 44)];
+    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 2, self.view.frame.size.width-150, 40)];
+    titleLabel.text = [self.currentChat getDisplayName];
     
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor darkTextColor];
-    titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
-    titleLabel.numberOfLines = 1;
-    titleLabel.adjustsFontSizeToFitWidth = YES;
-    titleLabel.textAlignment = NSTextAlignmentCenter;
+    [titleView addSubview:titleLabel];
+    [titleLabel setTextAlignment:NSTextAlignmentLeft];
     
-    NSString* displayName = [self.currentChat getDisplayName];
-    if ([displayName length])
-    {
-        titleLabel.text = displayName;
-    }
-    else
-    {
-        titleLabel.text = [self.currentChat chatJid];
-    }
-    
-    [titleLabel sizeToFit];
-    
-    [segmentedView addSubview:titleLabel];
-    
-    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-50, 10, 35, 35)];
+    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-55, 5, 35, 35)];
     [menuButton setBackgroundImage:[UIImage imageNamed:@"navmenu"] forState:UIControlStateNormal];
     [menuButton addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
-    [segmentedView addSubview:menuButton];
+    [titleView addSubview:menuButton];
     
-    self.navigationItem.titleView = segmentedView;
+    self.navigationItem.titleView = titleView;
     
 }
 
+-(void) backAction:(id) sender{
+    [self.currentChat setActive:NO];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(void) menuAction:(id) sender{
+   
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Supported"
+                                                        message:@"Selected feature is not implemenetd!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
     
 }
 
@@ -233,10 +247,13 @@
 
 -(void) scrollToBottom{
    
+    [bubbleTable scrollBubbleViewToBottomAnimated:YES];
+    /*
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[bubbleData count]-1 inSection:0];
     [bubbleTable scrollToRowAtIndexPath:indexPath
                           atScrollPosition:UITableViewScrollPositionBottom
                                   animated:YES];
+     */
 }
 
 -(NSBubbleData*) addRecievedMessage:(Message*) message scroll:(BOOL) aScroll
@@ -275,16 +292,12 @@
     //  [sayBubble setExtObject:message];
     // sayBubble.status = message.messageStatus;
     
-    /* Buddy *myAccount = [[[XmppController sharedSingleton] rosterController] getRegisteredUserBuddy];
-     UIImage* avatarImage =  myAccount.avatarImage;
-     
-     if( avatarImage == nil )
-     {
-     NSString *imgName = [[ThemeManager sharedManger] getImageNameForKey:DEFAULT_USER_IMAGE];
-     avatarImage = [UIImage imageNamed:imgName];
-     }
-     sayBubble.avatar = avatarImage;
-     */
+    UIImage *sendImage = [self.currentChat chatImage];
+    
+    if( sendImage == nil ){
+        sendImage = [self defaultAvatarImage];
+    }
+    sayBubble.avatar = sendImage;
     
     [bubbleData addObject:sayBubble];
     

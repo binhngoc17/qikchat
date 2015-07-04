@@ -214,6 +214,12 @@
 		59F7E4931B46448900F97050 /* typingMine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4891B46448900F97050 /* typingMine@2x.png */; };
 		59F7E4941B46448900F97050 /* typingSomeone.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E48A1B46448900F97050 /* typingSomeone.png */; };
 		59F7E4951B46448900F97050 /* typingSomeone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E48B1B46448900F97050 /* typingSomeone@2x.png */; };
+		59F7E4971B470EA400F97050 /* images.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4961B470EA400F97050 /* images.png */; };
+		59F7E49D1B47971E00F97050 /* back-Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E49A1B47971E00F97050 /* back-Arrow.png */; };
+		59F7E49E1B47971E00F97050 /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E49B1B47971E00F97050 /* Settings.png */; };
+		59F7E49F1B47971E00F97050 /* paperplane.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E49C1B47971E00F97050 /* paperplane.png */; };
+		59F7E4A11B47987700F97050 /* tab_settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4A01B47987700F97050 /* tab_settings@2x.png */; };
+		59F7E4A31B47A79500F97050 /* add_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4A21B47A79500F97050 /* add_blue.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -621,6 +627,12 @@
 		59F7E4891B46448900F97050 /* typingMine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "typingMine@2x.png"; sourceTree = "<group>"; };
 		59F7E48A1B46448900F97050 /* typingSomeone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = typingSomeone.png; sourceTree = "<group>"; };
 		59F7E48B1B46448900F97050 /* typingSomeone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "typingSomeone@2x.png"; sourceTree = "<group>"; };
+		59F7E4961B470EA400F97050 /* images.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = images.png; sourceTree = "<group>"; };
+		59F7E49A1B47971E00F97050 /* back-Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-Arrow.png"; sourceTree = "<group>"; };
+		59F7E49B1B47971E00F97050 /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
+		59F7E49C1B47971E00F97050 /* paperplane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paperplane.png; sourceTree = "<group>"; };
+		59F7E4A01B47987700F97050 /* tab_settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_settings@2x.png"; sourceTree = "<group>"; };
+		59F7E4A21B47A79500F97050 /* add_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_blue.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -710,6 +722,12 @@
 		5908F4231B3981B800627424 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				59F7E4A21B47A79500F97050 /* add_blue.png */,
+				59F7E4A01B47987700F97050 /* tab_settings@2x.png */,
+				59F7E49A1B47971E00F97050 /* back-Arrow.png */,
+				59F7E49B1B47971E00F97050 /* Settings.png */,
+				59F7E49C1B47971E00F97050 /* paperplane.png */,
+				59F7E4961B470EA400F97050 /* images.png */,
 				59F7E4811B46448900F97050 /* chatview */,
 				5970C61F1B403F0E00B5B9E4 /* navmenu.png */,
 				5970C61D1B403B1B00B5B9E4 /* menuMore@2x.png */,
@@ -1848,6 +1866,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59F7E49E1B47971E00F97050 /* Settings.png in Resources */,
 				59F7E4901B46448900F97050 /* missingAvatar.png in Resources */,
 				59F7E48E1B46448900F97050 /* bubbleSomeone.png in Resources */,
 				59798BBF1B3F033100D92124 /* tab_friends@2x.png in Resources */,
@@ -1859,13 +1878,18 @@
 				598967D51B3EDC1B002A296D /* hSlider.png in Resources */,
 				598967CC1B3EB028002A296D /* build-libidn.sh in Resources */,
 				59F7E4951B46448900F97050 /* typingSomeone@2x.png in Resources */,
+				59F7E49D1B47971E00F97050 /* back-Arrow.png in Resources */,
+				59F7E49F1B47971E00F97050 /* paperplane.png in Resources */,
 				5970C6201B403F0E00B5B9E4 /* navmenu.png in Resources */,
 				59798BBB1B3F022200D92124 /* contacts.png in Resources */,
 				59F7E4931B46448900F97050 /* typingMine@2x.png in Resources */,
 				59F7E4941B46448900F97050 /* typingSomeone.png in Resources */,
 				5908F4331B3982C800627424 /* QikAChat-Info.plist in Resources */,
+				59F7E4A31B47A79500F97050 /* add_blue.png in Resources */,
+				59F7E4971B470EA400F97050 /* images.png in Resources */,
 				598967C71B3EB028002A296D /* README.txt in Resources */,
 				59798BB61B3EFDEC00D92124 /* addfriends.png in Resources */,
+				59F7E4A11B47987700F97050 /* tab_settings@2x.png in Resources */,
 				59F7E48C1B46448900F97050 /* bubbleMine.png in Resources */,
 				5908F4321B39828E00627424 /* Default-568h@2x.png in Resources */,
 				5970C61E1B403B1B00B5B9E4 /* menuMore@2x.png in Resources */,

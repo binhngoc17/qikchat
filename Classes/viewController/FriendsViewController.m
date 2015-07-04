@@ -14,6 +14,10 @@
 #import "DDLog.h"
 #import "Buddy.h"
 
+@interface FriendsViewController()
+@property(nonatomic, strong) UITableView *tableView;
+@end
+
 @implementation FriendsViewController
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +28,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationBarHidden = NO;
     [self.view setBackgroundColor:[UIColor clearColor]];
     
     [self initTableView];
@@ -51,12 +54,6 @@
 	[super viewWillAppear:animated];
     
     self.navigationController.navigationBar.translucent = YES;
-   // self.navigationController.navigationBar.barTintColor = headerColor;
-    //self.navigationController.navigationBar.alpha = 0.5f;
-    
-  
-    [[self navigationController] setNavigationBarHidden:self.navigationBarHidden animated:YES];
-    [appInstance setStatusBarHidden:self.navigationBarHidden withAnimation:UIStatusBarAnimationNone];
     
     [self initTitleSegement];
     
@@ -77,50 +74,47 @@
 
 - (void) initTitleSegement {
     
-    UIView *segmentedView = [[UIView alloc] initWithFrame:(CGRect){0, 0, self.view.frame.size.width, 60}];
+    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 46)];
+    [titleView setBackgroundColor:[UIColor clearColor]];
     
-    UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 45, 45)];
+    UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 0, 45, 45)];
     [avatarView setBackgroundColor:[UIColor clearColor]];
     avatarView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar.png"] borderColor:[UIColor blackColor]];
-    avatarView.layer.cornerRadius = 3.0f;
     avatarView.clipsToBounds = YES;
-    [segmentedView addSubview:avatarView];
+    [titleView addSubview:avatarView];
     
-     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50+10, 15, self.view.frame.size.width-85, 44)];
+    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(53, 3, self.view.frame.size.width-120, 40)];
+    titleLabel.text = [[ProfileDataManager sharedInstance] getDisplayName:nil];
+    UIFont* boldFont = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+    [titleLabel setFont:boldFont];
     
-     titleLabel.backgroundColor = [UIColor clearColor];
-     titleLabel.textColor = [UIColor darkTextColor];
-     titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
-     titleLabel.numberOfLines = 1;
-     titleLabel.adjustsFontSizeToFitWidth = YES;
-     titleLabel.textAlignment = NSTextAlignmentCenter;
+    if(!titleLabel.text.length){
+        NSString* jid = [[ProfileDataManager sharedInstance] getXabberID:nil];
+        titleLabel.text = [Utility displayName:jid];
+    }
+    [titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [titleView addSubview:titleLabel];
     
-     NSString* displayName = [[ProfileDataManager sharedInstance] getDisplayName:nil];
-     if ([displayName length])
-     {
-         titleLabel.text = displayName;
-     }
-     else
-     {
-         NSString* jid = [[ProfileDataManager sharedInstance] getXabberID:nil];
-         titleLabel.text = [Utility displayName:jid];
-     }
-     [titleLabel sizeToFit];
-    
-     [segmentedView addSubview:titleLabel];
-    
-    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-50, 10, 35, 35)];
-    [menuButton setBackgroundImage:[UIImage imageNamed:@"navmenu"] forState:UIControlStateNormal];
+    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-59, 5, 35, 35)];
+    [menuButton setBackgroundImage:[UIImage imageNamed:@"add_blue.png"] forState:UIControlStateNormal];
     [menuButton addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
-    [segmentedView addSubview:menuButton];
-  
-    self.navigationItem.titleView = segmentedView;
+    [titleView addSubview:menuButton];
     
+    self.navigationItem.titleView = titleView;
+
 }
 
 -(void) menuAction:(id) sender{
     
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Supported"
+                                                    message:@"Selected feature is not implemenetd!"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    
 }
+
 -(void) updateFriendList:(id) sender {
     [self.tableView reloadData];
 }
@@ -130,9 +124,7 @@
 
 - (void)configurePhotoForCell:(UITableViewCell *)cell user:(Buddy*) abudy
 {
-	// Our xmppRosterStorage will cache photos as they arrive from the xmppvCardAvatarModule.
-	// We only need to ask the avatar module for a photo, if the roster doesn't have it.
-	
+
 	if (abudy.avatarImage != nil)
 	{
 		cell.imageView.image = [Utility roundImageWithImage:abudy.avatarImage borderColor:[UIColor blackColor]];
@@ -197,17 +189,12 @@
     Buddy *budy = [[xmppInstance rosterController] buddyForIndex:indexPath.row];
     if( budy ){
         UIViewController* chatview = [[UIController getUIController] startChatWith:budy.jid withName:budy.displayName];
+        chatview.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:chatview animated:YES];
     }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Actions
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-- (IBAction)settings:(id)sender
-{
-	//[self.navigationController presentViewController:[app settingsViewController] animated:YES completion:NULL];
-}
 
 @end

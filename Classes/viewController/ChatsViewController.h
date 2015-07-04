@@ -11,10 +11,4 @@
 
 
 @interface ChatsViewController : UIViewController <UITableViewDelegate,UITableViewDataSource>
-
-@property(nonatomic, strong) UITableView *tableView;
-@property(nonatomic) BOOL navigationBarHidden;
-
-- (IBAction)settings:(id)sender;
-
 @end

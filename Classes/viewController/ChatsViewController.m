@@ -11,6 +11,10 @@
 #import "QikAChat-Prefix.pch"
 #import "Chat.h"
 
+@interface ChatsViewController()
+@property(nonatomic, strong) UITableView *tableView;
+@end
+
 @implementation ChatsViewController
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +24,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationBarHidden = NO;
     [self.view setBackgroundColor:[UIColor clearColor]];
     
     [self initTableView];
@@ -49,12 +52,6 @@
 	[super viewWillAppear:animated];
   
     self.navigationController.navigationBar.translucent = YES;
-    //self.navigationController.navigationBar.barTintColor = headerColor;
-    //self.navigationController.navigationBar.alpha = 0.5f;
-    
-  
-    [[self navigationController] setNavigationBarHidden:self.navigationBarHidden animated:YES];
-    [appInstance setStatusBarHidden:self.navigationBarHidden withAnimation:UIStatusBarAnimationNone];
     
     [self initTitleSegement];
 
@@ -77,37 +74,43 @@
 
 - (void) initTitleSegement {
     
-    UIView *segmentedView = [[UIView alloc] initWithFrame:(CGRect){0, 0, self.view.frame.size.width, 60}];
-    
-   
-    UIButton* plusButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 35, 35)];
-    [plusButton setBackgroundImage:[UIImage imageNamed:@"navmenu"] forState:UIControlStateNormal];
-    [plusButton addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
-    [segmentedView addSubview:plusButton];
-  
-    
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 5, self.view.frame.size.width-85, 44)];
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor darkTextColor];
-    titleLabel.font = [UIFont boldSystemFontOfSize:18.0];
-    titleLabel.numberOfLines = 1;
-    titleLabel.adjustsFontSizeToFitWidth = YES;
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.text = @"Chats";
-    
-    
-    [segmentedView addSubview:titleLabel];
-    
-    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-50, 10, 35, 35)];
-    [menuButton setBackgroundImage:[UIImage imageNamed:@"navmenu"] forState:UIControlStateNormal];
+    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 35, 35)];
+    [menuButton setBackgroundImage:[UIImage imageNamed:@"navmenu.png"] forState:UIControlStateNormal];
     [menuButton addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
-    [segmentedView addSubview:menuButton];
+ 
+    self.navigationItem.leftBarButtonItem =  [[UIBarButtonItem alloc] initWithCustomView:menuButton ];
     
-    self.navigationItem.titleView = segmentedView;
+    self.title = @"Chats";
+    
+    UIButton* addButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-50, 10, 35, 35)];
+    [addButton setBackgroundImage:[UIImage imageNamed:@"add_blue.png"] forState:UIControlStateNormal];
+    [addButton addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.navigationItem.rightBarButtonItem =  [[UIBarButtonItem alloc] initWithCustomView:addButton ];
     
 }
 
 -(void) menuAction:(id) sender{
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Supported"
+                                                    message:@"Selected feature is not implemenetd!"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    
+}
+
+-(void) addAction:(id) sender{
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Supported"
+                                                    message:@"Selected feature is not implemenetd!"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
     
 }
 
@@ -187,12 +190,19 @@
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Actions
+#pragma mark UITableViewDelegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (IBAction)settings:(id)sender
-{
-	//[self.navigationController presentViewController:[[self appDelegate] settingsViewController] animated:YES completion:NULL];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    Chat *chat = [[xmppInstance messageController] chatForIndex:indexPath.row];
+    if( chat ){
+        UIViewController* chatview = [[UIController getUIController] startChatWith:chat.chatJid withName:[chat getDisplayName]];
+        chatview.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:chatview animated:YES];
+    }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+
 }
 
 @end

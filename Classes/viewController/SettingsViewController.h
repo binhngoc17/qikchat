@@ -9,16 +9,6 @@
 #import <UIKit/UIKit.h>
 
 
-@interface SettingsViewController : UIViewController 
-{
-  UITextField *jidField;
-  UITextField *passwordField;
-}
-
-@property (nonatomic,strong) IBOutlet UITextField *jidField;
-@property (nonatomic,strong) IBOutlet UITextField *passwordField;
-
-- (IBAction)done:(id)sender;
-- (IBAction)hideKeyboard:(id)sender;
+@interface SettingsViewController : UIViewController <UITableViewDelegate,UITableViewDataSource>
 
 @end

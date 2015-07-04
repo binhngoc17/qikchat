@@ -84,15 +84,16 @@
 #else
         self.avatarImage = [[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])];
 #endif
-        self.avatarImage.layer.cornerRadius = 9.0;
         self.avatarImage.layer.masksToBounds = YES;
         self.avatarImage.layer.borderColor = [UIColor colorWithWhite:0.0 alpha:0.2].CGColor;
         self.avatarImage.layer.borderWidth = 1.0;
         
         CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? 2 : self.frame.size.width - 52;
-        CGFloat avatarY = self.frame.size.height - 50;
+        CGFloat avatarY = self.frame.size.height - 44;
         
-        self.avatarImage.frame = CGRectMake(avatarX, avatarY, 50, 50);
+        self.avatarImage.frame = CGRectMake(avatarX, avatarY, 44, 44);
+        self.avatarImage.layer.cornerRadius = 22.0;
+        
         [self addSubview:self.avatarImage];
         
         CGFloat delta = self.frame.size.height - (self.data.insets.top + self.data.insets.bottom + self.data.view.frame.size.height);

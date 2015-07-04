@@ -50,13 +50,18 @@ static UIController *sharedUIController;
     
     ChatsViewController* rootViewController2 = [[ChatsViewController alloc] init];
     UINavigationController* navigationController2 = [[UINavigationController alloc] initWithRootViewController:rootViewController2];
+   
+    SettingsViewController* rootViewController3 = [[SettingsViewController alloc] init];
+    UINavigationController* navigationController3 = [[UINavigationController alloc] initWithRootViewController:rootViewController3];
     
     navigationController1.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Friends" image:[UIImage imageNamed:@"tab_friends"] tag:0] ;
     
     navigationController2.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"tab_chats"] tag:1] ;
+  
+    navigationController3.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings" image:[UIImage imageNamed:@"tab_settings"] tag:2] ;
     
     self.tabController = [[UITabBarController alloc] init];
-    self.tabController.viewControllers = [NSArray arrayWithObjects:navigationController1,navigationController2, nil];
+    self.tabController.viewControllers = [NSArray arrayWithObjects:navigationController1,navigationController2, navigationController3, nil];
     
     [self.window setRootViewController:self.tabController];
     [self.window makeKeyAndVisible];
@@ -69,9 +74,9 @@ static UIController *sharedUIController;
 
 -(UIViewController*) startChatWith:(NSString*) aJid withName:(NSString*) aName{
     Chat* chat = [[xmppInstance messageController] createChatForJID:aJid withDisplayName:aName];
+    // TODO later can be return the existing chatview with clean 
     ChatViewController* chatView = [[ChatViewController alloc] init];
     [chatView setupChat:chat];
-    chatView.hidesBottomBarWhenPushed = YES;
     return chatView;
 }
 

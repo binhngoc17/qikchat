@@ -9,56 +9,138 @@
 #import "SettingsViewController.h"
 #import "ProfileDataManager.h"
 #import "Literals.h"
+#import "QikAChat-Prefix.pch"
+
+@interface SettingsViewController()
+@property(nonatomic, strong) UITableView *tableView;
+@property(nonatomic, strong) NSMutableDictionary *tableDictionory;
+@end
 
 @implementation SettingsViewController
 
-@synthesize jidField;
-@synthesize passwordField;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Init/dealloc methods
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-- (void)awakeFromNib {
-  self.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark View lifecycle
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
-  
-   jidField.text = [[ProfileDataManager sharedInstance] getXabberID:nil];
-   passwordField.text = [[ProfileDataManager sharedInstance] getPassword:nil];
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Actions
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-- (IBAction)done:(id)sender
+- (void)viewDidLoad
 {
-    if( ![jidField.text length] || ![passwordField.text length]){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Input Error"
-                                                        message:@"You must enter user name and password!"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        return;
-  }
-  [[ProfileDataManager sharedInstance] setXabberID:jidField.text];
-  [[ProfileDataManager sharedInstance] setPassword:passwordField.text];
-
-  [self dismissViewControllerAnimated:YES completion:NULL];
+    [super viewDidLoad];
+    [self initTableView];
 }
 
-- (IBAction)hideKeyboard:(id)sender {
-  [sender resignFirstResponder];
-  [self done:sender];
+
+- (void) initTableView {
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44)];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLineEtched];
+    [self.view addSubview:self.tableView];
+    
+    [self.tableView setBackgroundColor:tableColor];
+    
+    self.tableDictionory  = [[NSMutableDictionary alloc] init];
+    
+    NSArray* arry1 = [[NSArray alloc] initWithObjects:@"Account",@"Profile",@"Status",nil];
+    [self.tableDictionory setObject:arry1 forKey:@"My Data"];
+    
+    NSArray* arry2 = [[NSArray alloc] initWithObjects:@"Sound",@"Wallpaper",@"Notification",nil];
+    [self.tableDictionory setObject:arry2 forKey:@"Chats"];
+    
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.title = @"Settings";
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark UITableView
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [[self.tableDictionory allKeys] count];
+}
+
+- (NSString *)tableView:(UITableView *)sender titleForHeaderInSection:(NSInteger)sectionIndex
+{
+    return [[self.tableDictionory allKeys] objectAtIndex:sectionIndex] ;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex
+{
+    NSString* key = [[self.tableDictionory allKeys] objectAtIndex:sectionIndex] ;
+    NSArray* list = [self.tableDictionory objectForKey:key];
+    return list.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                      reuseIdentifier:CellIdentifier];
+        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+     }
+    
+    NSString* key = [[self.tableDictionory allKeys] objectAtIndex:indexPath.section] ;
+    NSArray* list = [self.tableDictionory objectForKey:key];
+    
+    cell.textLabel.text = [list objectAtIndex:indexPath.row];
+    
+    [cell setBackgroundColor:tableCellColor];
+    cell.layer.borderColor = headerColor.CGColor;
+    cell.layer.borderWidth = 1.0f;
+
+    return cell;
+    
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark UITableViewDelegate
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    // this is just for demo purpose
+    
+    NSString* key = [[self.tableDictionory allKeys] objectAtIndex:indexPath.section] ;
+    NSArray* list = [self.tableDictionory objectForKey:key];
+    NSString* rowText =  [list objectAtIndex:indexPath.row];
+    
+    NSString* formatStr = [NSString stringWithFormat:@"You Selected : %@ -> %@", key, rowText ];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Supported Yet"
+                                                    message:formatStr
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+
+    [alert show];
+    
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+}
 
 @end
