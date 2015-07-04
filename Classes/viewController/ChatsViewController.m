@@ -125,8 +125,6 @@
 
 - (void)configurePhotoForCell:(UITableViewCell *)cell user:(Buddy *)user
 {
-    // Our xmppRosterStorage will cache photos as they arrive from the xmppvCardAvatarModule.
-    // We only need to ask the avatar module for a photo, if the roster doesn't have it.
     if (user.avatarImage != nil)
     {
         cell.imageView.image = [Utility roundImageWithImage:user.avatarImage borderColor:[UIColor blackColor]];

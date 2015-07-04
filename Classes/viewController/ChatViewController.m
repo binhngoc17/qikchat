@@ -57,7 +57,7 @@
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
     // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
     
-    bubbleTable.showAvatars = YES;
+    bubbleTable.showAvatars = NO;
     
     // Uncomment the line below to add "Now typing" bubble
     // Possible values are
@@ -65,7 +65,7 @@
     //    - NSBubbleTypingTypeMe - shows "now typing" bubble on the right
     //    - NSBubbleTypingTypeNone - no "now typing" bubble
     
-    bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
+    bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
     
     if( self.isReloadTabble )
         [bubbleTable reloadData];
@@ -103,12 +103,12 @@
     textField.layer.cornerRadius = 10.0f;
     textField.layer.borderColor = headerColor.CGColor;
     textField.layer.borderWidth = 2.0f;
+    textField.delegate = self;
     
     sendButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-60+10, 5, 45, 40)];
     [textInputView addSubview:sendButton];
     [sendButton setBackgroundColor:[UIColor clearColor]];
     [sendButton setTitle:@"Send" forState:UIControlStateNormal];
-    //[sendButton setBackgroundImage:[UIImage imageNamed:@"paperplane.png"] forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(sendPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     bubbleData = [[NSMutableArray alloc] init];
@@ -207,8 +207,6 @@
         if (message.fileData != nil) {
             UIImage *img = [UIImage imageWithData:message.fileData];
             sayBubble = [NSBubbleData dataWithImage:img date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeMine];
-        } else {
-            //sayBubble = [NSBubbleData dataWithImage:img date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
         }
     }
     else if( message.messageType == AUDIO_TYPE_MESSAGE )
@@ -225,7 +223,7 @@
     else
     {
         sayBubble = [NSBubbleData dataWithText:message.body date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeMine];
-  }
+    }
     
    //[sayBubble setExtObject:message];
    //sayBubble.status = message.messageStatus;
@@ -237,8 +235,8 @@
     [bubbleData addObject:sayBubble];
     
     if( aScroll ){
+        // can be optimized here to just refresh the single cell
         [bubbleTable reloadData];
-        //[bubbleTable insertbubbleAtEnd:sayBubble];
         [self scrollToBottom];
     }
     
@@ -246,14 +244,7 @@
 }
 
 -(void) scrollToBottom{
-   
     [bubbleTable scrollBubbleViewToBottomAnimated:YES];
-    /*
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[bubbleData count]-1 inSection:0];
-    [bubbleTable scrollToRowAtIndexPath:indexPath
-                          atScrollPosition:UITableViewScrollPositionBottom
-                                  animated:YES];
-     */
 }
 
 -(NSBubbleData*) addRecievedMessage:(Message*) message scroll:(BOOL) aScroll
@@ -269,8 +260,6 @@
         if (message.fileData != nil) {
             UIImage *img = [UIImage imageWithData:message.fileData];
             sayBubble = [NSBubbleData dataWithImage:img date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
-        } else {
-            //sayBubble = [NSBubbleData dataWithImage:img date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
         }
     }
     else if( message.messageType == AUDIO_TYPE_MESSAGE )
@@ -302,11 +291,10 @@
     [bubbleData addObject:sayBubble];
     
     if( aScroll ){
+        // can be optimized here to just refresh the single cell
         [bubbleTable reloadData];
-        //[bubbleTable insertbubbleAtEnd:sayBubble];
         [self scrollToBottom];
     }
-    
     return sayBubble;
 }
 
@@ -382,6 +370,25 @@
     [self.currentChat sendChatMessage:message];
     [self addSentMessage:message scroll:YES];
     textField.text = @"";
+}
+#pragma mark - UITextFieldDelegate implementation
+
+- (void)textFieldDidBeginEditing:(UITextField *)atextField{
+    bubbleTable.typingBubble = NSBubbleTypingTypeMe;
+}
+- (void)textFieldDidEndEditing:(UITextField *)atextField{
+    
+    bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
+}
+// called when 'return' key pressed. return NO to ignore.
+- (BOOL)textFieldShouldReturn:(UITextField *)atextField{
+   
+    bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
+    
+    if( [atextField.text length] )
+        [self sendPressed:nil];
+    
+    return YES;
 }
 
 @end

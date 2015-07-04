@@ -10,7 +10,7 @@
 #import "UIBubbleTableViewDataSource.h"
 @class Chat;
 
-@interface ChatViewController : UIViewController <UIBubbleTableViewDataSource,UITableViewDelegate>
+@interface ChatViewController : UIViewController <UIBubbleTableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
 @property(nonatomic) BOOL navigationBarHidden;
 @property(nonatomic, strong) Chat* currentChat;
