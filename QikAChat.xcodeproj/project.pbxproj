@@ -11,6 +11,7 @@
 		5908F4221B3981A300627424 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5908F4201B3981A300627424 /* main.m */; };
 		5908F4321B39828E00627424 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5908F4311B39828E00627424 /* Default-568h@2x.png */; };
 		5908F4331B3982C800627424 /* QikAChat-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5908F4261B3981E900627424 /* QikAChat-Info.plist */; };
+		591A45251B492188004ABE07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 591A45241B492188004ABE07 /* Images.xcassets */; };
 		592758351B3E88B3007A8A18 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5927582E1B3E88B3007A8A18 /* AppDelegate.m */; };
 		592758371B3E88B3007A8A18 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 592758331B3E88B3007A8A18 /* SettingsViewController.m */; };
 		5927584E1B3E9A9B007A8A18 /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 5927584D1B3E9A9B007A8A18 /* defaultAvatar.png */; };
@@ -243,6 +244,7 @@
 		5908F9441B3986D700627424 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		5908F94B1B39872E00627424 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		5908F94E1B39878F00627424 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
+		591A45241B492188004ABE07 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = QikAChat/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		5927582D1B3E88B3007A8A18 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		5927582E1B3E88B3007A8A18 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Classes/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		592758321B3E88B3007A8A18 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -722,6 +724,7 @@
 		5908F4231B3981B800627424 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				591A45241B492188004ABE07 /* Images.xcassets */,
 				59F7E4A21B47A79500F97050 /* add_blue.png */,
 				59F7E4A01B47987700F97050 /* tab_settings@2x.png */,
 				59F7E49A1B47971E00F97050 /* back-Arrow.png */,
@@ -1871,6 +1874,7 @@
 				59F7E48E1B46448900F97050 /* bubbleSomeone.png in Resources */,
 				59798BBF1B3F033100D92124 /* tab_friends@2x.png in Resources */,
 				5927584E1B3E9A9B007A8A18 /* defaultAvatar.png in Resources */,
+				591A45251B492188004ABE07 /* Images.xcassets in Resources */,
 				59F7E48F1B46448900F97050 /* bubbleSomeone@2x.png in Resources */,
 				59798BBE1B3F033100D92124 /* tab_chats@2x.png in Resources */,
 				59F7E48D1B46448900F97050 /* bubbleMine@2x.png in Resources */,
