@@ -27,21 +27,21 @@
     [super viewDidLoad];
     
     _controllView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    _controllView.backgroundColor = [UIColor clearColor];
+    _controllView.backgroundColor = dTableCellColor;
     [self.view addSubview:_controllView];
     
     int scrnwidth = [UIScreen mainScreen].bounds.size.width;
     int scrnheight = [UIScreen mainScreen].bounds.size.height;
     
     CGRect fieldframe = CGRectMake((scrnwidth-260)/2,
-                                   scrnheight/2 + 2*kXLabelFieldHight, 260, kXLabelFieldHight);
+                                   scrnheight/2 + kXLabelFieldHight, 260, kXLabelFieldHight);
     
     UIButton* signButton = [[UIButton alloc] initWithFrame:fieldframe];
     [signButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [signButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
     [signButton setTitle:[NSLocalizedString(btnLogin, nil) capitalizedString] forState:UIControlStateNormal];
     [signButton addTarget:self action:@selector(signingAction:) forControlEvents:UIControlEventTouchUpInside];
-    [signButton setBackgroundColor:[UIColor cyanColor]];
+    [signButton setBackgroundColor:[UIColor lightGrayColor]];
     signButton.layer.cornerRadius = 6.0f;
     [_controllView addSubview:signButton];
     
@@ -56,7 +56,7 @@
     _passwordTextField.textAlignment = NSTextAlignmentCenter;
     _passwordTextField.delegate = self;
     _passwordTextField.layer.cornerRadius = 6.0f;
-    _passwordTextField.backgroundColor = dTableCellColor;
+    _passwordTextField.backgroundColor = [UIColor whiteColor];
     [_controllView addSubview: _passwordTextField];
     
     fieldframe.origin.y = fieldframe.origin.y -kXLabelFieldHight-kXLabelTopMargin;
@@ -70,8 +70,9 @@
     _usernameTextField.textAlignment = NSTextAlignmentCenter;
     _usernameTextField.delegate = self;
     _usernameTextField.layer.cornerRadius = 6.0f;
-    _usernameTextField.backgroundColor = dTableCellColor;
+    _usernameTextField.backgroundColor = [UIColor whiteColor];
     [_controllView addSubview: _usernameTextField];
+    
     
     fieldframe.origin.y = fieldframe.origin.y -kXLabelFieldHight-kXLabelTopMargin;
     
@@ -84,9 +85,23 @@
     _displayNameField.textAlignment = NSTextAlignmentCenter;
     _displayNameField.delegate = self;
     _displayNameField.layer.cornerRadius = 6.0f;
-    _displayNameField.backgroundColor = dTableCellColor;
+    _displayNameField.backgroundColor = [UIColor whiteColor];
     [_controllView addSubview: _displayNameField];
     
+    fieldframe.origin.y = fieldframe.origin.y -4*kXLabelFieldHight-kXLabelTopMargin;
+    fieldframe.size.height =  fieldframe.size.height*4;
+    
+    _termsofUse = [[UILabel alloc] initWithFrame:fieldframe];
+    _termsofUse.contentMode = UIViewContentModeRedraw;
+    _termsofUse.textAlignment = NSTextAlignmentCenter;
+    _termsofUse.layer.cornerRadius = 6.0f;
+    _termsofUse.lineBreakMode = NSLineBreakByWordWrapping;
+    _termsofUse.numberOfLines = 5;
+    _termsofUse.backgroundColor = [UIColor clearColor];
+    [_termsofUse setText:NSLocalizedString(lblTermsofUseText, nil)];
+    [_termsofUse setFont:fontThinOfSize(14)];
+    [self.view addSubview: _termsofUse];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -120,6 +135,10 @@
 
 -(void) signingAction:(id) sender
 {
+    [_controllView endEditing:YES];// this will do the trick
+    [self handleKeyboardHide];
+    _keyBoardIsVisible = NO;
+
     if( ![_usernameTextField.text length] || ![_passwordTextField.text length]){
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Input Error"
                                                         message:@"You must enter user name and password!"
@@ -133,7 +152,7 @@
     if( !_spiner )
         _spiner = [[UIActivitySpiner alloc] initWithFrame:CGRectMake((self.view.frame.size.width-40)/2, 90 , 40, 40)];
     
-    [[ProfileDataManager sharedInstance] setXabberID:_displayNameField.text];
+    [[ProfileDataManager sharedInstance] setDisplayName:_displayNameField.text];
     [[ProfileDataManager sharedInstance] setXabberID:_usernameTextField.text];
     [[ProfileDataManager sharedInstance] setPassword:_passwordTextField.text];
     [xmppInstance connect];
@@ -141,9 +160,6 @@
     [_controllView addSubview:_spiner];
     [_spiner createAndShowSpinner];
     
-    [self handleKeyboardHide];
-    _keyBoardIsVisible = NO;
-
 }
 
 - (void)didReceiveMemoryWarning {

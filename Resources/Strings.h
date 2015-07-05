@@ -163,6 +163,8 @@
 
 #define btnLogin @"Login"
 #define lblYourDisplayName @"Your Display Name"
-#define lblYourUserId @"Your User Id"
+#define lblYourUserId @"Your User Id i.e rbc@gmail.com"
 #define lblYourPassworld @"Passworld"
+#define lblTermsofUseText @"You must have an User Id and a valid Password to procceed. If you don't have please register on web and try again else please enter below data to get started."
+
 

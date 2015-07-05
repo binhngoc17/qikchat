@@ -14,6 +14,7 @@
     UITextField *_displayNameField;
     UITextField *_usernameTextField;
     UITextField *_passwordTextField;
+    UILabel *_termsofUse;
     
     BOOL _keyBoardIsVisible;
     UIView* _controllView;
