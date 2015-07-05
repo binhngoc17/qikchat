@@ -168,12 +168,7 @@
     [backButton setBackgroundImage:[UIImage imageNamed:@"back-arrow"] forState:UIControlStateNormal];
     [titleView addSubview:backButton];
     
-   /* UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(55, 1, 43, 43)];
-    [avatarView setBackgroundColor:[UIColor clearColor]];
-    avatarView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar.png"] borderColor:[UIColor blackColor]];
-    avatarView.clipsToBounds = YES;
-    [titleView addSubview:avatarView];*/
-    
+
     UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 2, self.view.frame.size.width-100, 40)];
     titleLabel.text = [self.currentChat getDisplayName];
     

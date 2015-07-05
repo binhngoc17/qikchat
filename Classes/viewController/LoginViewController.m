@@ -26,7 +26,7 @@
 {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:dQikAColor];
+    [self.view setBackgroundColor:dQikAViewColor];
     
     _controllView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _controllView.backgroundColor = dClearColor;
@@ -101,7 +101,8 @@
     _termsofUse.numberOfLines = 5;
     _termsofUse.backgroundColor = [UIColor clearColor];
     [_termsofUse setText:NSLocalizedString(lblTermsofUseText, nil)];
-    [_termsofUse setFont:fontThinOfSize(14)];
+    [_termsofUse setFont:fontOfSize(14)];
+    [_termsofUse setTextColor:[UIColor whiteColor]];
     [self.view addSubview: _termsofUse];
 
 }

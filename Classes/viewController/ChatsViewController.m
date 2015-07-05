@@ -127,11 +127,11 @@
 {
     if (user.avatarImage != nil)
     {
-        cell.imageView.image = [Utility roundImageWithImage:user.avatarImage borderColor:[UIColor blackColor]];
+        cell.imageView.image = [Utility roundImageWithImage:user.avatarImage borderColor:[UIColor clearColor]];
     }
     else
     {
-        cell.imageView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar"] borderColor:[UIColor blackColor]];
+        cell.imageView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar"] borderColor:[UIColor clearColor]];
     }
     
     cell.imageView.layer.cornerRadius = 3.0f;

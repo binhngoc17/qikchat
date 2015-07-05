@@ -79,7 +79,7 @@
     
     UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 45, 45)];
     [avatarView setBackgroundColor:[UIColor clearColor]];
-    avatarView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar.png"] borderColor:[UIColor blackColor]];
+    avatarView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar.png"] borderColor:[UIColor clearColor]];
     avatarView.clipsToBounds = YES;
     [titleView addSubview:avatarView];
     
@@ -127,11 +127,11 @@
 
 	if (abudy.avatarImage != nil)
 	{
-		cell.imageView.image = [Utility roundImageWithImage:abudy.avatarImage borderColor:[UIColor blackColor]];
+		cell.imageView.image = [Utility roundImageWithImage:abudy.avatarImage borderColor:[UIColor clearColor]];
    }
 	else
 	{
-        cell.imageView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar"] borderColor:[UIColor blackColor]];
+        cell.imageView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar"] borderColor:[UIColor clearColor]];
 	}
     
     cell.imageView.layer.cornerRadius = 3.0f;
