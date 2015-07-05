@@ -74,10 +74,10 @@
 
 - (void) initTitleSegement {
     
-    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 46)];
+    UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 3, self.view.frame.size.width, 46)];
     [titleView setBackgroundColor:[UIColor clearColor]];
     
-    UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 0, 45, 45)];
+    UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 45, 45)];
     [avatarView setBackgroundColor:[UIColor clearColor]];
     avatarView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar.png"] borderColor:[UIColor blackColor]];
     avatarView.clipsToBounds = YES;
@@ -116,7 +116,7 @@
 }
 
 -(void) updateFriendList:(id) sender {
-    [self.tableView reloadData];
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark UITableViewCell helpers
@@ -170,8 +170,8 @@
 	
     Buddy *budy = [[xmppInstance rosterController] buddyForIndex:indexPath.row];
 	cell.textLabel.text = budy.displayName;
-	[cell setBackgroundColor:dTableCellColor];
-    cell.layer.borderColor = dHeaderColor.CGColor;
+	[cell setBackgroundColor:dQikAColor];
+    cell.layer.borderColor = dBorderColor.CGColor;
     cell.layer.borderWidth = 1.0f;
     cell.detailTextLabel.text = budy.statusText;
     [self configurePhotoForCell:cell user:budy];
@@ -184,13 +184,17 @@
 #pragma mark UITableViewDelegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return KCustomTableRowHight50;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     Buddy *budy = [[xmppInstance rosterController] buddyForIndex:indexPath.row];
     if( budy ){
         UIViewController* chatview = [[UIController getUIController] startChatWith:budy.jid withName:budy.displayName];
         chatview.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:chatview animated:YES];
+        [self.navigationController pushViewController:chatview animated:NO];
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 

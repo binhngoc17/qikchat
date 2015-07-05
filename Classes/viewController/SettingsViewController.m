@@ -39,7 +39,7 @@
     [self.view addSubview:self.tableView];
     
     [self.tableView setBackgroundColor:dClearColor];
-    [[UITableViewHeaderFooterView appearance] setTintColor:dHeaderColor];
+    [[UITableViewHeaderFooterView appearance] setTintColor:dQikAColor];
     
     self.tableDictionory  = [[NSMutableDictionary alloc] init];
     
@@ -114,8 +114,8 @@
     
     cell.textLabel.text = [NSString stringWithFormat:@"\t%@",[list objectAtIndex:indexPath.row]];
     
-    [cell setBackgroundColor:dTableCellColor];
-    cell.layer.borderColor = dHeaderColor.CGColor;
+    [cell setBackgroundColor:dQikAColor];
+    cell.layer.borderColor = dBorderColor.CGColor;
     cell.layer.borderWidth = 1.0f;
 
     return cell;
@@ -125,6 +125,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark UITableViewDelegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return KCustomTableRowHight45;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return KCustomTableHeaderHight;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 

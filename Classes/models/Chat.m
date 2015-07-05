@@ -342,8 +342,7 @@
                                                               type:UIMessageBarMessageTypeInfo
                                                     statusBarStyle:UIStatusBarStyleLightContent callback:^{
                                                         
-                                                        [[UIController getUIController] activateChatView:self];
-                                                        
+                                                        // Launch chat view here
                                                     }
          ];
         
@@ -435,6 +434,11 @@
     
     if( self.isActiveChat || [_allUiMessages count] ){
         NSBubbleData *sayBubble = [Utility createDataWithMessage:message];
+        if( !self.chatImage ){
+            Buddy *user = [[xmppInstance rosterController] getBuddyForJId:self.chatJid];
+            if( user )
+                [self setChatImage:user.avatarImage];
+        }
         sayBubble.avatar = self.chatImage;
         [_allUiMessages addObject:sayBubble];
     

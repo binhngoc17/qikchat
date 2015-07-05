@@ -67,13 +67,8 @@ static UIController *sharedUIController;
     [self.window makeKeyAndVisible];
 }
 
--(void) activateChatView:(Chat*) aChat{
-    ChatViewController* chatView = [ChatViewController sharedViewWitChat:aChat];
-}
-
 -(UIViewController*) startChatWith:(NSString*) aJid withName:(NSString*) aName{
     Chat* chat = [[xmppInstance messageController] createChatForJID:aJid withDisplayName:aName];
-    // TODO later can be return the existing chatview with clean 
     ChatViewController* chatView = [ChatViewController sharedViewWitChat:chat];
     return chatView;
 }

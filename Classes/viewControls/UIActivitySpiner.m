@@ -33,7 +33,7 @@
     if (_spinner == nil)
     {
         UIColor *suggestedColor = [self getFontColor];
-        _spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+        _spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         
         if (CGColorEqualToColor(suggestedColor.CGColor, [UIColor blackColor].CGColor))
         {
@@ -45,7 +45,7 @@
                                                        height);
             
             _spinnerBackground = [[UIView alloc] initWithFrame:spinnerBackgroundFrame];
-            _spinnerBackground.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.7f];
+            _spinnerBackground.backgroundColor = [UIColor lightGrayColor];
             _spinnerBackground.layer.cornerRadius = spinnerBackgroundFrame.size.height/2;
             
             [self addSubview:_spinnerBackground];

@@ -12,6 +12,8 @@
 		5908F4321B39828E00627424 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5908F4311B39828E00627424 /* Default-568h@2x.png */; };
 		5908F4331B3982C800627424 /* QikAChat-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5908F4261B3981E900627424 /* QikAChat-Info.plist */; };
 		591A45251B492188004ABE07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 591A45241B492188004ABE07 /* Images.xcassets */; };
+		591A452E1B49627B004ABE07 /* back-arrow1.png in Resources */ = {isa = PBXBuildFile; fileRef = 591A452C1B49627B004ABE07 /* back-arrow1.png */; };
+		591A452F1B49627B004ABE07 /* back-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 591A452D1B49627B004ABE07 /* back-arrow.png */; };
 		592758351B3E88B3007A8A18 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5927582E1B3E88B3007A8A18 /* AppDelegate.m */; };
 		592758371B3E88B3007A8A18 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 592758331B3E88B3007A8A18 /* SettingsViewController.m */; };
 		5927584E1B3E9A9B007A8A18 /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 5927584D1B3E9A9B007A8A18 /* defaultAvatar.png */; };
@@ -209,14 +211,11 @@
 		59F7E48D1B46448900F97050 /* bubbleMine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4831B46448900F97050 /* bubbleMine@2x.png */; };
 		59F7E48E1B46448900F97050 /* bubbleSomeone.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4841B46448900F97050 /* bubbleSomeone.png */; };
 		59F7E48F1B46448900F97050 /* bubbleSomeone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4851B46448900F97050 /* bubbleSomeone@2x.png */; };
-		59F7E4901B46448900F97050 /* missingAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4861B46448900F97050 /* missingAvatar.png */; };
-		59F7E4911B46448900F97050 /* missingAvatar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4871B46448900F97050 /* missingAvatar@2x.png */; };
 		59F7E4921B46448900F97050 /* typingMine.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4881B46448900F97050 /* typingMine.png */; };
 		59F7E4931B46448900F97050 /* typingMine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4891B46448900F97050 /* typingMine@2x.png */; };
 		59F7E4941B46448900F97050 /* typingSomeone.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E48A1B46448900F97050 /* typingSomeone.png */; };
 		59F7E4951B46448900F97050 /* typingSomeone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E48B1B46448900F97050 /* typingSomeone@2x.png */; };
 		59F7E4971B470EA400F97050 /* images.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4961B470EA400F97050 /* images.png */; };
-		59F7E49D1B47971E00F97050 /* back-Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E49A1B47971E00F97050 /* back-Arrow.png */; };
 		59F7E49E1B47971E00F97050 /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E49B1B47971E00F97050 /* Settings.png */; };
 		59F7E49F1B47971E00F97050 /* paperplane.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E49C1B47971E00F97050 /* paperplane.png */; };
 		59F7E4A11B47987700F97050 /* tab_settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59F7E4A01B47987700F97050 /* tab_settings@2x.png */; };
@@ -245,6 +244,8 @@
 		5908F94B1B39872E00627424 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		5908F94E1B39878F00627424 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
 		591A45241B492188004ABE07 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = QikAChat/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		591A452C1B49627B004ABE07 /* back-arrow1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-arrow1.png"; sourceTree = "<group>"; };
+		591A452D1B49627B004ABE07 /* back-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-arrow.png"; sourceTree = "<group>"; };
 		5927582D1B3E88B3007A8A18 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		5927582E1B3E88B3007A8A18 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Classes/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		592758321B3E88B3007A8A18 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -623,14 +624,11 @@
 		59F7E4831B46448900F97050 /* bubbleMine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubbleMine@2x.png"; sourceTree = "<group>"; };
 		59F7E4841B46448900F97050 /* bubbleSomeone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubbleSomeone.png; sourceTree = "<group>"; };
 		59F7E4851B46448900F97050 /* bubbleSomeone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubbleSomeone@2x.png"; sourceTree = "<group>"; };
-		59F7E4861B46448900F97050 /* missingAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = missingAvatar.png; sourceTree = "<group>"; };
-		59F7E4871B46448900F97050 /* missingAvatar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "missingAvatar@2x.png"; sourceTree = "<group>"; };
 		59F7E4881B46448900F97050 /* typingMine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = typingMine.png; sourceTree = "<group>"; };
 		59F7E4891B46448900F97050 /* typingMine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "typingMine@2x.png"; sourceTree = "<group>"; };
 		59F7E48A1B46448900F97050 /* typingSomeone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = typingSomeone.png; sourceTree = "<group>"; };
 		59F7E48B1B46448900F97050 /* typingSomeone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "typingSomeone@2x.png"; sourceTree = "<group>"; };
 		59F7E4961B470EA400F97050 /* images.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = images.png; sourceTree = "<group>"; };
-		59F7E49A1B47971E00F97050 /* back-Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-Arrow.png"; sourceTree = "<group>"; };
 		59F7E49B1B47971E00F97050 /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
 		59F7E49C1B47971E00F97050 /* paperplane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paperplane.png; sourceTree = "<group>"; };
 		59F7E4A01B47987700F97050 /* tab_settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_settings@2x.png"; sourceTree = "<group>"; };
@@ -724,10 +722,11 @@
 		5908F4231B3981B800627424 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				591A452C1B49627B004ABE07 /* back-arrow1.png */,
+				591A452D1B49627B004ABE07 /* back-arrow.png */,
 				591A45241B492188004ABE07 /* Images.xcassets */,
 				59F7E4A21B47A79500F97050 /* add_blue.png */,
 				59F7E4A01B47987700F97050 /* tab_settings@2x.png */,
-				59F7E49A1B47971E00F97050 /* back-Arrow.png */,
 				59F7E49B1B47971E00F97050 /* Settings.png */,
 				59F7E49C1B47971E00F97050 /* paperplane.png */,
 				59F7E4961B470EA400F97050 /* images.png */,
@@ -1778,8 +1777,6 @@
 				59F7E4831B46448900F97050 /* bubbleMine@2x.png */,
 				59F7E4841B46448900F97050 /* bubbleSomeone.png */,
 				59F7E4851B46448900F97050 /* bubbleSomeone@2x.png */,
-				59F7E4861B46448900F97050 /* missingAvatar.png */,
-				59F7E4871B46448900F97050 /* missingAvatar@2x.png */,
 				59F7E4881B46448900F97050 /* typingMine.png */,
 				59F7E4891B46448900F97050 /* typingMine@2x.png */,
 				59F7E48A1B46448900F97050 /* typingSomeone.png */,
@@ -1870,7 +1867,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				59F7E49E1B47971E00F97050 /* Settings.png in Resources */,
-				59F7E4901B46448900F97050 /* missingAvatar.png in Resources */,
 				59F7E48E1B46448900F97050 /* bubbleSomeone.png in Resources */,
 				59798BBF1B3F033100D92124 /* tab_friends@2x.png in Resources */,
 				5927584E1B3E9A9B007A8A18 /* defaultAvatar.png in Resources */,
@@ -1879,10 +1875,10 @@
 				59798BBE1B3F033100D92124 /* tab_chats@2x.png in Resources */,
 				59F7E48D1B46448900F97050 /* bubbleMine@2x.png in Resources */,
 				59798BB81B3EFDEC00D92124 /* friends.png in Resources */,
+				591A452F1B49627B004ABE07 /* back-arrow.png in Resources */,
 				598967D51B3EDC1B002A296D /* hSlider.png in Resources */,
 				598967CC1B3EB028002A296D /* build-libidn.sh in Resources */,
 				59F7E4951B46448900F97050 /* typingSomeone@2x.png in Resources */,
-				59F7E49D1B47971E00F97050 /* back-Arrow.png in Resources */,
 				59F7E49F1B47971E00F97050 /* paperplane.png in Resources */,
 				5970C6201B403F0E00B5B9E4 /* navmenu.png in Resources */,
 				59798BBB1B3F022200D92124 /* contacts.png in Resources */,
@@ -1897,7 +1893,7 @@
 				59F7E48C1B46448900F97050 /* bubbleMine.png in Resources */,
 				5908F4321B39828E00627424 /* Default-568h@2x.png in Resources */,
 				5970C61E1B403B1B00B5B9E4 /* menuMore@2x.png in Resources */,
-				59F7E4911B46448900F97050 /* missingAvatar@2x.png in Resources */,
+				591A452E1B49627B004ABE07 /* back-arrow1.png in Resources */,
 				59798BB71B3EFDEC00D92124 /* chats.png in Resources */,
 				59F7E4921B46448900F97050 /* typingMine.png in Resources */,
 			);
@@ -2125,6 +2121,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2168,6 +2165,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2193,12 +2191,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "QikAChat-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2214,12 +2214,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "QikAChat-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2243,6 +2245,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "QikAChatTests/QikAChatTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QikAChat.app/QikAChat";
@@ -2258,6 +2261,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "QikAChatTests/QikAChatTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QikAChat.app/QikAChat";

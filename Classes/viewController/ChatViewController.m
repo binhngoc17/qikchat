@@ -14,6 +14,7 @@
 #import "UIBubbleTableViewDataSource.h"
 #import "NSBubbleData.h"
 
+
 @interface ChatViewController ()
 {
     UIBubbleTableView *bubbleTable;
@@ -24,7 +25,7 @@
 }
 @property(nonatomic, strong) Chat* currentChat;
 @end
-
+ 
 @implementation ChatViewController
 
 +(ChatViewController*) sharedViewWitChat:(Chat*) achat{
@@ -45,7 +46,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view setBackgroundColor:dHeaderColor];
+    [self.view setBackgroundColor:dClearColor];
     [self initTableView];
 }
 
@@ -59,16 +60,17 @@
     self.navigationController.navigationBar.translucent = YES;
     
     [self initTitleSegement];
- 
+    [self.view endEditing:YES];
+    
     self.currentChat.chatDelegate  = self;
     [self.currentChat setActive:YES];
     
     bubbleTable.snapInterval = 120;
     
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
-    // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
+    // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (defaultAvatar.png)
     
-    bubbleTable.showAvatars = NO;
+    bubbleTable.showAvatars = YES;
     
     // Uncomment the line below to add "Now typing" bubble
     // Possible values are
@@ -87,6 +89,11 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [self.view endEditing:YES];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
     [self.currentChat setActive:NO];
     self.currentChat.chatDelegate  = nil;
     
@@ -100,18 +107,21 @@
     bubbleTable.bubbleDataSource = self;
     bubbleTable.delegate = self;
     
+    UITapGestureRecognizer *tapGesture= [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapOnTableView:)];
+    [bubbleTable addGestureRecognizer:tapGesture];
+    
     [self.view addSubview:bubbleTable];
-    [bubbleTable setBackgroundColor:dTableChatColor];
+    [bubbleTable setBackgroundColor:dClearColor];
     
     textInputView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-50, self.view.frame.size.width, 50)];
     [self.view addSubview:textInputView];
-    [textInputView setBackgroundColor:dHeaderColor];
+    [textInputView setBackgroundColor:dQikAColor];
     
     textField = [[UITextField alloc] initWithFrame:CGRectMake(5, 5, self.view.frame.size.width-60, 40)];
     [textInputView addSubview:textField];
     [textField setBackgroundColor:[UIColor whiteColor]];
     textField.layer.cornerRadius = 10.0f;
-    textField.layer.borderColor = dHeaderColor.CGColor;
+    textField.layer.borderColor = dBorderColor.CGColor;
     textField.layer.borderWidth = 2.0f;
     textField.delegate = self;
     
@@ -121,8 +131,8 @@
     [sendButton setTitle:@"Send" forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(sendPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    bubbleTable.bubbleDataSource = self;
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -153,24 +163,25 @@
     UIView* titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 45)];
     [titleView setBackgroundColor:[UIColor clearColor]];
     
-    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 5, 50, 40)];
+    UIButton* backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 5, 40, 40)];
     [backButton addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"back-arrow"] forState:UIControlStateNormal];
     [titleView addSubview:backButton];
     
-    UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(55, 1, 43, 43)];
+   /* UIImageView* avatarView = [[UIImageView alloc] initWithFrame:CGRectMake(55, 1, 43, 43)];
     [avatarView setBackgroundColor:[UIColor clearColor]];
     avatarView.image = [Utility roundImageWithImage:[UIImage imageNamed:@"defaultAvatar.png"] borderColor:[UIColor blackColor]];
     avatarView.clipsToBounds = YES;
-    [titleView addSubview:avatarView];
+    [titleView addSubview:avatarView];*/
     
-    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 2, self.view.frame.size.width-150, 40)];
+    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(55, 2, self.view.frame.size.width-100, 40)];
     titleLabel.text = [self.currentChat getDisplayName];
     
     [titleView addSubview:titleLabel];
     [titleLabel setTextAlignment:NSTextAlignmentLeft];
     
-    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-55, 5, 35, 35)];
+    
+    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-55, 0, 40, 40)];
     [menuButton setBackgroundImage:[UIImage imageNamed:@"navmenu"] forState:UIControlStateNormal];
     [menuButton addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
     [titleView addSubview:menuButton];
@@ -220,7 +231,11 @@
     return [[self.currentChat allUiMessageArray] objectAtIndex:row];
 }
 
+
 #pragma mark - Keyboard events
+-(void) asychScrollTable{
+    [self scrollToBottom:NO];
+}
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
@@ -236,6 +251,9 @@
         frame = bubbleTable.frame;
         frame.size.height -= kbSize.height;
         bubbleTable.frame = frame;
+        
+        [self performSelectorOnMainThread:@selector(asychScrollTable) withObject:nil waitUntilDone:NO];
+
     }];
 }
 
@@ -253,6 +271,9 @@
         frame = bubbleTable.frame;
         frame.size.height += kbSize.height;
         bubbleTable.frame = frame;
+        
+        [self performSelectorOnMainThread:@selector(asychScrollTable) withObject:nil waitUntilDone:NO];
+
     }];
 }
 
@@ -314,6 +335,15 @@
 -(void) aSynchReloadTableData{
     [bubbleTable reloadData];
     [self scrollToBottom:YES];
+}
+
+#pragma keyboard
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self.view endEditing:YES];// this will do the trick
+}
+
+-(void)didTapOnTableView:(UIEvent *)event{
+    [self.view endEditing:YES];// this will do the trick
 }
 
 @end

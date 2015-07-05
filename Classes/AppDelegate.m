@@ -35,7 +35,7 @@
     XmppController* controller = [XmppController sharedSingleton];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [self.window setBackgroundColor:dHeaderColor];
+    [self.window setBackgroundColor:[UIColor whiteColor]];
     UIController* uiController = [[UIController alloc] initWithWindow:self.window];
    
     if (![profileInstance hasCreatedAccount] )

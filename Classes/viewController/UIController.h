@@ -21,6 +21,5 @@
 
 -(void) showLoginScreen;
 -(void) showMainScreen;
--(void) activateChatView:(Chat*) aChat;
 -(UIViewController*) startChatWith:(NSString*) aJid withName:(NSString*) aName;
 @end

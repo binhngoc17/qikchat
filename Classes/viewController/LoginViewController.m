@@ -26,15 +26,17 @@
 {
     [super viewDidLoad];
     
+    [self.view setBackgroundColor:dQikAColor];
+    
     _controllView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    _controllView.backgroundColor = dTableCellColor;
+    _controllView.backgroundColor = dClearColor;
     [self.view addSubview:_controllView];
     
     int scrnwidth = [UIScreen mainScreen].bounds.size.width;
     int scrnheight = [UIScreen mainScreen].bounds.size.height;
     
     CGRect fieldframe = CGRectMake((scrnwidth-260)/2,
-                                   scrnheight/2 + kXLabelFieldHight, 260, kXLabelFieldHight);
+                                   scrnheight/2 + 2*kXLabelFieldHight, 260, kXLabelFieldHight);
     
     UIButton* signButton = [[UIButton alloc] initWithFrame:fieldframe];
     [signButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -88,7 +90,7 @@
     _displayNameField.backgroundColor = [UIColor whiteColor];
     [_controllView addSubview: _displayNameField];
     
-    fieldframe.origin.y = fieldframe.origin.y -4*kXLabelFieldHight-kXLabelTopMargin;
+    fieldframe.origin.y = fieldframe.origin.y -4*kXLabelFieldHight-kXLabelTopMargin*2;
     fieldframe.size.height =  fieldframe.size.height*4;
     
     _termsofUse = [[UILabel alloc] initWithFrame:fieldframe];
@@ -150,7 +152,9 @@
     }
     
     if( !_spiner )
-        _spiner = [[UIActivitySpiner alloc] initWithFrame:CGRectMake((self.view.frame.size.width-40)/2, 90 , 40, 40)];
+        _spiner = [[UIActivitySpiner alloc] initWithFrame:CGRectMake((self.view.frame.size.width-50)/2, 60 , 50, 50)];
+    else
+        [_spiner removeFromSuperview];
     
     [[ProfileDataManager sharedInstance] setDisplayName:_displayNameField.text];
     [[ProfileDataManager sharedInstance] setXabberID:_usernameTextField.text];
@@ -219,6 +223,12 @@
 
 -(void) handleKeyboardVisible
 {
+    if( _spiner ){
+        [xmppInstance disconnect];
+        [_spiner hideAndStopSpinner];
+        _spiner = nil;
+    }
+
     if (_keyBoardIsVisible)
         return;
     

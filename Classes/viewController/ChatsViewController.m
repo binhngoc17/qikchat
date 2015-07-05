@@ -74,7 +74,7 @@
 
 - (void) initTitleSegement {
     
-    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 35, 35)];
+    UIButton* menuButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 5, 45, 45)];
     [menuButton setBackgroundImage:[UIImage imageNamed:@"navmenu.png"] forState:UIControlStateNormal];
     [menuButton addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
  
@@ -180,8 +180,8 @@
    
 	[self configurePhotoForCell:cell user:user];
 	
-    [cell setBackgroundColor:dTableCellColor];
-    cell.layer.borderColor = dHeaderColor.CGColor;
+    [cell setBackgroundColor:dQikAColor];
+    cell.layer.borderColor = dBorderColor.CGColor;
     cell.layer.borderWidth = 1.0f;
 
     return cell;
@@ -190,6 +190,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark UITableViewDelegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return KCustomTableRowHight50;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -197,7 +200,7 @@
     if( chat ){
         UIViewController* chatview = [[UIController getUIController] startChatWith:chat.chatJid withName:[chat getDisplayName]];
         chatview.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:chatview animated:YES];
+        [self.navigationController pushViewController:chatview animated:NO];
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 

@@ -61,7 +61,6 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[StorageManager  sharedInstance] loadAllRosters:_allBuddyList];
         [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_FRIEND_LIST object:self];
-        NSLog(@"count = %ld", _allBuddyList.count);
     });
 }
 
@@ -267,7 +266,7 @@
             NSString* subscribtion = user.subscription;
             NSString* bareJid = [[user jid] bare];
             
-            updated = [self handleRosterItemUpdate:bareJid subcribtion:subscribtion formatName:displayName];
+            updated = updated || [self handleRosterItemUpdate:bareJid subcribtion:subscribtion formatName:displayName];
             Buddy *buddy = [_allBuddyList objectForKey:bareJid];
             if( buddy )
             {
@@ -318,7 +317,6 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [[StorageManager  sharedInstance] updateRosters:_allBuddyList.allValues];
             [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_FRIEND_LIST object:self];
-            NSLog(@"count = %ld", _allBuddyList.count);
         });
     }
 }
@@ -361,7 +359,7 @@
         NSString* subscribtion = user.subscription;
         NSString* bareJid = [[user jid] bare];
         
-        updated = [self handleRosterItemUpdate:bareJid subcribtion:subscribtion formatName:displayName];
+        updated = updated || [self handleRosterItemUpdate:bareJid subcribtion:subscribtion formatName:displayName];
         Buddy *buddy = [_allBuddyList objectForKey:bareJid];
         if( buddy )
         {
@@ -426,6 +424,7 @@
             buddy.currentStatusText = @"";
             didFrindChanged = YES;
             [[StorageManager sharedInstance] saveNewRoster:buddy];
+           // [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_FRIEND_LIST object:self];
         }
         else if( [name length] && ![name isEqualToString:[buddy getDisplayName]])
         {
