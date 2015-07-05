@@ -715,10 +715,8 @@ rollback:
     }
 }
 
--(NSMutableArray*)getAllChatMessagesForState:(NSInteger) aChatState
+-(void)readAllChatMessages:(NSMutableArray*)aReadArray forState:(NSInteger) aChatState;
 {
-    NSMutableArray* retArray = [[NSMutableArray alloc] init] ;
-    
     NSMutableString* statement = [[NSMutableString alloc] initWithString:kEmptyString];
     
     [statement appendFormat:@"SELECT * FROM %@ WHERE %@ = %ld AND %@ =%d", KTableChatItems, kTableChatItemState, (long)aChatState ,kTableChatItemIsOutGoing, YES ];
@@ -727,7 +725,7 @@ rollback:
     
     while ([rs next])
     {
-      	NSInteger id            = [rs intForColumnIndex:0];
+      	NSInteger idi            = [rs intForColumnIndex:0];
 		NSInteger type          = [rs intForColumnIndex:1];
         NSInteger isOutGoing    = [rs intForColumnIndex:2];
         
@@ -740,10 +738,9 @@ rollback:
         NSData* fileData   = [rs dataForColumnIndex:8];
         NSInteger state    = [rs intForColumnIndex:9];
         
-	    
-        Message* msg = [ [Message alloc] initWithTextMessage:body withJid:chatJid];
+	    Message* msg = [ [Message alloc] initWithTextMessage:body withJid:chatJid];
      
-        msg.messageNumber = id;
+        msg.messageNumber = idi;
         msg.messageType = type;
         msg.isOutGoing = isOutGoing;
         msg.date = [Utility stringToDate:time withFormat:kChatTimestampFormat];
@@ -753,10 +750,9 @@ rollback:
         msg.fileData   =  fileData;
         msg.messageStatus = state;
       
-        [retArray addObject:msg];
+        [aReadArray addObject:msg];
     }
-    return retArray;
-    
+
 }
 
 

@@ -45,7 +45,8 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[StorageManager  sharedInstance] loadAllChatList:_allChatList];
         [[NSNotificationCenter defaultCenter] postNotificationName:UPDATE_CHAT_LIST object:self];
-        NSLog(@"count = %ld", _allChatList.count);
+        // pending message yet to send -
+        [[StorageManager sharedInstance] readAllChatMessages:_allWaitingMessageQueue forState:MESSAGE_STATUS_WAITING];
     });
     
 }

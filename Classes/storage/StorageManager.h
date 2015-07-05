@@ -43,7 +43,8 @@
 -(void)updateRosterAvatar:(Buddy*) aBuddy;
 -(BOOL) loadAllRosters:(NSMutableDictionary*) aRosterDictionay;
 
--(NSMutableArray*)getAllChatMessagesForState:(NSInteger) aChatState;
+-(void)readAllChatMessages:(NSMutableArray*) aReadArray forState:(NSInteger) aChatState;
+
 -(void) storeChatMessage:(Message*) aMesage;
 -(void) updateChatMessage:(Message*) aMesage;
 -(void) loadAllChatMessags:(NSString*) aChatJID;

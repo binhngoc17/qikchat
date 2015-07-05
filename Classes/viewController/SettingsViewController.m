@@ -35,10 +35,11 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLineEtched];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:self.tableView];
     
     [self.tableView setBackgroundColor:dClearColor];
+    [[UITableViewHeaderFooterView appearance] setTintColor:dHeaderColor];
     
     self.tableDictionory  = [[NSMutableDictionary alloc] init];
     
@@ -47,6 +48,9 @@
     
     NSArray* arry2 = [[NSArray alloc] initWithObjects:@"Sound",@"Wallpaper",@"Notification",nil];
     [self.tableDictionory setObject:arry2 forKey:@"Chats"];
+  
+    NSArray* arry3 = [[NSArray alloc] initWithObjects:@"Share",@"Block",nil];
+    [self.tableDictionory setObject:arry3 forKey:@"Friends"];
     
 }
 
@@ -108,7 +112,7 @@
     NSString* key = [[self.tableDictionory allKeys] objectAtIndex:indexPath.section] ;
     NSArray* list = [self.tableDictionory objectForKey:key];
     
-    cell.textLabel.text = [list objectAtIndex:indexPath.row];
+    cell.textLabel.text = [NSString stringWithFormat:@"\t%@",[list objectAtIndex:indexPath.row]];
     
     [cell setBackgroundColor:dTableCellColor];
     cell.layer.borderColor = dHeaderColor.CGColor;
