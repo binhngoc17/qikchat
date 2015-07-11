@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintLocationsKey" : {
+    "B956E36BEDF01BA85725DD74B4CF3587FB0CE56D" : {
+      "DVTSourceControlBranchIdentifierKey" : "1.0",
+      "DVTSourceControlLocationRevisionKey" : "85857f612ae9f08862a35d26330ded34e242a552",
+      "DVTSourceControlBranchOptionsKey" : 48,
+      "DVTSourceControlWorkspaceBlueprintLocationTypeKey" : "DVTSourceControlBranch"
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B956E36BEDF01BA85725DD74B4CF3587FB0CE56D",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "DDEC723A-86D8-49C2-B511-3BA23DDA0C12",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "B956E36BEDF01BA85725DD74B4CF3587FB0CE56D" : "QikAChat\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "QikAChat",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "QikAChat.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/rbchauhan@bitbucket.org\/rbchauhan\/qikachat.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B956E36BEDF01BA85725DD74B4CF3587FB0CE56D"
+    }
+  ]
+}
