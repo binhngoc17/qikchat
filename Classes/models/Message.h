@@ -53,9 +53,7 @@ typedef NSInteger MessageType;
 -(id)initWithTextMessage:(NSString *)message withJid:(NSString*) aJid;
 
 +(Message*)messageWithText:(NSString *)message withJid:(NSString*) aJid;
-
 +(NSString *)getStringMessageType:(MessageType)msgType ;
-
 +(MessageType)getMessageType:(NSString*)msgType ;
 
 @end

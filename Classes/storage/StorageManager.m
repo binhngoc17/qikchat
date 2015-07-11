@@ -327,7 +327,7 @@ rollback:
     return [_database executeUpdate:statement];
 }
 
--(void)loadAllChatList:(NSMutableDictionary*) allChats //forRosters:(NSDictionary*) allBuddyList;
+-(void)loadAllChatList:(NSMutableDictionary*) allChats 
 {
     NSMutableString* statement = [[NSMutableString alloc] initWithString:kEmptyString];
     
@@ -345,17 +345,7 @@ rollback:
         
         Chat* chat = [[Chat alloc ] initWithChatJID:jid withName:name];
         [chat setLastMessage:lastMsg withTime:lasttime withUnread:unreadCount messageId:msgNumber];
-        
-        /*if( allBuddyList )
-        {
-            Buddy* associatedBuddy = [allBuddyList objectForKey:jid];
-            if( associatedBuddy ){
-                UIImage* avatar = [associatedBuddy avatarImage];
-                [chat setChatImage:avatar];
-                [chat setChatDisplayName:associatedBuddy.getDisplayName];
-            }
-        }*/
-        
+    
         [allChats setObject:chat forKey:jid];
     }
 }

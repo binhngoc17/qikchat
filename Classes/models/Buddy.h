@@ -36,7 +36,6 @@ typedef unsigned int OTRBuddyStatus;
 @interface Buddy : NSObject
 {
     int _associatedluid;
-    BOOL _isLastSeenFetched;
 }
 
 @property (nonatomic, retain, getter = getJid ) NSString* jid;
@@ -50,7 +49,6 @@ typedef unsigned int OTRBuddyStatus;
 @property (nonatomic) OTRBuddyStatus buddyStatus;
 @property (nonatomic) OTRKitMessageState encryptionStatus;
 @property (nonatomic, strong) NSString* lresAvtarURL;
-@property (nonatomic, strong) NSDate *lastSeenDate;
 
 -(id)initWithDisplayName:(NSString*)buddyName accountJid:(NSString*)accountName status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName;
 +(Buddy*)buddyWithDisplayName:(NSString*)buddyName accountJid:(NSString*)accountName  status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName;
@@ -63,7 +61,5 @@ typedef unsigned int OTRBuddyStatus;
 -(void) setABLUID:(int) luid;
 -(int) getABLUID;
 -(OTRBuddyStatus) getStatus;
--(BOOL) isLastSeenFetched;
--(void) setLastSeenFetched:(BOOL) aValue;
 
 @end

@@ -35,7 +35,6 @@ typedef NSInteger OTRChatState;
 
 @property (nonatomic, assign) IBOutlet id<ChatMessageDelegate> chatDelegate;
 @property (nonatomic, retain) NSString* chatJid;
-
 -(id)initWithChatJID:(NSString *)aJID withName:(NSString*) aName;
 
 -(NSInteger) lastMessageId;
@@ -45,20 +44,21 @@ typedef NSInteger OTRChatState;
 -(NSString*) getDisplayName;
 -(UIImage*) chatImage;
 
+// method which are called to setup chat data last activity
 -(void) setChatImage:(UIImage*) image;
 -(void) setLastMessage:(NSString*) message withTime:(NSString*) aTime withUnread:(NSInteger) aUnreadCount messageId:(NSInteger) messageNumber;
 
--(void) sendChatMessage:(Message*)message;
+// method called from below layers
 -(void) handleMessageDelivered:(Message*) aMessage;
 -(void) handleRecievedMessage:(Message *)message;
 -(void) handleChatStateRecieved:(OTRChatState) chatState;
 
+// method called from UI layers
 -(void) loadMessagesFromDB;
-
 -(BOOL) isActiveChat;
 -(void) setActive:(BOOL) isActive;
 -(NSInteger) unreadCount;
-
 -(NSArray*) allUiMessageArray;
+-(void) sendChatMessage:(Message*)message;
 
 @end

@@ -21,7 +21,6 @@
 @synthesize hresAvtarURL;
 @synthesize displayName;
 @synthesize lresAvtarURL;
-@synthesize lastSeenDate;
 
 -(id)initWithDisplayName:(NSString*)buddyName accountJid:(NSString*) buddyAccountName status:(OTRBuddyStatus)buddyStatus groupName:(NSString*)buddyGroupName
 {
@@ -34,7 +33,6 @@
         self.phoneNumer = @"";
         self.hresAvtarURL = @""; // do not change it
         self.statusText = @"Whatsup";
-        _isLastSeenFetched = FALSE;
     }
     return self;
 }
@@ -86,16 +84,7 @@
 
 -(void) setCurrentStatus:(OTRBuddyStatus)newStatus
 {
-    if( newStatus == kOTRBuddyStatusAway )
-    {
-        self.lastSeenDate = [NSDate dateWithTimeIntervalSinceNow:0];
-    }
-    else if( newStatus == kOTRBuddyStatusAvailable )
-    {
-        self.lastSeenDate = nil;
-    }
     self.buddyStatus = newStatus;
-    
 }
 
 -(void)receiveStatusMessage:(NSString *)message
@@ -162,14 +151,5 @@
     return [Utility displayName:self.jid];
 }
 
--(void) setLastSeenFetched:(BOOL) aValue
-{
-    _isLastSeenFetched = aValue;
-}
-
--(BOOL) isLastSeenFetched
-{
-    return _isLastSeenFetched;
-}
 
 @end
